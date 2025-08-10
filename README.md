@@ -1,29 +1,29 @@
-# 🔒 Risk Analysis Web App
+# Risk Analysis Web App
 
 A GitHub Pages web application that analyzes Azure Application Registration permissions against the NIST Cybersecurity Framework 2.0 to identify and assess potential security risks.
 
-## 🚀 Live Demo
+## Live Demo
 
 Visit the live application: [https://chatala1.github.io/App-Registration-Model/](https://chatala1.github.io/App-Registration-Model/)
 
-## ✨ Features
+## Features
 
-- **📄 File Upload**: Support for Markdown and JSON project plans
-- **🔍 Risk Analysis**: Intelligent parsing and analysis of Azure permissions
-- **📊 NIST CSF 2.0 Mapping**: Automatic mapping to NIST Cybersecurity Framework categories
-- **⚠️ Risk Scoring**: Comprehensive risk scoring based on permission levels
-- **💡 Recommendations**: Actionable security recommendations
-- **📥 Report Generation**: Downloadable HTML and JSON reports
-- **📱 Responsive Design**: Works on desktop and mobile devices
+- **File Upload**: Support for Markdown and JSON project plans
+- **Risk Analysis**: Intelligent parsing and analysis of Azure permissions
+- **NIST CSF 2.0 Mapping**: Automatic mapping to NIST Cybersecurity Framework categories
+- **Risk Scoring**: Comprehensive risk scoring based on permission levels
+- **Recommendations**: Actionable security recommendations
+- **Report Generation**: Downloadable HTML and JSON reports
+- **Responsive Design**: Works on desktop and mobile devices
 
-## 🎯 How It Works
+## How It Works
 
 1. **Upload** your project plan (Markdown or JSON format)
 2. **Analyze** the content for Azure Application Registration permissions
 3. **Review** the risk assessment and NIST CSF 2.0 mappings
 4. **Download** detailed reports for documentation and compliance
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 📁 /docs (GitHub Pages)
@@ -38,41 +38,25 @@ Visit the live application: [https://chatala1.github.io/App-Registration-Model/]
     └── sample-report.html      # Sample analysis report
 ```
 
-## 🔧 Technology Stack
+## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Charts**: Chart.js for risk visualization
 - **Hosting**: GitHub Pages
 - **CI/CD**: GitHub Actions for automated deployment
 
-## 📋 Supported Permissions
+## Supported Permissions
 
 The application analyzes the following Azure Application Registration permissions:
 
-### Critical Risk (Score: 10)
-- `Directory.ReadWrite.All`
-- `RoleManagement.ReadWrite.All`
+| Risk Level    | Score   | Permissions                                                                                  |
+|--------------|---------|---------------------------------------------------------------------------------------------|
+| Critical     | 10      | Directory.ReadWrite.All, RoleManagement.ReadWrite.All                                        |
+| High         | 7-9     | Application.ReadWrite.All, User.ReadWrite.All, Group.ReadWrite.All, Policy.ReadWrite.All, Files.ReadWrite.All |
+| Medium       | 4-6     | Directory.Read.All, Application.Read.All, User.Read.All, AuditLog.Read.All, SecurityEvents.Read.All |
+| Low          | 1-3     | Mail.Read, Group.Read.All, Basic profile permissions                                         |
 
-### High Risk (Score: 7-9)
-- `Application.ReadWrite.All`
-- `User.ReadWrite.All`
-- `Group.ReadWrite.All`
-- `Policy.ReadWrite.All`
-- `Files.ReadWrite.All`
-
-### Medium Risk (Score: 4-6)
-- `Directory.Read.All`
-- `Application.Read.All`
-- `User.Read.All`
-- `AuditLog.Read.All`
-- `SecurityEvents.Read.All`
-
-### Low Risk (Score: 1-3)
-- `Mail.Read`
-- `Group.Read.All`
-- Basic profile permissions
-
-## 🎯 NIST CSF 2.0 Categories
+## NIST CSF 2.0 Categories
 
 The application maps detected permissions to these NIST framework categories:
 
@@ -83,7 +67,7 @@ The application maps detected permissions to these NIST framework categories:
 - **RS** - Respond: Response planning and communications
 - **RC** - Recover: Recovery planning and improvements
 
-## 📖 Usage Examples
+## Usage Examples
 
 ### Sample Project Plan (Markdown)
 
@@ -109,7 +93,7 @@ The application maps detected permissions to these NIST framework categories:
 - **CSF Categories**: PR.AC, ID.RA, GV.RM, PR.DS
 - **Recommendations**: 7 actionable items
 
-## 🛠️ Local Development
+## Local Development
 
 1. Clone the repository:
 ```bash
@@ -125,7 +109,7 @@ python3 -m http.server 8000
 
 3. Open your browser to `http://localhost:8000`
 
-## 🚀 Deployment
+## Deployment
 
 The application automatically deploys to GitHub Pages when changes are pushed to the main branch. The deployment process:
 
@@ -134,7 +118,7 @@ The application automatically deploys to GitHub Pages when changes are pushed to
 3. Deploys to GitHub Pages environment
 4. Available at: `https://[username].github.io/App-Registration-Model/`
 
-## 🔍 Risk Analysis Algorithm
+## Risk Analysis Algorithm
 
 The risk scoring algorithm considers:
 
@@ -144,7 +128,7 @@ The risk scoring algorithm considers:
 4. **Compliance Requirements**: GDPR, HIPAA, SOX indicators
 5. **Best Practices**: Industry security standards
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/new-feature`
@@ -154,17 +138,17 @@ The risk scoring algorithm considers:
 6. Push to the branch: `git push origin feature/new-feature`
 7. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
 - [Microsoft Graph API Permissions](https://docs.microsoft.com/en-us/graph/permissions-reference)
 - [Azure App Registration Risk Evaluation Tool](https://github.com/johdcyber/Azure-App-Registration-Risk-Evaluation-Tool)
 
-## 📞 Support
+## Support
 
 If you encounter any issues or have questions:
 
@@ -174,4 +158,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**⚡ Quick Start**: Try the live demo with the built-in sample project plan!
+**Quick Start**: Try the live demo with the built-in sample project plan!
