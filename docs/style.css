@@ -263,6 +263,11 @@ header p {
     margin-bottom: 1rem;
     font-size: 1rem;
     font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
 }
 
 .result-card h3 i {
@@ -270,10 +275,100 @@ header p {
     margin-right: 0.5rem;
 }
 
-.results-list {
-    max-height: 200px;
-    overflow-y: auto;
+.result-card h3 .collapse-toggle {
+    color: #8b949e;
+    transition: transform 0.2s ease;
 }
+
+.result-card.collapsed .collapse-toggle {
+    transform: rotate(-90deg);
+}
+
+.results-list {
+    max-height: none;
+    overflow: visible;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.result-card.collapsed .results-list {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+/* Tabbed Interface */
+.results-tabs {
+    display: flex;
+    border-bottom: 1px solid #30363d;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.tab-button:hover {
+    color: #f0f6fc;
+    background: #21262d;
+}
+
+.tab-button.active {
+    color: #58a6ff;
+    border-bottom-color: #58a6ff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* Compact Results View */
+.results-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-card {
+    text-align: center;
+    padding: 1rem;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+}
+
+.summary-card .metric-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #f0f6fc;
+    display: block;
+}
+
+.summary-card .metric-label {
+    font-size: 0.875rem;
+    color: #8b949e;
+    margin-top: 0.25rem;
+}
+
+.summary-card.critical .metric-value { color: #f85149; }
+.summary-card.high .metric-value { color: #d29922; }
+.summary-card.medium .metric-value { color: #58a6ff; }
+.summary-card.low .metric-value { color: #3fb950; }
 
 .permission-item, .csf-item, .risk-item, .recommendation-item {
     padding: 0.75rem;
@@ -472,4 +567,30 @@ footer a:hover {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* Print styles for PDF generation */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .card {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+    
+    .page-break {
+        page-break-before: always;
+    }
+    
+    .action-buttons {
+        display: none !important;
+    }
 }
