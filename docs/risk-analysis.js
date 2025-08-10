@@ -175,16 +175,41 @@ class RiskAnalyzer {
         return Array.from(csfMappings).map(category => {
             const [mainCategory, subCategory] = category.split('.');
             const categoryInfo = this.nistData.categories[mainCategory];
+            const subcategoryInfo = categoryInfo ? categoryInfo.subcategories[category] : null;
             
             return {
                 category,
-                name: categoryInfo ? categoryInfo.subcategories[category] || category : category,
-                description: categoryInfo ? categoryInfo.description : 'NIST CSF 2.0 Category',
-                mainCategory: categoryInfo ? categoryInfo.name : mainCategory
+                name: subcategoryInfo ? subcategoryInfo.name : category,
+                description: subcategoryInfo ? subcategoryInfo.description : 'NIST CSF 2.0 Category',
+                mainCategory: categoryInfo ? categoryInfo.name : mainCategory,
+                controls: subcategoryInfo ? subcategoryInfo.controls || [] : [],
+                remediation: subcategoryInfo ? subcategoryInfo.remediation || [] : [],
+                severity: this.calculateCSFSeverity(category, detectedPermissions)
             };
         });
     }
     
+    calculateCSFSeverity(category, detectedPermissions) {
+        // Calculate severity based on the risk levels of permissions mapped to this CSF category
+        const mappedPermissions = detectedPermissions.filter(permission => 
+            permission.csfMapping && permission.csfMapping.includes(category)
+        );
+        
+        if (mappedPermissions.length === 0) return 'medium';
+        
+        const hasCritical = mappedPermissions.some(p => p.riskLevel === 'critical');
+        const hasHigh = mappedPermissions.some(p => p.riskLevel === 'high');
+        
+        if (hasCritical) return 'critical';
+        if (hasHigh) return 'high';
+        
+        const avgRiskScore = mappedPermissions.reduce((sum, p) => sum + (p.riskScore || 0), 0) / mappedPermissions.length;
+        
+        if (avgRiskScore >= 7) return 'high';
+        if (avgRiskScore >= 4) return 'medium';
+        return 'low';
+    }
+
     identifyRiskIndicators(content) {
         const riskIndicators = [];
         const contentLower = content.toLowerCase();
@@ -375,9 +400,33 @@ class RiskAnalyzer {
         // Display CSF categories
         this.csfCategories.innerHTML = this.analysisResults.csfMappings
             .map(category => `
-                <div class="csf-item">
-                    <div class="item-title">${category.category} - ${category.mainCategory}</div>
+                <div class="csf-item ${category.severity}">
+                    <div class="item-title">
+                        ${category.category} - ${category.mainCategory}
+                        <span class="item-score score-${category.severity}">${category.severity.toUpperCase()}</span>
+                    </div>
                     <div class="item-description">${category.name}</div>
+                    <div class="item-description">${category.description}</div>
+                    
+                    ${category.controls.length > 0 ? `
+                        <div class="csf-controls">
+                            <strong>Specific Controls:</strong>
+                            <ul>
+                                ${category.controls.slice(0, 3).map(control => `<li>${control}</li>`).join('')}
+                                ${category.controls.length > 3 ? `<li><em>... and ${category.controls.length - 3} more controls</em></li>` : ''}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    ${category.remediation.length > 0 ? `
+                        <div class="csf-remediation">
+                            <strong>Remediation Advice:</strong>
+                            <ul>
+                                ${category.remediation.slice(0, 3).map(advice => `<li>${advice}</li>`).join('')}
+                                ${category.remediation.length > 3 ? `<li><em>... and ${category.remediation.length - 3} more recommendations</em></li>` : ''}
+                            </ul>
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         
@@ -531,9 +580,27 @@ class RiskAnalyzer {
     <div class="section">
         <h2>🎯 NIST CSF 2.0 Categories</h2>
         ${results.csfMappings.map(c => `
-            <div class="csf-item">
-                <strong>${c.category}</strong> - ${c.mainCategory}<br>
-                ${c.name}
+            <div class="csf-item ${c.severity}">
+                <strong>${c.category}</strong> - ${c.mainCategory} 
+                <span class="score-badge score-${c.severity}">${c.severity.toUpperCase()}</span><br>
+                <em>${c.name}</em><br>
+                ${c.description}
+                
+                ${c.controls.length > 0 ? `
+                    <br><br><strong>Specific Controls:</strong>
+                    <ul>
+                        ${c.controls.slice(0, 3).map(control => `<li>${control}</li>`).join('')}
+                        ${c.controls.length > 3 ? `<li><em>... and ${c.controls.length - 3} more controls</em></li>` : ''}
+                    </ul>
+                ` : ''}
+                
+                ${c.remediation.length > 0 ? `
+                    <br><strong>Remediation Advice:</strong>
+                    <ul>
+                        ${c.remediation.slice(0, 3).map(advice => `<li>${advice}</li>`).join('')}
+                        ${c.remediation.length > 3 ? `<li><em>... and ${c.remediation.length - 3} more recommendations</em></li>` : ''}
+                    </ul>
+                ` : ''}
             </div>
         `).join('')}
     </div>

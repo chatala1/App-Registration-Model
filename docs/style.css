@@ -278,6 +278,30 @@ header p {
     background: #ebf8ff;
 }
 
+.csf-controls, .csf-remediation {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #f7fafc;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.csf-controls ul, .csf-remediation ul {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+}
+
+.csf-controls li, .csf-remediation li {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+.csf-controls strong, .csf-remediation strong {
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
 .recommendation-item {
     border-left-color: #805ad5;
     background: #faf5ff;
