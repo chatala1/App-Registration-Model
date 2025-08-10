@@ -6,6 +6,9 @@
     <title>Risk Analysis Web App - Azure Application Registration</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Document parsing libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body>
     <header>
@@ -18,7 +21,7 @@
     <main class="container">
         <section id="upload-section" class="card">
             <h2>📄 Upload Project Plan</h2>
-            <p>Upload your project plan in Markdown or JSON format to analyze potential risks related to Azure Application Registration permissions.</p>
+            <p>Upload your project plan or document to analyze potential risks related to Azure Application Registration permissions.</p>
             
             <div class="upload-area" id="upload-area">
                 <div class="upload-content">
@@ -28,9 +31,9 @@
                         <line x1="12" y1="15" x2="12" y2="3"></line>
                     </svg>
                     <p>Drop your file here or <span class="upload-link">browse</span></p>
-                    <p class="upload-formats">Supported formats: .md, .json</p>
+                    <p class="upload-formats">Supported formats: .md, .json, .txt, .pdf, .docx, .doc, .rtf</p>
                 </div>
-                <input type="file" id="file-input" accept=".md,.json,.txt" hidden>
+                <input type="file" id="file-input" accept=".md,.json,.txt,.pdf,.docx,.doc,.rtf" hidden>
             </div>
 
             <div id="file-info" class="file-info" style="display: none;">
