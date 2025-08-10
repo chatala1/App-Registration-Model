@@ -1,0 +1,472 @@
+{
+  "categories": {
+    "GV": {
+      "name": "Govern",
+      "description": "The organization's cybersecurity risk management strategy, expectations, and policy are established, communicated, and monitored.",
+      "subcategories": {
+        "GV.GV": {
+          "name": "Governance - Governance",
+          "description": "Organizational cybersecurity strategy is established and communicated",
+          "controls": [
+            "GV.GV-01: Organizational cybersecurity strategy is established",
+            "GV.GV-02: Cybersecurity roles and responsibilities are coordinated and aligned",
+            "GV.GV-03: Legal, regulatory, and contractual requirements are understood and managed"
+          ],
+          "remediation": [
+            "Establish clear cybersecurity governance framework for Azure applications",
+            "Define roles and responsibilities for application registration management",
+            "Document compliance requirements for application permissions"
+          ]
+        },
+        "GV.RM": {
+          "name": "Governance - Risk Management",
+          "description": "Risk management processes are established, managed, and agreed to by organizational stakeholders",
+          "controls": [
+            "GV.RM-01: Risk management processes are established and managed",
+            "GV.RM-02: Risk appetite and risk tolerance statements are established",
+            "GV.RM-03: Cybersecurity risk management processes are integrated"
+          ],
+          "remediation": [
+            "Implement risk assessment framework for application permissions",
+            "Define risk appetite for different permission levels",
+            "Establish approval workflows for high-risk permissions",
+            "Integrate application risk management with organizational processes"
+          ]
+        },
+        "GV.RR": {
+          "name": "Governance - Risk Strategy",
+          "description": "Risk response strategies are established and managed",
+          "controls": [
+            "GV.RR-01: Risk response actions are established and prioritized",
+            "GV.RR-02: Risk responses are selected, communicated, implemented, and monitored"
+          ],
+          "remediation": [
+            "Develop risk response strategies for different permission scenarios",
+            "Implement monitoring for high-risk application permissions"
+          ]
+        },
+        "GV.PO": {
+          "name": "Governance - Policy",
+          "description": "Organizational cybersecurity policy is established, communicated, and enforced",
+          "controls": [
+            "GV.PO-01: Organizational cybersecurity policy is established and communicated",
+            "GV.PO-02: Cybersecurity policy is reviewed and updated"
+          ],
+          "remediation": [
+            "Establish Azure application registration security policies",
+            "Define permission assignment policies and procedures",
+            "Implement regular policy review cycles"
+          ]
+        },
+        "GV.OC": {
+          "name": "Governance - Oversight",
+          "description": "Senior leadership monitors cybersecurity risk and receives updates",
+          "controls": [
+            "GV.OC-01: Cybersecurity-related outcomes are communicated at senior levels",
+            "GV.OC-02: Cybersecurity performance and effectiveness are monitored"
+          ],
+          "remediation": [
+            "Establish executive reporting for application security metrics",
+            "Implement dashboards for permission risk monitoring"
+          ]
+        }
+      }
+    },
+    "ID": {
+      "name": "Identify",
+      "description": "The organization's current cybersecurity posture is understood to manage cybersecurity risk to systems, people, assets, data, and capabilities.",
+      "subcategories": {
+        "ID.AM": {
+          "name": "Identify - Asset Management",
+          "description": "Assets are formally managed throughout removal, transfers, and disposition",
+          "controls": [
+            "ID.AM-01: Inventories of hardware managed within the organization are maintained",
+            "ID.AM-02: Inventories of software and applications are maintained",
+            "ID.AM-03: Organizational communication and data flows are mapped",
+            "ID.AM-04: External information systems are catalogued"
+          ],
+          "remediation": [
+            "Maintain inventory of all Azure application registrations",
+            "Document data flows and integrations for each application",
+            "Catalog external systems that applications connect to",
+            "Implement automated asset discovery for application permissions"
+          ]
+        },
+        "ID.RA": {
+          "name": "Identify - Risk Assessment",
+          "description": "Risk assessments are performed to identify cybersecurity risks to organizational operations",
+          "controls": [
+            "ID.RA-01: Asset vulnerabilities are identified and documented",
+            "ID.RA-02: Threat intelligence is received from information sharing forums and sources",
+            "ID.RA-03: Threats are identified and documented",
+            "ID.RA-04: Potential business impacts and likelihoods are identified"
+          ],
+          "remediation": [
+            "Conduct regular risk assessments for application permissions",
+            "Monitor threat intelligence related to Azure application attacks",
+            "Document potential impact of compromised applications",
+            "Assess likelihood of permission abuse scenarios"
+          ]
+        },
+        "ID.IM": {
+          "name": "Identify - Improvement",
+          "description": "Cybersecurity risk management processes are improved by incorporating lessons learned",
+          "controls": [
+            "ID.IM-01: A baseline configuration is established and maintained",
+            "ID.IM-02: The response to identified cybersecurity incidents is improved"
+          ],
+          "remediation": [
+            "Establish baseline security configurations for applications",
+            "Learn from security incidents involving application permissions"
+          ]
+        },
+        "ID.BE": {
+          "name": "Identify - Business Environment",
+          "description": "The organization's mission, objectives, stakeholders, and activities are understood",
+          "controls": [
+            "ID.BE-01: Business functions, processes, and activities are understood",
+            "ID.BE-02: Dependencies and critical functions are understood"
+          ],
+          "remediation": [
+            "Document business functions supported by each application",
+            "Identify critical dependencies and single points of failure"
+          ]
+        },
+        "ID.GV": {
+          "name": "Identify - Governance",
+          "description": "The organizational approach to cybersecurity risk management is understood",
+          "controls": [
+            "ID.GV-01: Cybersecurity roles and responsibilities are established",
+            "ID.GV-02: Cybersecurity activities are governed by policies and procedures"
+          ],
+          "remediation": [
+            "Define clear roles for application security management",
+            "Establish governance procedures for permission grants"
+          ]
+        },
+        "ID.SC": {
+          "name": "Identify - Supply Chain",
+          "description": "Supply chain risk management processes are identified, established, assessed, managed, and agreed to",
+          "controls": [
+            "ID.SC-01: Cybersecurity roles and responsibilities for suppliers are identified",
+            "ID.SC-02: Cybersecurity requirements are integrated into supplier contracts"
+          ],
+          "remediation": [
+            "Assess third-party integrations and their security requirements",
+            "Include cybersecurity requirements in vendor contracts"
+          ]
+        }
+      }
+    },
+    "PR": {
+      "name": "Protect",
+      "description": "Safeguards to ensure delivery of critical infrastructure services are implemented.",
+      "subcategories": {
+        "PR.AC": {
+          "name": "Protect - Access Control",
+          "description": "Access to physical and logical assets and associated facilities is limited to authorized users, processes, and devices",
+          "controls": [
+            "PR.AC-01: Identities and credentials are issued, managed, verified, revoked, and audited",
+            "PR.AC-02: Physical access to assets is managed and protected",
+            "PR.AC-03: Logical access to assets and associated facilities is managed",
+            "PR.AC-04: Access permissions and authorizations are managed",
+            "PR.AC-05: Network integrity is protected",
+            "PR.AC-06: Identities are proofed and bound to credentials and asserted in interactions",
+            "PR.AC-07: Users, devices, and other assets are authenticated"
+          ],
+          "remediation": [
+            "Implement least privilege principle for application permissions",
+            "Use conditional access policies to restrict application access",
+            "Enable multi-factor authentication for administrative access",
+            "Regularly audit and review application permissions",
+            "Implement just-in-time access for privileged operations",
+            "Use managed identities where possible to avoid credential exposure"
+          ]
+        },
+        "PR.AT": {
+          "name": "Protect - Awareness and Training",
+          "description": "Personnel are provided cybersecurity awareness education and training",
+          "controls": [
+            "PR.AT-01: Users are informed and trained",
+            "PR.AT-02: Privileged users understand their roles and responsibilities"
+          ],
+          "remediation": [
+            "Train developers on secure application registration practices",
+            "Educate administrators on permission risk implications",
+            "Provide security awareness training on application threats"
+          ]
+        },
+        "PR.DS": {
+          "name": "Protect - Data Security",
+          "description": "Information and records are managed consistent with organizational risk strategy",
+          "controls": [
+            "PR.DS-01: Data-at-rest is protected",
+            "PR.DS-02: Data-in-transit is protected",
+            "PR.DS-03: Assets are formally managed throughout removal, transfers, and disposition",
+            "PR.DS-04: Adequate capacity to ensure availability is maintained",
+            "PR.DS-05: Protections against data leaks are implemented"
+          ],
+          "remediation": [
+            "Encrypt sensitive data accessed by applications",
+            "Implement data loss prevention for application integrations",
+            "Classify data based on sensitivity and restrict access accordingly",
+            "Monitor data access patterns for anomalies",
+            "Implement data retention policies for application logs"
+          ]
+        },
+        "PR.IP": {
+          "name": "Protect - Information Protection Processes",
+          "description": "Security policies, processes, and procedures are maintained and used",
+          "controls": [
+            "PR.IP-01: A baseline configuration is created and maintained",
+            "PR.IP-02: A System Development Life Cycle to manage systems is implemented",
+            "PR.IP-03: Configuration change control processes are in place"
+          ],
+          "remediation": [
+            "Establish secure baseline configurations for applications",
+            "Implement secure development lifecycle practices",
+            "Use infrastructure as code for consistent deployments"
+          ]
+        },
+        "PR.MA": {
+          "name": "Protect - Maintenance",
+          "description": "Maintenance and repairs of organizational assets are performed",
+          "controls": [
+            "PR.MA-01: Maintenance and repair of assets is performed using approved tools",
+            "PR.MA-02: Remote maintenance is approved, logged, and performed in a secure manner"
+          ],
+          "remediation": [
+            "Use approved tools for application maintenance and updates",
+            "Secure remote access for application administration"
+          ]
+        },
+        "PR.PT": {
+          "name": "Protect - Protective Technology",
+          "description": "Technical security solutions are managed to ensure the security of assets",
+          "controls": [
+            "PR.PT-01: Audit/log records are determined, documented, implemented, and reviewed",
+            "PR.PT-02: Removable media is protected and its use restricted",
+            "PR.PT-03: The principle of least functionality is incorporated",
+            "PR.PT-04: Communications and control networks are protected"
+          ],
+          "remediation": [
+            "Enable comprehensive audit logging for all application activities",
+            "Implement network segmentation for application traffic",
+            "Use application firewalls and security controls",
+            "Monitor and analyze security logs continuously"
+          ]
+        },
+        "PR.AA": {
+          "name": "Protect - Authentication and Authorization",
+          "description": "Access to assets and associated facilities is limited to authorized users, processes, and devices",
+          "controls": [
+            "PR.AA-01: Identities and credentials are issued, managed, verified, revoked, and audited",
+            "PR.AA-02: Identity and credential management systems are protected",
+            "PR.AA-03: Users are authenticated prior to access",
+            "PR.AA-04: Devices are authenticated prior to access"
+          ],
+          "remediation": [
+            "Implement strong identity and access management",
+            "Use certificate-based authentication where appropriate",
+            "Regularly rotate application credentials and secrets",
+            "Implement device-based conditional access policies"
+          ]
+        }
+      }
+    },
+    "DE": {
+      "name": "Detect",
+      "description": "Activities to identify the occurrence of a cybersecurity event are implemented.",
+      "subcategories": {
+        "DE.AE": {
+          "name": "Detect - Anomalies and Events",
+          "description": "Anomalous activity is detected and the potential impact is understood",
+          "controls": [
+            "DE.AE-01: A baseline of network operations and expected data flows is established",
+            "DE.AE-02: Detected events are analyzed to understand attack targets and methods",
+            "DE.AE-03: Event data are collected and correlated from multiple sources",
+            "DE.AE-04: Impact of events is determined"
+          ],
+          "remediation": [
+            "Establish baseline behavior patterns for applications",
+            "Implement anomaly detection for unusual permission usage",
+            "Correlate security events across multiple applications",
+            "Assess impact of security events on business operations"
+          ]
+        },
+        "DE.CM": {
+          "name": "Detect - Continuous Monitoring",
+          "description": "The organization continuously monitors to identify cybersecurity events",
+          "controls": [
+            "DE.CM-01: Networks and network communications are monitored",
+            "DE.CM-02: The physical environment is monitored",
+            "DE.CM-03: Personnel activity is monitored",
+            "DE.CM-04: Malicious code is detected",
+            "DE.CM-05: Unauthorized mobile code is detected",
+            "DE.CM-06: External service provider activity is monitored",
+            "DE.CM-07: Monitoring for unauthorized personnel, connections, devices, and software is performed"
+          ],
+          "remediation": [
+            "Monitor application network traffic and API calls",
+            "Implement real-time monitoring for privileged operations",
+            "Monitor user activities within applications",
+            "Detect suspicious application behavior patterns",
+            "Monitor third-party service integrations",
+            "Alert on unauthorized access attempts"
+          ]
+        },
+        "DE.DP": {
+          "name": "Detect - Detection Processes",
+          "description": "Detection processes and procedures are maintained and tested",
+          "controls": [
+            "DE.DP-01: Roles and responsibilities for detection are well defined",
+            "DE.DP-02: Detection activities comply with applicable requirements",
+            "DE.DP-03: Detection processes are tested",
+            "DE.DP-04: Event detection information is communicated",
+            "DE.DP-05: Detection processes are continuously improved"
+          ],
+          "remediation": [
+            "Define roles for security monitoring and incident detection",
+            "Ensure detection processes meet compliance requirements",
+            "Test and validate security monitoring capabilities",
+            "Establish communication channels for security alerts",
+            "Continuously improve detection based on lessons learned"
+          ]
+        }
+      }
+    },
+    "RS": {
+      "name": "Respond",
+      "description": "Activities to take action regarding a detected cybersecurity incident are implemented.",
+      "subcategories": {
+        "RS.RP": {
+          "name": "Respond - Response Planning",
+          "description": "Response processes and procedures are executed and maintained",
+          "controls": [
+            "RS.RP-01: Response plan is executed during or after an incident",
+            "RS.RP-02: Response procedures are updated"
+          ],
+          "remediation": [
+            "Develop incident response procedures for application security events",
+            "Create playbooks for common application security scenarios",
+            "Regularly update response procedures based on new threats"
+          ]
+        },
+        "RS.CO": {
+          "name": "Respond - Communications",
+          "description": "Response activities are coordinated with internal and external stakeholders",
+          "controls": [
+            "RS.CO-01: Personnel know their roles and order of operations when a response is needed",
+            "RS.CO-02: Incidents are reported consistent with established criteria",
+            "RS.CO-03: Information is shared consistent with response plans",
+            "RS.CO-04: Coordination with stakeholders occurs consistent with response plans",
+            "RS.CO-05: Voluntary information sharing occurs with external stakeholders"
+          ],
+          "remediation": [
+            "Train personnel on incident response roles and procedures",
+            "Establish clear incident reporting criteria and processes",
+            "Share threat intelligence with relevant stakeholders",
+            "Coordinate with cloud providers during security incidents",
+            "Participate in industry threat sharing initiatives"
+          ]
+        },
+        "RS.AN": {
+          "name": "Respond - Analysis",
+          "description": "Analysis is conducted to ensure effective response and support recovery activities",
+          "controls": [
+            "RS.AN-01: Notifications from detection systems are investigated",
+            "RS.AN-02: The impact of the incident is understood",
+            "RS.AN-03: Forensics are performed",
+            "RS.AN-04: Incidents are categorized consistent with response plans"
+          ],
+          "remediation": [
+            "Investigate all security alerts related to applications",
+            "Assess the business impact of security incidents",
+            "Preserve forensic evidence for analysis",
+            "Categorize incidents based on severity and impact"
+          ]
+        },
+        "RS.MI": {
+          "name": "Respond - Mitigation",
+          "description": "Activities are performed to prevent expansion of an event and mitigate its effects",
+          "controls": [
+            "RS.MI-01: Incidents are contained",
+            "RS.MI-02: Incidents are mitigated",
+            "RS.MI-03: Newly identified vulnerabilities are mitigated or documented"
+          ],
+          "remediation": [
+            "Implement containment procedures for compromised applications",
+            "Disable compromised credentials and revoke permissions",
+            "Apply security patches and mitigations promptly",
+            "Document and track vulnerability remediation"
+          ]
+        },
+        "RS.IM": {
+          "name": "Respond - Improvements",
+          "description": "Organizational response activities are improved by incorporating lessons learned",
+          "controls": [
+            "RS.IM-01: Response plans incorporate lessons learned",
+            "RS.IM-02: Response strategies are updated"
+          ],
+          "remediation": [
+            "Update response procedures based on incident lessons learned",
+            "Improve security controls based on attack patterns",
+            "Enhance monitoring capabilities after incidents"
+          ]
+        }
+      }
+    },
+    "RC": {
+      "name": "Recover",
+      "description": "Activities to restore any capabilities or services that were impaired due to a cybersecurity incident are implemented.",
+      "subcategories": {
+        "RC.RP": {
+          "name": "Recover - Recovery Planning",
+          "description": "Recovery processes and procedures are executed and maintained",
+          "controls": [
+            "RC.RP-01: Recovery plan is executed during or after a cybersecurity incident",
+            "RC.RP-02: Recovery procedures are updated"
+          ],
+          "remediation": [
+            "Develop recovery procedures for application security incidents",
+            "Test backup and restore procedures for applications",
+            "Document recovery time objectives for critical applications",
+            "Regularly update recovery procedures based on lessons learned"
+          ]
+        },
+        "RC.IM": {
+          "name": "Recover - Improvements",
+          "description": "Recovery activities are improved by incorporating lessons learned from current and previous events",
+          "controls": [
+            "RC.IM-01: Recovery plans incorporate lessons learned",
+            "RC.IM-02: Recovery strategies are updated"
+          ],
+          "remediation": [
+            "Update recovery procedures based on incident experiences",
+            "Improve backup and restoration strategies",
+            "Enhance business continuity planning for applications"
+          ]
+        },
+        "RC.CO": {
+          "name": "Recover - Communications",
+          "description": "Restoration activities are coordinated with internal and external parties",
+          "controls": [
+            "RC.CO-01: Public relations are managed",
+            "RC.CO-02: Reputation is repaired after an incident",
+            "RC.CO-03: Recovery activities are communicated to stakeholders"
+          ],
+          "remediation": [
+            "Develop communication plans for security incidents",
+            "Manage stakeholder communications during recovery",
+            "Coordinate with legal and compliance teams as needed"
+          ]
+        }
+      }
+    }
+  },
+  "riskKeywords": {
+    "high": ["critical", "sensitive", "privileged", "admin", "global", "directory", "application", "write", "all"],
+    "medium": ["read", "user", "member", "group", "policy", "audit"],
+    "low": ["basic", "profile", "sign-in", "openid"]
+  }
+}

@@ -84,18 +84,36 @@ class RiskAnalyzer {
     
     async loadDataFiles() {
         try {
+            // Load from knowledge base - the foundational documents for risk analysis
             const [nistResponse, entraResponse] = await Promise.all([
-                fetch('./data/nist-csf-2.0.json'),
-                fetch('./data/entra-permissions.json')
+                fetch('./knowledge/nist-csf-2.0.json'),
+                fetch('./knowledge/application-permissions-index.json')
             ]);
             
             this.nistData = await nistResponse.json();
             this.entraData = await entraResponse.json();
             
-            console.log('Data files loaded successfully');
+            console.log('Knowledge base loaded successfully');
+            console.log('Loaded NIST CSF 2.0 framework and application permissions index from knowledge base');
         } catch (error) {
-            console.error('Error loading data files:', error);
-            alert('Error loading risk analysis data. Please refresh the page.');
+            console.error('Error loading knowledge base:', error);
+            console.log('Falling back to data folder...');
+            
+            // Fallback to data folder if knowledge base is not available
+            try {
+                const [nistFallback, entraFallback] = await Promise.all([
+                    fetch('./data/nist-csf-2.0.json'),
+                    fetch('./data/entra-permissions.json')
+                ]);
+                
+                this.nistData = await nistFallback.json();
+                this.entraData = await entraFallback.json();
+                
+                console.log('Fallback data files loaded successfully');
+            } catch (fallbackError) {
+                console.error('Error loading fallback data files:', fallbackError);
+                alert('Error loading risk analysis data. Please check that the knowledge base is properly configured.');
+            }
         }
     }
     
@@ -507,6 +525,9 @@ class RiskAnalyzer {
         this.analysisSection.style.display = 'block';
         this.analysisSection.scrollIntoView({ behavior: 'smooth' });
         
+        // Display knowledge base info
+        this.displayKnowledgeBaseInfo();
+        
         // Display overall risk
         this.overallScore.textContent = this.analysisResults.overallRisk.score;
         this.riskLevel.textContent = this.analysisResults.overallRisk.level.toUpperCase();
@@ -654,6 +675,30 @@ class RiskAnalyzer {
                     <div class="item-description">${rec.description}</div>
                 </div>
             `).join('') : '<p style="color: #8b949e; font-style: italic;">No immediate actions required</p>';
+    }
+    
+    displayKnowledgeBaseInfo() {
+        // Add knowledge base information to show analysis foundation
+        const knowledgeBaseInfo = document.getElementById('knowledge-base-info');
+        if (knowledgeBaseInfo) {
+            const permissionCount = Object.keys(this.entraData.permissions).length;
+            const csfCategoryCount = Object.keys(this.nistData.categories).length;
+            
+            knowledgeBaseInfo.innerHTML = `
+                <div class="knowledge-base-card">
+                    <h4><i class="fas fa-database"></i> Analysis Foundation</h4>
+                    <p>This analysis is based on comprehensive knowledge base documents:</p>
+                    <ul>
+                        <li><strong>Application Permissions Index:</strong> ${permissionCount} Microsoft Graph permissions with risk assessments</li>
+                        <li><strong>NIST CSF 2.0 Framework:</strong> ${csfCategoryCount} categories with Azure-specific controls</li>
+                        <li><strong>Risk Assessment Method:</strong> Context-aware analysis distinguishing app vs delegated permissions</li>
+                    </ul>
+                    <div class="knowledge-base-badge">
+                        <span class="badge-text">Powered by Comprehensive Knowledge Base</span>
+                    </div>
+                </div>
+            `;
+        }
     }
     
     createRiskChart() {

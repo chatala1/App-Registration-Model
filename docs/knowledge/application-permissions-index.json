@@ -1,0 +1,356 @@
+{
+  "permissions": {
+    "Application.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read applications and service principals",
+      "impact": "Can read application configurations and secrets",
+      "csfMapping": ["ID.AM", "PR.AC"],
+      "riskScore": 6,
+      "permissionType": "application",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 6
+    },
+    "Application.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write all applications",
+      "impact": "Can create, modify, and delete applications and their credentials",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 9,
+      "permissionType": "application",
+      "delegatedRiskScore": 8,
+      "appRiskScore": 9
+    },
+    "Directory.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read directory data",
+      "impact": "Can read all directory information including users, groups, and applications",
+      "csfMapping": ["ID.AM", "PR.AC"],
+      "riskScore": 6,
+      "permissionType": "application",
+      "delegatedRiskScore": 5,
+      "appRiskScore": 6
+    },
+    "Directory.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Read and write directory data",
+      "impact": "Can read and write all directory information",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 10,
+      "permissionType": "application",
+      "delegatedRiskScore": 9,
+      "appRiskScore": 10
+    },
+    "User.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read all users' full profiles",
+      "impact": "Can read user profiles and organizational information",
+      "csfMapping": ["ID.AM", "PR.DS"],
+      "riskScore": 5,
+      "permissionType": "both",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "User.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write all users' full profiles",
+      "impact": "Can read and write user profiles and manage user accounts",
+      "csfMapping": ["PR.AC", "ID.RA", "PR.DS"],
+      "riskScore": 8,
+      "permissionType": "both",
+      "delegatedRiskScore": 7,
+      "appRiskScore": 8
+    },
+    "Group.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read all groups",
+      "impact": "Can read group information and memberships",
+      "csfMapping": ["ID.AM", "PR.AC"],
+      "riskScore": 4,
+      "permissionType": "both",
+      "delegatedRiskScore": 3,
+      "appRiskScore": 4
+    },
+    "Group.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write all groups",
+      "impact": "Can manage groups and group memberships",
+      "csfMapping": ["PR.AC", "ID.RA"],
+      "riskScore": 7,
+      "permissionType": "both",
+      "delegatedRiskScore": 6,
+      "appRiskScore": 7
+    },
+    "RoleManagement.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read role management data",
+      "impact": "Can read role assignments and role definitions",
+      "csfMapping": ["ID.AM", "PR.AC"],
+      "riskScore": 6,
+      "permissionType": "application",
+      "delegatedRiskScore": 5,
+      "appRiskScore": 6
+    },
+    "RoleManagement.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Read and write role management data",
+      "impact": "Can manage role assignments and create custom roles",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 10,
+      "permissionType": "application",
+      "delegatedRiskScore": 9,
+      "appRiskScore": 10
+    },
+    "Policy.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read your organization's policies",
+      "impact": "Can read conditional access and other policies",
+      "csfMapping": ["ID.AM", "PR.AC"],
+      "riskScore": 5,
+      "permissionType": "application",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "Policy.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write your organization's policies",
+      "impact": "Can manage conditional access and security policies",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.PO"],
+      "riskScore": 9,
+      "permissionType": "application",
+      "delegatedRiskScore": 8,
+      "appRiskScore": 9
+    },
+    "AuditLog.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read audit log data",
+      "impact": "Can read audit logs and sign-in reports",
+      "csfMapping": ["DE.CM", "ID.AM"],
+      "riskScore": 4,
+      "permissionType": "both",
+      "delegatedRiskScore": 3,
+      "appRiskScore": 4
+    },
+    "SecurityEvents.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read your organization's security events",
+      "impact": "Can read security events and alerts",
+      "csfMapping": ["DE.AE", "DE.CM"],
+      "riskScore": 5,
+      "permissionType": "application",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "SecurityActions.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read your organization's security actions",
+      "impact": "Can read security actions and investigations",
+      "csfMapping": ["RS.AN", "DE.CM"],
+      "riskScore": 5,
+      "permissionType": "application",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "Mail.Read": {
+      "riskLevel": "low",
+      "description": "Read user mail",
+      "impact": "Can read user's mailbox",
+      "csfMapping": ["PR.DS"],
+      "riskScore": 3,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 3,
+      "appRiskScore": 5
+    },
+    "Mail.ReadWrite": {
+      "riskLevel": "medium",
+      "description": "Read and write access to user mail",
+      "impact": "Can read and send emails on behalf of user",
+      "csfMapping": ["PR.DS", "PR.AC"],
+      "riskScore": 5,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 5,
+      "appRiskScore": 7
+    },
+    "Files.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read all files that the user can access",
+      "impact": "Can read all files across the organization",
+      "csfMapping": ["PR.DS", "ID.AM"],
+      "riskScore": 6,
+      "permissionType": "both",
+      "delegatedRiskScore": 5,
+      "appRiskScore": 6
+    },
+    "Files.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Have full access to all files user can access",
+      "impact": "Can read, write, and delete files across the organization",
+      "csfMapping": ["PR.DS", "PR.AC", "ID.RA"],
+      "riskScore": 8,
+      "permissionType": "both",
+      "delegatedRiskScore": 7,
+      "appRiskScore": 8
+    },
+    "User.Read": {
+      "riskLevel": "low",
+      "description": "Sign in and read user profile",
+      "impact": "Can read basic user profile information",
+      "csfMapping": ["PR.AC"],
+      "riskScore": 2,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 2,
+      "appRiskScore": 3
+    },
+    "offline_access": {
+      "riskLevel": "medium",
+      "description": "Maintain access to data you have given it access to",
+      "impact": "Application can access data without user being present",
+      "csfMapping": ["PR.AC"],
+      "riskScore": 4,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "Mail.Send": {
+      "riskLevel": "medium",
+      "description": "Send mail as user",
+      "impact": "Can send emails on behalf of the user",
+      "csfMapping": ["PR.AC", "PR.DS"],
+      "riskScore": 5,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 5,
+      "appRiskScore": 7
+    },
+    "Calendars.ReadWrite": {
+      "riskLevel": "medium",
+      "description": "Have full access to user calendars",
+      "impact": "Can read and modify user calendar events",
+      "csfMapping": ["PR.DS", "PR.AC"],
+      "riskScore": 4,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 6
+    },
+    "Contacts.ReadWrite": {
+      "riskLevel": "medium",
+      "description": "Have full access to user contacts",
+      "impact": "Can read and modify user contacts",
+      "csfMapping": ["PR.DS"],
+      "riskScore": 4,
+      "permissionType": "delegated",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "DeviceManagementConfiguration.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write Microsoft Intune device configuration and policies",
+      "impact": "Can manage device configurations and compliance policies",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 8,
+      "permissionType": "application",
+      "delegatedRiskScore": 7,
+      "appRiskScore": 8
+    },
+    "DeviceManagementManagedDevices.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write Microsoft Intune managed devices",
+      "impact": "Can manage and control organizational devices",
+      "csfMapping": ["PR.AC", "ID.AM", "GV.RM"],
+      "riskScore": 8,
+      "permissionType": "application",
+      "delegatedRiskScore": 7,
+      "appRiskScore": 8
+    },
+    "Sites.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write items in all site collections",
+      "impact": "Can access and modify SharePoint content across the organization",
+      "csfMapping": ["PR.DS", "PR.AC", "ID.RA"],
+      "riskScore": 7,
+      "permissionType": "both",
+      "delegatedRiskScore": 6,
+      "appRiskScore": 7
+    },
+    "Sites.FullControl.All": {
+      "riskLevel": "critical",
+      "description": "Have full control of all site collections",
+      "impact": "Complete administrative control over SharePoint sites",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 10,
+      "permissionType": "both",
+      "delegatedRiskScore": 9,
+      "appRiskScore": 10
+    },
+    "Reports.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read all usage reports",
+      "impact": "Can read organizational usage and activity reports",
+      "csfMapping": ["DE.CM", "ID.AM"],
+      "riskScore": 5,
+      "permissionType": "application",
+      "delegatedRiskScore": 4,
+      "appRiskScore": 5
+    },
+    "Domain.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Read and write domains",
+      "impact": "Can manage organizational domains and DNS settings",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 10,
+      "permissionType": "application",
+      "delegatedRiskScore": 9,
+      "appRiskScore": 10
+    },
+    "Organization.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Read and write organization information",
+      "impact": "Can modify organizational settings and configurations",
+      "csfMapping": ["PR.AC", "GV.RM", "ID.RA"],
+      "riskScore": 10,
+      "permissionType": "application",
+      "delegatedRiskScore": 9,
+      "appRiskScore": 10
+    },
+    "Agreement.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write all terms of use agreements",
+      "impact": "Can manage terms of use and consent agreements",
+      "csfMapping": ["GV.RM", "PR.AC"],
+      "riskScore": 7,
+      "permissionType": "application",
+      "delegatedRiskScore": 6,
+      "appRiskScore": 7
+    },
+    "IdentityProvider.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Read and write identity providers",
+      "impact": "Can manage external identity providers and federation settings",
+      "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "riskScore": 10,
+      "permissionType": "application",
+      "delegatedRiskScore": 9,
+      "appRiskScore": 10
+    }
+  },
+  "riskLevels": {
+    "low": {
+      "score": "1-3",
+      "description": "Limited impact, basic permissions",
+      "color": "#28a745"
+    },
+    "medium": {
+      "score": "4-6", 
+      "description": "Moderate impact, read access to sensitive data",
+      "color": "#ffc107"
+    },
+    "high": {
+      "score": "7-9",
+      "description": "High impact, write access to critical resources",
+      "color": "#fd7e14"
+    },
+    "critical": {
+      "score": "10",
+      "description": "Critical impact, administrative privileges",
+      "color": "#dc3545"
+    }
+  }
+}

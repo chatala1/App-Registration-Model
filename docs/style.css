@@ -651,3 +651,101 @@ footer a:hover {
         display: none !important;
     }
 }
+
+/* Knowledge Base Section */
+.knowledge-base-section {
+    margin: 1.5rem 0;
+    padding: 0;
+}
+
+.knowledge-base-card {
+    background: linear-gradient(135deg, #1a1f26 0%, #161b22 100%);
+    border: 1px solid #58a6ff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.knowledge-base-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #58a6ff, #7c3aed, #58a6ff);
+    animation: knowledgeGlow 3s ease-in-out infinite;
+}
+
+@keyframes knowledgeGlow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+.knowledge-base-card h4 {
+    color: #58a6ff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.knowledge-base-card h4 i {
+    color: #58a6ff;
+    font-size: 1.2rem;
+}
+
+.knowledge-base-card p {
+    color: #c9d1d9;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.knowledge-base-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.knowledge-base-card li {
+    color: #8b949e;
+    font-size: 0.9rem;
+    padding: 0.3rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.knowledge-base-card li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #58a6ff;
+    font-weight: bold;
+}
+
+.knowledge-base-card strong {
+    color: #f0f6fc;
+    font-weight: 600;
+}
+
+.knowledge-base-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.badge-text {
+    background: linear-gradient(90deg, #58a6ff, #7c3aed);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(88, 166, 255, 0.2);
+}
