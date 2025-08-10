@@ -1,0 +1,74 @@
+{
+  "categories": {
+    "GV": {
+      "name": "Govern",
+      "description": "The organization's cybersecurity risk management strategy, expectations, and policy are established, communicated, and monitored.",
+      "subcategories": {
+        "GV.GV": "Governance - Governance",
+        "GV.RM": "Governance - Risk Management", 
+        "GV.RR": "Governance - Risk Strategy",
+        "GV.PO": "Governance - Policy",
+        "GV.OC": "Governance - Oversight"
+      }
+    },
+    "ID": {
+      "name": "Identify",
+      "description": "The organization's current cybersecurity posture is understood to manage cybersecurity risk to systems, people, assets, data, and capabilities.",
+      "subcategories": {
+        "ID.AM": "Identify - Asset Management",
+        "ID.RA": "Identify - Risk Assessment",
+        "ID.IM": "Identify - Improvement",
+        "ID.BE": "Identify - Business Environment",
+        "ID.GV": "Identify - Governance",
+        "ID.SC": "Identify - Supply Chain"
+      }
+    },
+    "PR": {
+      "name": "Protect",
+      "description": "Safeguards to ensure delivery of critical infrastructure services are implemented.",
+      "subcategories": {
+        "PR.AC": "Protect - Access Control",
+        "PR.AT": "Protect - Awareness and Training",
+        "PR.DS": "Protect - Data Security",
+        "PR.IP": "Protect - Information Protection Processes",
+        "PR.MA": "Protect - Maintenance",
+        "PR.PT": "Protect - Protective Technology",
+        "PR.AA": "Protect - Authentication and Authorization"
+      }
+    },
+    "DE": {
+      "name": "Detect",
+      "description": "Activities to identify the occurrence of a cybersecurity event are implemented.",
+      "subcategories": {
+        "DE.AE": "Detect - Anomalies and Events",
+        "DE.CM": "Detect - Continuous Monitoring",
+        "DE.DP": "Detect - Detection Processes"
+      }
+    },
+    "RS": {
+      "name": "Respond",
+      "description": "Activities to take action regarding a detected cybersecurity incident are implemented.",
+      "subcategories": {
+        "RS.RP": "Respond - Response Planning",
+        "RS.CO": "Respond - Communications",
+        "RS.AN": "Respond - Analysis",
+        "RS.MI": "Respond - Mitigation",
+        "RS.IM": "Respond - Improvements"
+      }
+    },
+    "RC": {
+      "name": "Recover",
+      "description": "Activities to restore any capabilities or services that were impaired due to a cybersecurity incident are implemented.",
+      "subcategories": {
+        "RC.RP": "Recover - Recovery Planning",
+        "RC.IM": "Recover - Improvements",
+        "RC.CO": "Recover - Communications"
+      }
+    }
+  },
+  "riskKeywords": {
+    "high": ["critical", "sensitive", "privileged", "admin", "global", "directory", "application", "write", "all"],
+    "medium": ["read", "user", "member", "group", "policy", "audit"],
+    "low": ["basic", "profile", "sign-in", "openid"]
+  }
+}
