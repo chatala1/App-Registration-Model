@@ -404,6 +404,63 @@ header p {
     font-weight: 600;
 }
 
+.item-subtitle {
+    display: flex;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.permission-type {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.permission-type.application-permission {
+    background: #3d1a1a;
+    color: #f85149;
+    border: 1px solid #da3633;
+}
+
+.permission-type.delegated-permission {
+    background: #1a2f3d;
+    color: #58a6ff;
+    border: 1px solid #1c7ed6;
+}
+
+.permission-type.mixed-context {
+    background: #2e2619;
+    color: #d29922;
+    border: 1px solid #bf8700;
+}
+
+.permission-type.context-unknown {
+    background: #24292f;
+    color: #8b949e;
+    border: 1px solid #30363d;
+}
+
+.permission-availability {
+    font-size: 0.75rem;
+    color: #8b949e;
+    font-style: italic;
+}
+
+.context-info {
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: #21262d;
+    border-left: 2px solid #58a6ff;
+    font-size: 0.8rem;
+    color: #8b949e;
+    border-radius: 3px;
+}
+
 .csf-item {
     border-left-color: #58a6ff;
     background: #1c2a3a;

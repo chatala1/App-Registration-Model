@@ -137,15 +137,23 @@ class RiskAnalyzer {
         const detectedPermissions = [];
         const contentLower = content.toLowerCase();
         
+        // Determine if this is likely app permissions or delegated permissions context
+        const permissionContext = this.determinePermissionContext(content);
+        
         // Search for exact permission names
         Object.keys(this.entraData.permissions).forEach(permission => {
             const permissionLower = permission.toLowerCase();
             if (contentLower.includes(permissionLower) || 
                 contentLower.includes(permissionLower.replace(/\./g, ' '))) {
+                
+                const permissionData = this.entraData.permissions[permission];
+                const effectivePermission = this.calculateEffectivePermission(permissionData, permissionContext);
+                
                 detectedPermissions.push({
                     name: permission,
-                    ...this.entraData.permissions[permission],
-                    detected: 'exact_match'
+                    ...effectivePermission,
+                    detected: 'exact_match',
+                    detectedContext: permissionContext
                 });
             }
         });
@@ -175,16 +183,84 @@ class RiskAnalyzer {
             if (pattern.test(content) && 
                 !detectedPermissions.find(p => p.name === permission)) {
                 if (this.entraData.permissions[permission]) {
+                    const permissionData = this.entraData.permissions[permission];
+                    const effectivePermission = this.calculateEffectivePermission(permissionData, permissionContext);
+                    
                     detectedPermissions.push({
                         name: permission,
-                        ...this.entraData.permissions[permission],
-                        detected: 'pattern_match'
+                        ...effectivePermission,
+                        detected: 'pattern_match',
+                        detectedContext: permissionContext
                     });
                 }
             }
         });
         
         return detectedPermissions;
+    }
+    
+    determinePermissionContext(content) {
+        const contentLower = content.toLowerCase();
+        
+        // Keywords that suggest app permissions (application context)
+        const appPermissionKeywords = [
+            'application permission', 'app permission', 'service principal', 
+            'daemon', 'background service', 'unattended', 'server-to-server',
+            'application registration', 'client credentials', 'certificate',
+            'app-only', 'application-only'
+        ];
+        
+        // Keywords that suggest delegated permissions (user context)
+        const delegatedPermissionKeywords = [
+            'delegated permission', 'user permission', 'on behalf of user',
+            'user consent', 'interactive', 'user sign-in', 'oauth flow',
+            'authorization code', 'user context', 'signed-in user'
+        ];
+        
+        const appScore = appPermissionKeywords.filter(keyword => 
+            contentLower.includes(keyword)).length;
+        const delegatedScore = delegatedPermissionKeywords.filter(keyword => 
+            contentLower.includes(keyword)).length;
+        
+        // If we can't determine from context, assume mixed/both
+        if (appScore === delegatedScore) {
+            return 'both';
+        }
+        
+        return appScore > delegatedScore ? 'application' : 'delegated';
+    }
+    
+    calculateEffectivePermission(permissionData, context) {
+        // Create a copy of the permission data
+        const effectivePermission = { ...permissionData };
+        
+        // Determine the effective risk score based on context
+        if (context === 'application' && permissionData.appRiskScore) {
+            effectivePermission.riskScore = permissionData.appRiskScore;
+            effectivePermission.contextType = 'Application Permission';
+        } else if (context === 'delegated' && permissionData.delegatedRiskScore) {
+            effectivePermission.riskScore = permissionData.delegatedRiskScore;
+            effectivePermission.contextType = 'Delegated Permission';
+        } else {
+            // Default or both - use the higher risk score for safety
+            const appScore = permissionData.appRiskScore || permissionData.riskScore;
+            const delegatedScore = permissionData.delegatedRiskScore || permissionData.riskScore;
+            effectivePermission.riskScore = Math.max(appScore, delegatedScore);
+            effectivePermission.contextType = 'Mixed Context';
+        }
+        
+        // Update risk level based on new score
+        if (effectivePermission.riskScore >= 10) {
+            effectivePermission.riskLevel = 'critical';
+        } else if (effectivePermission.riskScore >= 7) {
+            effectivePermission.riskLevel = 'high';
+        } else if (effectivePermission.riskScore >= 4) {
+            effectivePermission.riskLevel = 'medium';
+        } else {
+            effectivePermission.riskLevel = 'low';
+        }
+        
+        return effectivePermission;
     }
     
     mapToCSFCategories(detectedPermissions, content) {
@@ -446,7 +522,16 @@ class RiskAnalyzer {
                     <div class="item-title">${permission.name}
                         <span class="item-score score-${permission.riskLevel}">${permission.riskScore}/10</span>
                     </div>
+                    <div class="item-subtitle">
+                        <span class="permission-type ${permission.contextType ? permission.contextType.toLowerCase().replace(' ', '-') : 'unknown'}">${permission.contextType || 'Context Unknown'}</span>
+                        ${permission.permissionType ? `<span class="permission-availability">Available as: ${this.formatPermissionType(permission.permissionType)}</span>` : ''}
+                    </div>
                     <div class="item-description">${permission.description}</div>
+                    ${permission.detectedContext && permission.detectedContext !== 'both' ? `
+                        <div class="context-info">
+                            Detected in ${permission.detectedContext} context
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         
@@ -716,7 +801,20 @@ class RiskAnalyzer {
         ${results.detectedPermissions.map(p => `
             <div class="permission-item ${p.riskLevel}">
                 <strong>${p.name}</strong> (Risk Score: ${p.riskScore}/10)<br>
+                <span style="display: inline-block; margin: 5px 0; padding: 3px 8px; background: #1c2a3a; border: 1px solid #58a6ff; border-radius: 4px; font-size: 0.8em; color: #58a6ff;">
+                    ${p.contextType || 'Context Unknown'}
+                </span>
+                ${p.permissionType ? `
+                    <span style="margin-left: 10px; font-size: 0.85em; color: #8b949e; font-style: italic;">
+                        Available as: ${this.formatPermissionType(p.permissionType)}
+                    </span>
+                ` : ''}<br>
                 ${p.description}
+                ${p.detectedContext && p.detectedContext !== 'both' ? `
+                    <br><small style="color: #8b949e; font-style: italic;">
+                        Detected in ${p.detectedContext} context
+                    </small>
+                ` : ''}
             </div>
         `).join('')}
     </div>
@@ -1107,6 +1205,19 @@ class RiskAnalyzer {
     </div>
 </body>
 </html>`;
+    }
+    
+    formatPermissionType(permissionType) {
+        switch (permissionType) {
+            case 'application':
+                return 'App Permission';
+            case 'delegated':
+                return 'Delegated Permission';
+            case 'both':
+                return 'App & Delegated Permission';
+            default:
+                return permissionType || 'Unknown';
+        }
     }
     
     resetAnalysis() {
