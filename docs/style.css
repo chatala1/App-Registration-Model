@@ -9,7 +9,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     color: #333;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f8f9fa;
     min-height: 100vh;
 }
 
@@ -21,12 +21,12 @@ body {
 
 /* Header */
 header {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    background: #212529;
     padding: 2rem 0;
     text-align: center;
     color: white;
     margin-bottom: 2rem;
+    border-bottom: 3px solid #495057;
 }
 
 header h1 {
@@ -43,76 +43,73 @@ header p {
 /* Cards */
 .card {
     background: white;
-    border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    border: 1px solid #e9ecef;
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card h2 {
-    color: #2c3e50;
+    color: #212529;
     margin-bottom: 1rem;
     font-size: 1.5rem;
+    font-weight: 600;
 }
 
 /* Upload Area */
 .upload-area {
-    border: 2px dashed #cbd5e0;
-    border-radius: 8px;
+    border: 2px dashed #6c757d;
     padding: 3rem 2rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: #f8fafc;
+    background: #f8f9fa;
 }
 
 .upload-area.dragover {
-    border-color: #667eea;
-    background: #e6f3ff;
-    transform: scale(1.02);
+    border-color: #495057;
+    background: #e9ecef;
 }
 
 .upload-area:hover {
-    border-color: #667eea;
-    background: #f0f8ff;
+    border-color: #495057;
+    background: #e9ecef;
 }
 
 .upload-icon {
     width: 48px;
     height: 48px;
-    color: #667eea;
+    color: #495057;
     margin-bottom: 1rem;
 }
 
 .upload-content p {
     font-size: 1.1rem;
-    color: #4a5568;
+    color: #495057;
     margin-bottom: 0.5rem;
 }
 
 .upload-link {
-    color: #667eea;
+    color: #495057;
     font-weight: 600;
     text-decoration: underline;
 }
 
 .upload-formats {
     font-size: 0.9rem;
-    color: #718096;
+    color: #6c757d;
 }
 
 /* File Info */
 .file-info {
     margin-top: 1rem;
     padding: 1rem;
-    background: #f0f8ff;
-    border-radius: 8px;
+    background: #e9ecef;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -125,55 +122,54 @@ header p {
 
 #file-name {
     font-weight: 600;
-    color: #2c3e50;
+    color: #212529;
 }
 
 #file-size {
     font-size: 0.9rem;
-    color: #718096;
+    color: #6c757d;
 }
 
 /* Buttons */
 .btn {
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 6px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .btn-primary {
-    background: #667eea;
+    background: #212529;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #5a6fd8;
-    transform: translateY(-1px);
+    background: #495057;
 }
 
 .btn-secondary {
-    background: #4fd1c7;
+    background: #6c757d;
     color: white;
 }
 
 .btn-secondary:hover {
-    background: #38b2ac;
-    transform: translateY(-1px);
+    background: #495057;
 }
 
 .btn-outline {
     background: transparent;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: #212529;
+    border: 2px solid #212529;
 }
 
 .btn-outline:hover {
-    background: #667eea;
+    background: #212529;
     color: white;
 }
 
@@ -188,9 +184,8 @@ header p {
 .risk-score-card {
     text-align: center;
     padding: 2rem;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: #212529;
     color: white;
-    border-radius: 12px;
 }
 
 .risk-score-card h3 {
@@ -228,13 +223,12 @@ header p {
 
 .result-card {
     padding: 1.5rem;
-    background: #f8fafc;
-    border-radius: 8px;
-    border-left: 4px solid #667eea;
+    background: #f8f9fa;
+    border-left: 4px solid #495057;
 }
 
 .result-card h3 {
-    color: #2c3e50;
+    color: #212529;
     margin-bottom: 1rem;
     font-size: 1.1rem;
 }
@@ -247,7 +241,6 @@ header p {
 .permission-item, .csf-item, .risk-item, .recommendation-item {
     padding: 0.75rem;
     margin-bottom: 0.5rem;
-    border-radius: 6px;
     background: white;
     border-left: 3px solid transparent;
 }
@@ -285,13 +278,13 @@ header p {
 
 .item-title {
     font-weight: 600;
-    color: #2c3e50;
+    color: #212529;
     margin-bottom: 0.25rem;
 }
 
 .item-description {
     font-size: 0.9rem;
-    color: #4a5568;
+    color: #495057;
     line-height: 1.4;
 }
 
@@ -299,7 +292,6 @@ header p {
     font-weight: 600;
     float: right;
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
     font-size: 0.8rem;
     color: white;
 }
@@ -322,16 +314,16 @@ header p {
 
 /* Footer */
 footer {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    background: #212529;
     color: white;
     text-align: center;
     padding: 2rem 0;
     margin-top: 3rem;
+    border-top: 3px solid #495057;
 }
 
 footer a {
-    color: #4fd1c7;
+    color: #adb5bd;
     text-decoration: none;
 }
 
@@ -403,7 +395,6 @@ footer a:hover {
     width: 20px;
     height: 20px;
     border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
     border-top-color: #fff;
     animation: spin 1s ease-in-out infinite;
 }
