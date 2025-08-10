@@ -1,0 +1,45 @@
+name: Validate Deployment
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Validate HTML
+        run: |
+          echo "Validating HTML files..."
+          find docs -name "*.html" -exec echo "Checking {}" \;
+          
+      - name: Check file structure
+        run: |
+          echo "Checking required files..."
+          test -f docs/index.html || (echo "Missing index.html" && exit 1)
+          test -f docs/style.css || (echo "Missing style.css" && exit 1)
+          test -f docs/upload.js || (echo "Missing upload.js" && exit 1)
+          test -f docs/risk-analysis.js || (echo "Missing risk-analysis.js" && exit 1)
+          test -f docs/.nojekyll || (echo "Missing .nojekyll" && exit 1)
+          echo "All required files present"
+          
+      - name: Check data files
+        run: |
+          echo "Checking data files..."
+          test -f docs/data/nist-csf-2.0.json || (echo "Missing NIST data" && exit 1)
+          test -f docs/data/entra-permissions.json || (echo "Missing permissions data" && exit 1)
+          echo "All data files present"
+          
+      - name: Simulate Pages build
+        uses: actions/configure-pages@v5
+        
+      - name: Test artifact upload
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'

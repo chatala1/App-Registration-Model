@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Analysis Web App - Azure Application Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔒 Risk Analysis Web App</h1>
+            <p>Analyze Azure Application Registration risks against NIST CSF 2.0 framework</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="upload-section" class="card">
+            <h2>📄 Upload Project Plan</h2>
+            <p>Upload your project plan in Markdown or JSON format to analyze potential risks related to Azure Application Registration permissions.</p>
+            
+            <div class="upload-area" id="upload-area">
+                <div class="upload-content">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7,10 12,15 17,10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <p>Drop your file here or <span class="upload-link">browse</span></p>
+                    <p class="upload-formats">Supported formats: .md, .json</p>
+                </div>
+                <input type="file" id="file-input" accept=".md,.json,.txt" hidden>
+            </div>
+
+            <div id="file-info" class="file-info" style="display: none;">
+                <div class="file-details">
+                    <span id="file-name"></span>
+                    <span id="file-size"></span>
+                </div>
+                <button id="analyze-btn" class="btn btn-primary">🔍 Analyze Risks</button>
+            </div>
+        </section>
+
+        <section id="analysis-section" class="card" style="display: none;">
+            <h2>📊 Risk Analysis Results</h2>
+            
+            <div class="analysis-summary">
+                <div class="risk-score-card">
+                    <h3>Overall Risk Score</h3>
+                    <div id="overall-score" class="score-display">-</div>
+                    <div id="risk-level" class="risk-level">-</div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="risk-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>🔐 Detected Permissions</h3>
+                    <div id="permissions-list" class="results-list"></div>
+                </div>
+                
+                <div class="result-card">
+                    <h3>🎯 NIST CSF 2.0 Categories</h3>
+                    <div id="csf-categories" class="results-list"></div>
+                </div>
+                
+                <div class="result-card">
+                    <h3>⚠️ Risk Indicators</h3>
+                    <div id="risk-indicators" class="results-list"></div>
+                </div>
+                
+                <div class="result-card">
+                    <h3>💡 Recommendations</h3>
+                    <div id="recommendations" class="results-list"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="download-html" class="btn btn-secondary">📄 Download HTML Report</button>
+                <button id="download-json" class="btn btn-secondary">📋 Download JSON Report</button>
+                <button id="new-analysis" class="btn btn-outline">🔄 New Analysis</button>
+            </div>
+        </section>
+
+        <section id="sample-section" class="card">
+            <h2>📋 Sample Project Plan</h2>
+            <p>Don't have a project plan ready? Try our sample to see how the analysis works:</p>
+            <button id="load-sample" class="btn btn-outline">📝 Load Sample Plan</button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Risk Analysis Tool - Built for GitHub Pages</p>
+            <p>Powered by <a href="https://www.nist.gov/cyberframework" target="_blank">NIST CSF 2.0</a> and <a href="https://docs.microsoft.com/en-us/graph/permissions-reference" target="_blank">Microsoft Graph API</a></p>
+        </div>
+    </footer>
+
+    <script src="upload.js"></script>
+    <script src="risk-analysis.js"></script>
+</body>
+</html>
