@@ -5,6 +5,12 @@
       "description": "Read applications and service principals",
       "impact": "Can read application configurations and secrets",
       "csfMapping": ["ID.AM", "PR.AC"],
+      "csfControls": [
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle",
+        "ID.AM-05: Resources are prioritized based on classification and business impact",
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-02: Physical access to organizational assets is managed and enforced"
+      ],
       "riskScore": 6
     },
     "Application.ReadWrite.All": {
@@ -12,6 +18,15 @@
       "description": "Read and write all applications",
       "impact": "Can create, modify, and delete applications and their credentials",
       "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "csfControls": [
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "PR.AC-06: Authenticated identities are verified before access is granted",
+        "ID.RA-01: Organizational assets are identified and managed",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed",
+        "GV.RM-01: Risk management processes are established and managed",
+        "GV.RM-03: Risk management activities and outcomes are communicated"
+      ],
       "riskScore": 9
     },
     "Directory.Read.All": {
@@ -19,13 +34,29 @@
       "description": "Read directory data",
       "impact": "Can read all directory information including users, groups, and applications",
       "csfMapping": ["ID.AM", "PR.AC"],
+      "csfControls": [
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle",
+        "ID.AM-05: Resources are prioritized based on classification and business impact",
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-02: Physical access to organizational assets is managed and enforced"
+      ],
       "riskScore": 6
     },
     "Directory.ReadWrite.All": {
-      "riskLevel": "high",
+      "riskLevel": "critical",
       "description": "Read and write directory data",
       "impact": "Can read and write all directory information",
       "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "csfControls": [
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "PR.AC-06: Authenticated identities are verified before access is granted",
+        "ID.RA-01: Organizational assets are identified and managed",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed",
+        "GV.RM-01: Risk management processes are established and managed",
+        "GV.RM-02: Risk appetite and risk tolerance statements are established",
+        "GV.RM-03: Risk management activities and outcomes are communicated"
+      ],
       "riskScore": 10
     },
     "User.Read.All": {
@@ -33,6 +64,12 @@
       "description": "Read all users' full profiles",
       "impact": "Can read user profiles and organizational information",
       "csfMapping": ["ID.AM", "PR.DS"],
+      "csfControls": [
+        "ID.AM-05: Resources are prioritized based on classification and business impact",
+        "PR.DS-01: Data is protected at rest",
+        "PR.DS-02: Data in transit is protected",
+        "PR.DS-05: Data are protected by implementing data loss prevention"
+      ],
       "riskScore": 5
     },
     "User.ReadWrite.All": {
@@ -40,6 +77,14 @@
       "description": "Read and write all users' full profiles",
       "impact": "Can read and write user profiles and manage user accounts",
       "csfMapping": ["PR.AC", "ID.RA", "PR.DS"],
+      "csfControls": [
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "PR.AC-06: Authenticated identities are verified before access is granted",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed",
+        "PR.DS-01: Data is protected at rest",
+        "PR.DS-05: Data are protected by implementing data loss prevention"
+      ],
       "riskScore": 8
     },
     "Group.Read.All": {
@@ -47,6 +92,11 @@
       "description": "Read all groups",
       "impact": "Can read group information and memberships",
       "csfMapping": ["ID.AM", "PR.AC"],
+      "csfControls": [
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle",
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-02: Physical access to organizational assets is managed and enforced"
+      ],
       "riskScore": 4
     },
     "Group.ReadWrite.All": {
@@ -54,6 +104,13 @@
       "description": "Read and write all groups",
       "impact": "Can manage groups and group memberships",
       "csfMapping": ["PR.AC", "ID.RA"],
+      "csfControls": [
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "PR.AC-06: Authenticated identities are verified before access is granted",
+        "ID.RA-01: Organizational assets are identified and managed",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed"
+      ],
       "riskScore": 7
     },
     "RoleManagement.Read.All": {
@@ -61,6 +118,11 @@
       "description": "Read role management data",
       "impact": "Can read role assignments and role definitions",
       "csfMapping": ["ID.AM", "PR.AC"],
+      "csfControls": [
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle",
+        "ID.AM-05: Resources are prioritized based on classification and business impact",
+        "PR.AC-01: Access permissions are managed and enforced"
+      ],
       "riskScore": 6
     },
     "RoleManagement.ReadWrite.All": {
@@ -68,6 +130,16 @@
       "description": "Read and write role management data",
       "impact": "Can manage role assignments and create custom roles",
       "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
+      "csfControls": [
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "PR.AC-06: Authenticated identities are verified before access is granted",
+        "ID.RA-01: Organizational assets are identified and managed",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed",
+        "GV.RM-01: Risk management processes are established and managed",
+        "GV.RM-02: Risk appetite and risk tolerance statements are established",
+        "GV.RM-03: Risk management activities and outcomes are communicated"
+      ],
       "riskScore": 10
     },
     "Policy.Read.All": {
@@ -75,6 +147,11 @@
       "description": "Read your organization's policies",
       "impact": "Can read conditional access and other policies",
       "csfMapping": ["ID.AM", "PR.AC"],
+      "csfControls": [
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle",
+        "PR.AC-01: Access permissions are managed and enforced",
+        "GV.PO-01: Policy is established and communicated"
+      ],
       "riskScore": 5
     },
     "Policy.ReadWrite.All": {
@@ -82,6 +159,14 @@
       "description": "Read and write your organization's policies",
       "impact": "Can manage conditional access and security policies",
       "csfMapping": ["PR.AC", "ID.RA", "GV.PO"],
+      "csfControls": [
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "ID.RA-01: Organizational assets are identified and managed",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed",
+        "GV.PO-01: Policy is established and communicated",
+        "GV.PO-02: Policy is reviewed, updated, and approved"
+      ],
       "riskScore": 9
     },
     "AuditLog.Read.All": {
@@ -89,6 +174,12 @@
       "description": "Read audit log data",
       "impact": "Can read audit logs and sign-in reports",
       "csfMapping": ["DE.CM", "ID.AM"],
+      "csfControls": [
+        "DE.CM-01: Networks and environments are monitored to detect anomalous activity",
+        "DE.CM-06: External service provider activity is monitored",
+        "DE.CM-08: Vulnerability scans are performed",
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle"
+      ],
       "riskScore": 4
     },
     "SecurityEvents.Read.All": {
@@ -96,6 +187,12 @@
       "description": "Read your organization's security events",
       "impact": "Can read security events and alerts",
       "csfMapping": ["DE.AE", "DE.CM"],
+      "csfControls": [
+        "DE.AE-01: Anomalous activity is detected in a timely manner",
+        "DE.AE-02: Potential impacts of anomalous activity are analyzed",
+        "DE.CM-01: Networks and environments are monitored to detect anomalous activity",
+        "DE.CM-06: External service provider activity is monitored"
+      ],
       "riskScore": 5
     },
     "SecurityActions.Read.All": {
@@ -103,6 +200,11 @@
       "description": "Read your organization's security actions",
       "impact": "Can read security actions and investigations",
       "csfMapping": ["RS.AN", "DE.CM"],
+      "csfControls": [
+        "RS.AN-01: Incidents are investigated",
+        "RS.AN-02: Incident data and context are collected and analyzed",
+        "DE.CM-01: Networks and environments are monitored to detect anomalous activity"
+      ],
       "riskScore": 5
     },
     "Mail.Read": {
@@ -110,6 +212,10 @@
       "description": "Read user mail",
       "impact": "Can read user's mailbox",
       "csfMapping": ["PR.DS"],
+      "csfControls": [
+        "PR.DS-01: Data is protected at rest",
+        "PR.DS-05: Data are protected by implementing data loss prevention"
+      ],
       "riskScore": 3
     },
     "Mail.ReadWrite": {
@@ -117,6 +223,11 @@
       "description": "Read and write access to user mail",
       "impact": "Can read and send emails on behalf of user",
       "csfMapping": ["PR.DS", "PR.AC"],
+      "csfControls": [
+        "PR.DS-01: Data is protected at rest",
+        "PR.DS-02: Data in transit is protected",
+        "PR.AC-01: Access permissions are managed and enforced"
+      ],
       "riskScore": 5
     },
     "Files.Read.All": {
@@ -124,6 +235,12 @@
       "description": "Read all files that the user can access",
       "impact": "Can read all files across the organization",
       "csfMapping": ["PR.DS", "ID.AM"],
+      "csfControls": [
+        "PR.DS-01: Data is protected at rest",
+        "PR.DS-05: Data are protected by implementing data loss prevention",
+        "ID.AM-02: Assets are inventoried and managed throughout their lifecycle",
+        "ID.AM-05: Resources are prioritized based on classification and business impact"
+      ],
       "riskScore": 6
     },
     "Files.ReadWrite.All": {
@@ -131,6 +248,15 @@
       "description": "Have full access to all files user can access",
       "impact": "Can read, write, and delete files across the organization",
       "csfMapping": ["PR.DS", "PR.AC", "ID.RA"],
+      "csfControls": [
+        "PR.DS-01: Data is protected at rest",
+        "PR.DS-02: Data in transit is protected",
+        "PR.DS-05: Data are protected by implementing data loss prevention",
+        "PR.AC-01: Access permissions are managed and enforced",
+        "PR.AC-04: Access is managed and enforced for remote access",
+        "ID.RA-01: Organizational assets are identified and managed",
+        "ID.RA-02: Cybersecurity risk to organizational assets is identified and assessed"
+      ],
       "riskScore": 8
     }
   },

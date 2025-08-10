@@ -189,11 +189,24 @@ class RiskAnalyzer {
     
     mapToCSFCategories(detectedPermissions, content) {
         const csfMappings = new Set();
+        const specificControlsMap = new Map(); // Track specific controls for each category
         
-        // Add CSF categories from detected permissions
+        // Add CSF categories from detected permissions and collect specific controls
         detectedPermissions.forEach(permission => {
             if (permission.csfMapping) {
-                permission.csfMapping.forEach(category => csfMappings.add(category));
+                permission.csfMapping.forEach(category => {
+                    csfMappings.add(category);
+                    
+                    // Collect specific controls for this category
+                    if (permission.csfControls) {
+                        if (!specificControlsMap.has(category)) {
+                            specificControlsMap.set(category, new Set());
+                        }
+                        permission.csfControls.forEach(control => {
+                            specificControlsMap.get(category).add(control);
+                        });
+                    }
+                });
             }
         });
         
@@ -227,6 +240,10 @@ class RiskAnalyzer {
             const categoryInfo = this.nistData.categories[mainCategory];
             const subcategoryInfo = categoryInfo ? categoryInfo.subcategories[category] : null;
             
+            // Get specific controls for this category from detected permissions
+            const specificControls = specificControlsMap.has(category) ? 
+                Array.from(specificControlsMap.get(category)) : [];
+            
             return {
                 category,
                 name: subcategoryInfo ? subcategoryInfo.name : category,
@@ -234,6 +251,7 @@ class RiskAnalyzer {
                 mainCategory: categoryInfo ? categoryInfo.name : mainCategory,
                 controls: subcategoryInfo ? subcategoryInfo.controls || [] : [],
                 remediation: subcategoryInfo ? subcategoryInfo.remediation || [] : [],
+                specificControls: specificControls, // Add specific controls from permissions
                 severity: this.calculateCSFSeverity(category, detectedPermissions)
             };
         });
@@ -461,9 +479,19 @@ class RiskAnalyzer {
                     <div class="item-description">${category.name}</div>
                     <div class="item-description">${category.description}</div>
                     
-                    ${category.controls.length > 0 ? `
+                    ${category.specificControls && category.specificControls.length > 0 ? `
                         <div class="csf-controls">
-                            <strong>Specific Controls:</strong>
+                            <strong>Specific CSF Controls:</strong>
+                            <ul>
+                                ${category.specificControls.slice(0, 4).map(control => `<li>${control}</li>`).join('')}
+                                ${category.specificControls.length > 4 ? `<li><em>... and ${category.specificControls.length - 4} more controls</em></li>` : ''}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    ${category.controls && category.controls.length > 0 ? `
+                        <div class="csf-controls">
+                            <strong>Framework Controls:</strong>
                             <ul>
                                 ${category.controls.slice(0, 3).map(control => `<li>${control}</li>`).join('')}
                                 ${category.controls.length > 3 ? `<li><em>... and ${category.controls.length - 3} more controls</em></li>` : ''}
@@ -471,7 +499,7 @@ class RiskAnalyzer {
                         </div>
                     ` : ''}
                     
-                    ${category.remediation.length > 0 ? `
+                    ${category.remediation && category.remediation.length > 0 ? `
                         <div class="csf-remediation">
                             <strong>Remediation Advice:</strong>
                             <ul>
@@ -730,15 +758,23 @@ class RiskAnalyzer {
                 <em>${c.name}</em><br>
                 ${c.description}
                 
-                ${c.controls.length > 0 ? `
-                    <br><br><strong>Specific Controls:</strong>
+                ${c.specificControls && c.specificControls.length > 0 ? `
+                    <br><br><strong>Specific CSF Controls (from detected permissions):</strong>
+                    <ul>
+                        ${c.specificControls.slice(0, 5).map(control => `<li>${control}</li>`).join('')}
+                        ${c.specificControls.length > 5 ? `<li><em>... and ${c.specificControls.length - 5} more specific controls</em></li>` : ''}
+                    </ul>
+                ` : ''}
+                
+                ${c.controls && c.controls.length > 0 ? `
+                    <br><strong>Framework Controls:</strong>
                     <ul>
                         ${c.controls.slice(0, 3).map(control => `<li>${control}</li>`).join('')}
                         ${c.controls.length > 3 ? `<li><em>... and ${c.controls.length - 3} more controls</em></li>` : ''}
                     </ul>
                 ` : ''}
                 
-                ${c.remediation.length > 0 ? `
+                ${c.remediation && c.remediation.length > 0 ? `
                     <br><strong>Remediation Advice:</strong>
                     <ul>
                         ${c.remediation.slice(0, 3).map(advice => `<li>${advice}</li>`).join('')}
@@ -1029,9 +1065,19 @@ class RiskAnalyzer {
                 <div class="item-description">${category.name}</div>
                 <div class="item-description">${category.description}</div>
                 
-                ${category.controls.length > 0 ? `
+                ${category.specificControls && category.specificControls.length > 0 ? `
                     <div class="csf-controls">
-                        <strong>Specific Controls:</strong>
+                        <strong>Specific CSF Controls (from detected permissions):</strong>
+                        <ul>
+                            ${category.specificControls.slice(0, 6).map(control => `<li>${control}</li>`).join('')}
+                            ${category.specificControls.length > 6 ? `<li><em>... and ${category.specificControls.length - 6} more specific controls</em></li>` : ''}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                ${category.controls && category.controls.length > 0 ? `
+                    <div class="csf-controls">
+                        <strong>Framework Controls:</strong>
                         <ul>
                             ${category.controls.slice(0, 5).map(control => `<li>${control}</li>`).join('')}
                             ${category.controls.length > 5 ? `<li><em>... and ${category.controls.length - 5} more controls</em></li>` : ''}
@@ -1039,7 +1085,7 @@ class RiskAnalyzer {
                     </div>
                 ` : ''}
                 
-                ${category.remediation.length > 0 ? `
+                ${category.remediation && category.remediation.length > 0 ? `
                     <div class="csf-remediation">
                         <strong>Remediation Advice:</strong>
                         <ul>
