@@ -58,29 +58,116 @@
                 </div>
             </div>
 
-            <div class="results-grid">
+            <!-- Summary Cards -->
+            <div class="results-summary">
+                <div class="summary-card">
+                    <span id="permissions-count" class="metric-value">0</span>
+                    <span class="metric-label">Detected Permissions</span>
+                </div>
+                <div class="summary-card">
+                    <span id="csf-count" class="metric-value">0</span>
+                    <span class="metric-label">NIST CSF Categories</span>
+                </div>
+                <div class="summary-card">
+                    <span id="risks-count" class="metric-value">0</span>
+                    <span class="metric-label">Risk Indicators</span>
+                </div>
+                <div class="summary-card">
+                    <span id="recommendations-count" class="metric-value">0</span>
+                    <span class="metric-label">Recommendations</span>
+                </div>
+            </div>
+
+            <!-- Tabbed Interface -->
+            <div class="results-tabs">
+                <button class="tab-button active" data-tab="overview">
+                    <i class="bi bi-grid-3x3-gap"></i> Overview
+                </button>
+                <button class="tab-button" data-tab="permissions">
+                    <i class="bi bi-key"></i> Permissions
+                </button>
+                <button class="tab-button" data-tab="nist">
+                    <i class="bi bi-bullseye"></i> NIST CSF 2.0
+                </button>
+                <button class="tab-button" data-tab="risks">
+                    <i class="bi bi-exclamation-triangle"></i> Risk Indicators
+                </button>
+                <button class="tab-button" data-tab="recommendations">
+                    <i class="bi bi-lightbulb"></i> Recommendations
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3>
+                            <span><i class="bi bi-key"></i> Critical Permissions</span>
+                            <i class="bi bi-chevron-down collapse-toggle"></i>
+                        </h3>
+                        <div id="critical-permissions" class="results-list"></div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>
+                            <span><i class="bi bi-exclamation-triangle"></i> High-Priority Risks</span>
+                            <i class="bi bi-chevron-down collapse-toggle"></i>
+                        </h3>
+                        <div id="high-priority-risks" class="results-list"></div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3>
+                            <span><i class="bi bi-lightbulb"></i> Immediate Actions</span>
+                            <i class="bi bi-chevron-down collapse-toggle"></i>
+                        </h3>
+                        <div id="immediate-actions" class="results-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="permissions-tab" class="tab-content">
                 <div class="result-card">
-                    <h3><i class="bi bi-key"></i> Detected Permissions</h3>
+                    <h3>
+                        <span><i class="bi bi-key"></i> Detected Permissions</span>
+                        <i class="bi bi-chevron-down collapse-toggle"></i>
+                    </h3>
                     <div id="permissions-list" class="results-list"></div>
                 </div>
-                
+            </div>
+
+            <div id="nist-tab" class="tab-content">
                 <div class="result-card">
-                    <h3><i class="bi bi-bullseye"></i> NIST CSF 2.0 Categories</h3>
+                    <h3>
+                        <span><i class="bi bi-bullseye"></i> NIST CSF 2.0 Categories</span>
+                        <i class="bi bi-chevron-down collapse-toggle"></i>
+                    </h3>
                     <div id="csf-categories" class="results-list"></div>
                 </div>
-                
+            </div>
+
+            <div id="risks-tab" class="tab-content">
                 <div class="result-card">
-                    <h3><i class="bi bi-exclamation-triangle"></i> Risk Indicators</h3>
+                    <h3>
+                        <span><i class="bi bi-exclamation-triangle"></i> Risk Indicators</span>
+                        <i class="bi bi-chevron-down collapse-toggle"></i>
+                    </h3>
                     <div id="risk-indicators" class="results-list"></div>
                 </div>
-                
+            </div>
+
+            <div id="recommendations-tab" class="tab-content">
                 <div class="result-card">
-                    <h3><i class="bi bi-lightbulb"></i> Recommendations</h3>
+                    <h3>
+                        <span><i class="bi bi-lightbulb"></i> Recommendations</span>
+                        <i class="bi bi-chevron-down collapse-toggle"></i>
+                    </h3>
                     <div id="recommendations" class="results-list"></div>
                 </div>
             </div>
 
             <div class="action-buttons">
+                <button id="download-pdf" class="btn btn-primary"><i class="bi bi-file-earmark-pdf"></i> Download PDF Report</button>
                 <button id="download-html" class="btn btn-secondary"><i class="bi bi-file-earmark-text"></i> Download HTML Report</button>
                 <button id="download-json" class="btn btn-secondary"><i class="bi bi-file-earmark-code"></i> Download JSON Report</button>
                 <button id="new-analysis" class="btn btn-outline"><i class="bi bi-arrow-repeat"></i> New Analysis</button>

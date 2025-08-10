@@ -18,7 +18,18 @@ class RiskAnalyzer {
         this.riskIndicators = document.getElementById('risk-indicators');
         this.recommendations = document.getElementById('recommendations');
         
+        // New elements for enhanced UI
+        this.permissionsCount = document.getElementById('permissions-count');
+        this.csfCount = document.getElementById('csf-count');
+        this.risksCount = document.getElementById('risks-count');
+        this.recommendationsCount = document.getElementById('recommendations-count');
+        
+        this.criticalPermissions = document.getElementById('critical-permissions');
+        this.highPriorityRisks = document.getElementById('high-priority-risks');
+        this.immediateActions = document.getElementById('immediate-actions');
+        
         // Buttons
+        this.downloadPdfBtn = document.getElementById('download-pdf');
         this.downloadHtmlBtn = document.getElementById('download-html');
         this.downloadJsonBtn = document.getElementById('download-json');
         this.newAnalysisBtn = document.getElementById('new-analysis');
@@ -27,9 +38,48 @@ class RiskAnalyzer {
     }
     
     initializeEventListeners() {
+        this.downloadPdfBtn.addEventListener('click', () => this.downloadReport('pdf'));
         this.downloadHtmlBtn.addEventListener('click', () => this.downloadReport('html'));
         this.downloadJsonBtn.addEventListener('click', () => this.downloadReport('json'));
         this.newAnalysisBtn.addEventListener('click', () => this.resetAnalysis());
+        
+        // Tab switching
+        this.initializeTabHandlers();
+        
+        // Collapsible sections
+        this.initializeCollapsibleSections();
+    }
+    
+    initializeTabHandlers() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                const targetContent = document.getElementById(`${targetTab}-tab`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+    }
+    
+    initializeCollapsibleSections() {
+        document.addEventListener('click', (e) => {
+            const header = e.target.closest('.result-card h3');
+            if (header) {
+                const card = header.closest('.result-card');
+                card.classList.toggle('collapsed');
+            }
+        });
     }
     
     async loadDataFiles() {
@@ -386,6 +436,9 @@ class RiskAnalyzer {
         this.riskLevel.textContent = this.analysisResults.overallRisk.level.toUpperCase();
         this.riskLevel.className = `risk-level ${this.analysisResults.overallRisk.level}`;
         
+        // Update summary cards
+        this.updateSummaryCards();
+        
         // Display detected permissions
         this.permissionsList.innerHTML = this.analysisResults.detectedPermissions
             .map(permission => `
@@ -449,9 +502,83 @@ class RiskAnalyzer {
                     <div class="item-description">${rec.description}</div>
                 </div>
             `).join('');
+        
+        // Populate overview tab
+        this.populateOverviewTab();
+        
+        // Try to create chart (if Chart.js is available)
+        this.createRiskChart();
+    }
+    
+    updateSummaryCards() {
+        this.permissionsCount.textContent = this.analysisResults.detectedPermissions.length;
+        this.csfCount.textContent = this.analysisResults.csfMappings.length;
+        this.risksCount.textContent = this.analysisResults.riskIndicators.length;
+        this.recommendationsCount.textContent = this.analysisResults.recommendations.length;
+        
+        // Update card styling based on counts
+        const summaryCards = document.querySelectorAll('.summary-card');
+        const criticalCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length;
+        const highCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length;
+        
+        // Color code based on risk levels
+        if (criticalCount > 0) {
+            summaryCards[0].className = 'summary-card critical';
+        } else if (highCount > 2) {
+            summaryCards[0].className = 'summary-card high';
+        } else {
+            summaryCards[0].className = 'summary-card medium';
+        }
+    }
+    
+    populateOverviewTab() {
+        // Critical permissions (score >= 8)
+        const criticalPerms = this.analysisResults.detectedPermissions.filter(p => p.riskScore >= 8);
+        this.criticalPermissions.innerHTML = criticalPerms.length > 0 ? 
+            criticalPerms.map(permission => `
+                <div class="permission-item ${permission.riskLevel}">
+                    <div class="item-title">${permission.name}
+                        <span class="item-score score-${permission.riskLevel}">${permission.riskScore}/10</span>
+                    </div>
+                    <div class="item-description">${permission.description}</div>
+                </div>
+            `).join('') : '<p style="color: #8b949e; font-style: italic;">No critical permissions detected</p>';
+        
+        // High-priority risks (critical and high level)
+        const highPriorityRisks = this.analysisResults.riskIndicators.filter(r => 
+            r.level === 'critical' || r.level === 'high'
+        );
+        this.highPriorityRisks.innerHTML = highPriorityRisks.length > 0 ?
+            highPriorityRisks.map(indicator => `
+                <div class="risk-item ${indicator.level}">
+                    <div class="item-title">${indicator.indicator}</div>
+                    <div class="item-description">${indicator.description}</div>
+                </div>
+            `).join('') : '<p style="color: #8b949e; font-style: italic;">No high-priority risks identified</p>';
+        
+        // Immediate actions (critical and high priority recommendations)
+        const immediateActions = this.analysisResults.recommendations.filter(r => 
+            r.priority === 'critical' || r.priority === 'high'
+        );
+        this.immediateActions.innerHTML = immediateActions.length > 0 ?
+            immediateActions.map(rec => `
+                <div class="recommendation-item">
+                    <div class="item-title">${rec.title} 
+                        <span class="item-score score-${rec.priority}">${rec.priority.toUpperCase()}</span>
+                    </div>
+                    <div class="item-description">${rec.description}</div>
+                </div>
+            `).join('') : '<p style="color: #8b949e; font-style: italic;">No immediate actions required</p>';
     }
     
     createRiskChart() {
+        // Check if Chart.js is available
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not available, skipping chart creation');
+            document.getElementById('risk-chart').style.display = 'none';
+            return;
+        }
+        
         const ctx = document.getElementById('risk-chart').getContext('2d');
         
         const riskData = {
@@ -461,31 +588,46 @@ class RiskAnalyzer {
             low: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length
         };
         
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Critical', 'High', 'Medium', 'Low'],
-                datasets: [{
-                    data: [riskData.critical, riskData.high, riskData.medium, riskData.low],
-                    backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745'],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Risk Distribution'
+        try {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Critical', 'High', 'Medium', 'Low'],
+                    datasets: [{
+                        data: [riskData.critical, riskData.high, riskData.medium, riskData.low],
+                        backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f0f6fc',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Risk Distribution',
+                            color: '#f0f6fc',
+                            font: {
+                                size: 16
+                            }
+                        }
                     }
                 }
-            }
-        });
+            });
+        } catch (error) {
+            console.error('Error creating chart:', error);
+            document.getElementById('risk-chart').style.display = 'none';
+        }
     }
     
     downloadReport(format) {
@@ -498,6 +640,8 @@ class RiskAnalyzer {
             this.downloadJsonReport();
         } else if (format === 'html') {
             this.downloadHtmlReport();
+        } else if (format === 'pdf') {
+            this.downloadPdfReport();
         }
     }
     
@@ -651,6 +795,318 @@ class RiskAnalyzer {
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+    }
+    
+    downloadPdfReport() {
+        // Create a new window for the printable report
+        const printWindow = window.open('', '_blank');
+        const reportHtml = this.generatePrintableReport();
+        
+        printWindow.document.open();
+        printWindow.document.write(reportHtml);
+        printWindow.document.close();
+        
+        // Wait for content to load, then trigger print dialog
+        printWindow.onload = function() {
+            setTimeout(() => {
+                printWindow.print();
+                // Close window after printing (optional)
+                printWindow.onafterprint = function() {
+                    printWindow.close();
+                };
+            }, 500);
+        };
+    }
+    
+    generatePrintableReport() {
+        const currentDate = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Analysis Report - ${currentDate}</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none !important; }
+            .page-break { page-break-before: always; }
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; 
+            margin: 40px; 
+            line-height: 1.6; 
+            color: #333;
+            background: white;
+        }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .risk-score { 
+            font-size: 4em; 
+            font-weight: bold; 
+            margin: 20px 0;
+        }
+        
+        .section { 
+            margin-bottom: 30px; 
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section h2 {
+            margin-top: 0;
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .item { 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-left: 4px solid #ccc; 
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .item-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+        
+        .score-critical, .critical { border-left-color: #dc3545; }
+        .score-high, .high { border-left-color: #fd7e14; }
+        .score-medium, .medium { border-left-color: #ffc107; }
+        .score-low, .low { border-left-color: #28a745; }
+        
+        .score-critical { background: #dc3545; }
+        .score-high { background: #fd7e14; }
+        .score-medium { background: #ffc107; color: #333; }
+        .score-low { background: #28a745; }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .summary-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .summary-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+        
+        .summary-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .csf-controls, .csf-remediation {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .csf-controls ul, .csf-remediation ul {
+            margin: 5px 0 0 20px;
+            padding: 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔒 Azure Application Registration Risk Analysis Report</h1>
+        <div class="risk-score">${this.analysisResults.overallRisk.score}/100</div>
+        <h2>Risk Level: ${this.analysisResults.overallRisk.level.toUpperCase()}</h2>
+        <p>Generated on: ${currentDate}</p>
+    </div>
+    
+    <div class="section">
+        <h2>📊 Executive Summary</h2>
+        <p>This comprehensive risk analysis evaluates Azure Application Registration permissions against the NIST Cybersecurity Framework 2.0. The analysis identified <strong>${this.analysisResults.detectedPermissions.length} permissions</strong> with varying risk levels, mapped to <strong>${this.analysisResults.csfMappings.length} NIST CSF 2.0 categories</strong>, and found <strong>${this.analysisResults.riskIndicators.length} risk indicators</strong>.</p>
+        
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.overallRisk.score}/100</span>
+                <span class="summary-label">Overall Risk Score</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.length}</span>
+                <span class="summary-label">Detected Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length}</span>
+                <span class="summary-label">Critical Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.recommendations.filter(r => r.priority === 'critical' || r.priority === 'high').length}</span>
+                <span class="summary-label">Priority Actions</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>🔐 Detected Permissions</h2>
+        <p>The following Azure Application Registration permissions were identified and analyzed:</p>
+        ${this.analysisResults.detectedPermissions.map(permission => `
+            <div class="item ${permission.riskLevel}">
+                <div class="item-title">
+                    <span>${permission.name}</span>
+                    <span class="score-badge score-${permission.riskLevel}">${permission.riskScore}/10</span>
+                </div>
+                <div class="item-description">${permission.description}</div>
+            </div>
+        `).join('')}
+    </div>
+    
+    <div class="section page-break">
+        <h2>🎯 NIST CSF 2.0 Categories</h2>
+        <p>The identified permissions and content map to the following NIST Cybersecurity Framework 2.0 categories:</p>
+        ${this.analysisResults.csfMappings.map(category => `
+            <div class="item">
+                <div class="item-title">
+                    <span><strong>${category.category}</strong> - ${category.mainCategory}</span>
+                    <span class="score-badge score-${category.severity}">${category.severity.toUpperCase()}</span>
+                </div>
+                <div class="item-description">${category.name}</div>
+                <div class="item-description">${category.description}</div>
+                
+                ${category.controls.length > 0 ? `
+                    <div class="csf-controls">
+                        <strong>Specific Controls:</strong>
+                        <ul>
+                            ${category.controls.slice(0, 5).map(control => `<li>${control}</li>`).join('')}
+                            ${category.controls.length > 5 ? `<li><em>... and ${category.controls.length - 5} more controls</em></li>` : ''}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                ${category.remediation.length > 0 ? `
+                    <div class="csf-remediation">
+                        <strong>Remediation Advice:</strong>
+                        <ul>
+                            ${category.remediation.slice(0, 5).map(advice => `<li>${advice}</li>`).join('')}
+                            ${category.remediation.length > 5 ? `<li><em>... and ${category.remediation.length - 5} more recommendations</em></li>` : ''}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+        `).join('')}
+    </div>
+    
+    <div class="section">
+        <h2>⚠️ Risk Indicators</h2>
+        <p>The following risk indicators were identified through content analysis:</p>
+        ${this.analysisResults.riskIndicators.map(indicator => `
+            <div class="item ${indicator.level}">
+                <div class="item-title">
+                    <span>${indicator.indicator}</span>
+                    <span class="score-badge score-${indicator.level}">${indicator.level.toUpperCase()}</span>
+                </div>
+                <div class="item-description">${indicator.description}</div>
+            </div>
+        `).join('')}
+    </div>
+    
+    <div class="section page-break">
+        <h2>💡 Security Recommendations</h2>
+        <p>Based on the risk analysis, the following recommendations should be implemented:</p>
+        ${this.analysisResults.recommendations.map(rec => `
+            <div class="item">
+                <div class="item-title">
+                    <span>${rec.title}</span>
+                    <span class="score-badge score-${rec.priority}">${rec.priority.toUpperCase()}</span>
+                </div>
+                <div class="item-description">${rec.description}</div>
+            </div>
+        `).join('')}
+    </div>
+    
+    <div class="section">
+        <h2>📋 Next Steps</h2>
+        <div class="item">
+            <div class="item-title">Immediate Actions (1-7 days)</div>
+            <div class="item-description">Address critical and high-priority recommendations, implement conditional access policies</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Short-term (1-4 weeks)</div>
+            <div class="item-description">Set up monitoring and alerting, review permission assignments</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Medium-term (1-3 months)</div>
+            <div class="item-description">Implement just-in-time access, establish governance processes</div>
+        </div>
+        <div class="item">
+            <div class="item-title">Long-term (3-6 months)</div>
+            <div class="item-description">Regular permission reviews, continuous improvement of security posture</div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p><strong>Generated by Azure Application Registration Risk Analysis Tool</strong></p>
+        <p>Powered by <a href="https://www.nist.gov/cyberframework">NIST CSF 2.0</a> and <a href="https://docs.microsoft.com/en-us/graph/permissions-reference">Microsoft Graph API</a></p>
+        <p><em>This report should be reviewed by security professionals and updated based on organizational policies.</em></p>
+    </div>
+</body>
+</html>`;
     }
     
     resetAnalysis() {
