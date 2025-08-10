@@ -91,17 +91,17 @@ class FileUploader {
     displayFileInfo(file) {
         const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
         const fileTypeMap = {
-            '.pdf': '📄 PDF Document',
-            '.docx': '📝 Word Document',
-            '.doc': '📝 Word Document',
-            '.rtf': '📝 Rich Text Document',
-            '.md': '📋 Markdown Document',
-            '.json': '🔧 JSON Data',
-            '.txt': '📄 Text Document',
-            '.text': '📄 Text Document'
+            '.pdf': 'PDF Document',
+            '.docx': 'Word Document',
+            '.doc': 'Word Document',
+            '.rtf': 'Rich Text Document',
+            '.md': 'Markdown Document',
+            '.json': 'JSON Data',
+            '.txt': 'Text Document',
+            '.text': 'Text Document'
         };
         
-        const fileTypeDisplay = fileTypeMap[fileExtension] || '📄 Document';
+        const fileTypeDisplay = fileTypeMap[fileExtension] || 'Document';
         
         this.fileName.textContent = file.name;
         this.fileSize.textContent = `${this.formatFileSize(file.size)} • ${fileTypeDisplay}`;
