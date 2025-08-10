@@ -482,20 +482,68 @@ class RiskAnalyzer {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Risk Analysis Report</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-        .header { text-align: center; margin-bottom: 40px; }
-        .risk-score { font-size: 3em; font-weight: bold; color: #${this.getRiskColor(results.overallRisk.level)}; }
-        .section { margin-bottom: 30px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            line-height: 1.6; 
+            color: #333;
+            background: #f8f9fa;
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            padding: 20px;
+            background: #212529;
+            color: white;
+            border-bottom: 3px solid #495057;
+        }
+        .risk-score { font-size: 3em; font-weight: bold; margin: 20px 0; }
+        .section { 
+            margin-bottom: 30px; 
+            padding: 20px;
+            background: white;
+            border: 1px solid #e9ecef;
+        }
         .permission-item, .risk-item, .recommendation-item { 
-            padding: 10px; margin: 5px 0; border-left: 4px solid #ccc; background: #f9f9f9; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-left: 4px solid #ccc; 
+            background: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .high { border-left-color: #fd7e14; }
         .critical { border-left-color: #dc3545; }
         .medium { border-left-color: #ffc107; }
         .low { border-left-color: #28a745; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0; 
+            background: #f8f9fa;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #e2e8f0; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #495057; 
+            color: white;
+            font-weight: 600;
+        }
+        .score-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+        .score-critical { background: #dc3545; }
+        .score-high { background: #fd7e14; }
+        .score-medium { background: #ffc107; color: #333; }
+        .score-low { background: #28a745; }
     </style>
 </head>
 <body>
