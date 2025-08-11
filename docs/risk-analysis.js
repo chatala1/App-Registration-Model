@@ -115,6 +115,7 @@ class RiskAnalyzer {
         const riskIndicators = this.identifyRiskIndicators(content);
         const recommendations = this.generateRecommendations(detectedPermissions, riskIndicators);
         const overallRisk = this.calculateOverallRisk(detectedPermissions, riskIndicators);
+        const appDetails = this.extractApplicationDetails(content);
         
         this.analysisResults = {
             detectedPermissions,
@@ -122,6 +123,7 @@ class RiskAnalyzer {
             riskIndicators,
             recommendations,
             overallRisk,
+            appDetails,
             timestamp: new Date().toISOString(),
             content: content.substring(0, 1000) + '...' // Truncated for report
         };
@@ -428,6 +430,89 @@ class RiskAnalyzer {
         };
     }
     
+    extractApplicationDetails(content) {
+        const details = {
+            purpose: 'Application Integration',
+            application: 'Business Application',
+            connection: 'Connects to organizational resources'
+        };
+        
+        // Extract project/application name - look for various patterns
+        const projectPatterns = [
+            /\*\*Project Name:\*\*\s*([^\n\r]+)/i,
+            /Project Name[:\s]*([^\n\r]+)/i,
+            /Application Name[:\s]*([^\n\r]+)/i,
+            /App Name[:\s]*([^\n\r]+)/i,
+            /^#\s*([^\n\r]+)/m // Main heading
+        ];
+        
+        for (const pattern of projectPatterns) {
+            const match = content.match(pattern);
+            if (match) {
+                details.application = match[1].replace(/\*\*/g, '').trim();
+                break;
+            }
+        }
+        
+        // Extract purpose or objective
+        const purposePatterns = [
+            /\*\*Purpose[:\s]*\*\*\s*([^\n\r]+)/i,
+            /Purpose[:\s]*([^\n\r]+)/i,
+            /Objective[:\s]*([^\n\r]+)/i,
+            /(?:Executive\s+)?Summary[:\s]*\n+([^\n\r]+)/i,
+            /designed to\s+([^.,\n\r]+)/i
+        ];
+        
+        for (const pattern of purposePatterns) {
+            const match = content.match(pattern);
+            if (match) {
+                details.purpose = match[1].replace(/\*\*/g, '').trim();
+                break;
+            }
+        }
+        
+        // Extract integration or connection details
+        const integrationPatterns = [
+            /integrat[e|es|ing|ion].*?(?:with|to)\s+([^.,\n\r]+)/gi,
+            /connect[s|ing|ion].*?(?:with|to)\s+([^.,\n\r]+)/gi,
+            /leverages?\s+([^.,\n\r]+)/gi,
+            /requires?\s+(?:extensive\s+)?([^.,\n\r]+\s+(?:permissions?|API|integration))/gi
+        ];
+        
+        for (const pattern of integrationPatterns) {
+            const matches = [...content.matchAll(pattern)];
+            if (matches.length > 0) {
+                const integrations = matches.map(match => match[1].trim()).slice(0, 3);
+                details.connection = `Integrates with ${integrations.join(', ')}`;
+                break;
+            }
+        }
+        
+        // Fallback: look for specific technology mentions
+        const techMentions = [];
+        const techPatterns = [
+            /Azure\s+(?:AD|Active Directory)/gi,
+            /Microsoft\s+Graph\s+API/gi,
+            /SharePoint/gi,
+            /Exchange\s+Online/gi,
+            /Office\s+365/gi,
+            /Teams/gi
+        ];
+        
+        techPatterns.forEach(pattern => {
+            const matches = content.match(pattern);
+            if (matches) {
+                techMentions.push(matches[0]);
+            }
+        });
+        
+        if (techMentions.length > 0 && details.connection === 'Connects to organizational resources') {
+            details.connection = `Integrates with ${techMentions.slice(0, 3).join(', ')}`;
+        }
+        
+        return details;
+    }
+    
     updateGauge(score, level) {
         // Update gauge value display
         this.gaugeValue.textContent = score;
@@ -528,10 +613,25 @@ class RiskAnalyzer {
         document.getElementById('summary-low').textContent = lowCount;
     }
 
+    updateApplicationDetails() {
+        const details = this.analysisResults.appDetails;
+        
+        const purposeElement = document.querySelector('#app-purpose .detail-value');
+        const nameElement = document.querySelector('#app-name .detail-value');
+        const descriptionElement = document.querySelector('#app-description .detail-value');
+        
+        if (purposeElement) purposeElement.textContent = details.purpose;
+        if (nameElement) nameElement.textContent = details.application;
+        if (descriptionElement) descriptionElement.textContent = details.connection;
+    }
+
     displayResults() {
         // Show analysis section
         this.analysisSection.style.display = 'block';
         this.analysisSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Update application details
+        this.updateApplicationDetails();
         
         // Update gauge and summary
         this.updateGauge(this.analysisResults.overallRisk.score, this.analysisResults.overallRisk.level);
