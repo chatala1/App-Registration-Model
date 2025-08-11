@@ -312,57 +312,69 @@ class FileUploader {
     }
     
     async loadSamplePlan() {
-        const sampleContent = `# Sample Project Plan - Customer Portal Application
+        const sampleContent = `# Sales CRM to Microsoft Graph API Integration
+## Azure Application Registration Project Plan
 
-## Project Overview
-This project involves creating a customer portal application with Azure AD integration for authentication and user management.
+**Project Name:** SalesMax CRM to Microsoft Graph API Integration  
+**Source Application:** SalesMax CRM v3.2  
+**Target Application:** Microsoft Graph API  
+**Connection Type:** REST API Integration via OAuth 2.0  
 
-## Application Registration Requirements
+## Connection Overview
 
-### Required Permissions
-- **User.Read.All**: Read all users' full profiles for customer lookup
-- **Directory.Read.All**: Access directory data for organizational structure
-- **Application.ReadWrite.All**: Manage application configurations
-- **Group.ReadWrite.All**: Manage customer groups and access levels
-- **Mail.Send**: Send notifications to customers
-- **Files.ReadWrite.All**: Access customer documents and files
+**SalesMax CRM** (source application) connects to **Microsoft Graph API** (target application) to synchronize customer contact information, calendar events, and email communications for sales representatives.
 
-### Application Features
-- Customer authentication via Azure AD
-- User profile management
-- Document sharing and collaboration
-- Email notifications for important updates
-- Administrative dashboard for user management
-- Integration with Microsoft Graph API
+## Required Azure Application Permissions
 
-### Security Considerations
-- Implement conditional access policies
-- Enable multi-factor authentication
-- Regular audit of application permissions
-- Monitor sign-in activities and security events
+### Critical Risk Permissions
+- **Contacts.ReadWrite**: Synchronize customer contacts bidirectionally
+- **Calendars.ReadWrite**: Create and update calendar events for sales meetings
 
-### Compliance Requirements
-- Ensure GDPR compliance for customer data
-- Implement data retention policies
-- Regular security assessments
-- Audit logging for all critical operations
+### High Risk Permissions  
+- **User.ReadWrite.All**: Access and modify user profiles for sales team management
+- **Mail.ReadWrite**: Read and categorize email communications
+- **Directory.Read.All**: Access organizational structure for territory management
 
-## Risk Factors
-- **High privilege permissions**: Application.ReadWrite.All and Directory.Read.All
-- **Sensitive data access**: Files.ReadWrite.All for customer documents
-- **User management capabilities**: Group.ReadWrite.All for access control
-- **Email sending capabilities**: Mail.Send for notifications
+### Medium Risk Permissions
+- **User.Read.All**: Read user profiles for contact matching
+- **Mail.Read**: Monitor email interactions with prospects
+- **Calendars.Read**: View calendar availability for meeting scheduling
 
-## Deployment Plan
-1. Development environment setup
-2. Testing with limited permissions
-3. Security review and approval
-4. Production deployment with monitoring
-5. Regular permission reviews and updates`;
+### Low Risk Permissions
+- **User.Read**: Basic profile access for authentication
+- **profile**: Standard OpenID Connect profile claims
+- **openid**: Standard OpenID Connect authentication
+- **email**: Email address access for user identification
+
+## Data Integration Flows
+
+### Contact Synchronization
+**Direction:** Bidirectional (SalesMax CRM ↔ Microsoft Graph API)
+- Customer contact information
+- Business phone numbers and addresses
+- Personal notes and interaction history
+
+### Calendar Event Integration
+**Direction:** Read-only (Microsoft Graph API → SalesMax CRM)
+- Sales meeting scheduling
+- Customer appointment tracking
+- Availability management
+
+### Email Activity Tracking  
+**Direction:** Read-only (Microsoft Graph API → SalesMax CRM)
+- Email interaction monitoring
+- Response time tracking
+- Communication categorization
+
+## Compliance and Security
+- All API communications encrypted with TLS 1.3
+- Customer data stored in compliance with GDPR and SOX requirements
+- Access logs maintained for 7 years per regulatory requirements
+- Role-based permissions within SalesMax CRM`;
 
         // Simulate file upload with sample content
         this.currentContent = sampleContent;
-        this.currentFile = { name: 'sample-project-plan.md', size: sampleContent.length };
+        this.currentFile = { name: 'project-plan-sales-crm-graph.md', size: sampleContent.length };
         this.displayFileInfo(this.currentFile);
         this.analyzeBtn.disabled = false;
     }
