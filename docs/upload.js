@@ -413,6 +413,12 @@ class FileUploader {
                     fileName: 'sample-reporting-teams.txt',
                     path: 'samples/sample-reporting-teams.txt'
                 }
+            },
+            'customer-portal': {
+                pdf: {
+                    fileName: 'sample-customer-portal.pdf',
+                    path: 'samples/sample-customer-portal.pdf'
+                }
             }
         };
 

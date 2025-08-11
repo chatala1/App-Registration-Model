@@ -1,0 +1,74 @@
+{
+  "projectName": "[Enter your project name]",
+  "sourceApplication": "[Source application name and version]",
+  "targetApplication": "Microsoft Graph API",
+  "connectionType": "[REST API Integration via OAuth 2.0]",
+  "date": "[YYYY-MM-DD]",
+  "author": "[Your name or team]",
+  "classification": "[Business Critical/Standard/Internal]",
+  "overview": {
+    "description": "[Describe the integration purpose and scope]",
+    "purpose": "[Explain why this integration is needed]"
+  },
+  "applications": [
+    {
+      "name": "[Source Application Name]",
+      "vendor": "[Vendor Name]",
+      "version": "[Version Number]",
+      "deployment": "[Cloud-hosted SaaS/On-premises/Hybrid]",
+      "authentication": "[Azure AD integrated/Other]"
+    },
+    {
+      "name": "Microsoft Graph API",
+      "service": "Microsoft 365 Graph API",
+      "version": "v1.0",
+      "endpoints": ["[List relevant endpoints: Users, Calendar, Mail, etc.]"],
+      "authentication": "OAuth 2.0 with PKCE"
+    }
+  ],
+  "permissions": {
+    "critical": [
+      {
+        "permission": "[Permission.Name]",
+        "purpose": "[Description of why this permission is needed]",
+        "riskLevel": "Critical"
+      }
+    ],
+    "high": [
+      {
+        "permission": "[Permission.Name]",
+        "purpose": "[Description of why this permission is needed]",
+        "riskLevel": "High"
+      }
+    ],
+    "medium": [
+      {
+        "permission": "[Permission.Name]",
+        "purpose": "[Description of why this permission is needed]", 
+        "riskLevel": "Medium"
+      }
+    ],
+    "low": [
+      {
+        "permission": "[Permission.Name]",
+        "purpose": "[Description of why this permission is needed]",
+        "riskLevel": "Low"
+      }
+    ]
+  },
+  "dataFlows": [
+    {
+      "name": "[Data Flow Name]",
+      "direction": "[Bidirectional/Read-only/Write-only]",
+      "source": "[Source System]",
+      "target": "[Target System]",
+      "dataTypes": ["[List types of data being transferred]"]
+    }
+  ],
+  "security": {
+    "encryption": "[TLS version and encryption details]",
+    "compliance": ["[List compliance requirements: GDPR, HIPAA, SOX, etc.]"],
+    "dataRetention": "[Data retention policy]",
+    "accessControl": "[Role-based permissions and access control details]"
+  }
+}
