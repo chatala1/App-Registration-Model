@@ -19,24 +19,82 @@
                 <nav class="header-nav">
                     <a href="index.html" class="nav-link">
                         <i class="bi bi-house"></i>
-                        Home
+                        <span class="nav-text">Home</span>
+                    </a>
+                    <a href="index.html#sample-section" class="nav-link">
+                        <i class="bi bi-collection"></i>
+                        <span class="nav-text">Samples</span>
                     </a>
                     <a href="templates.html" class="nav-link active">
                         <i class="bi bi-file-earmark-code"></i>
-                        Templates
+                        <span class="nav-text">Templates</span>
                     </a>
+                    <a href="reports/sample-report.html" class="nav-link">
+                        <i class="bi bi-graph-up"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                    <div class="nav-divider"></div>
+                    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle navigation menu">
+                        <i class="bi bi-list"></i>
+                    </button>
                 </nav>
             </div>
         </div>
     </header>
 
     <main class="container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="index.html">
+                        <i class="bi bi-house"></i>
+                        <span>Risk Analysis Engine</span>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <i class="bi bi-file-earmark-code"></i>
+                    <span>Templates</span>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Secondary Navigation for Templates -->
+        <nav class="secondary-nav" aria-label="Template categories">
+            <div class="secondary-nav-content">
+                <span class="secondary-nav-label">Template Types:</span>
+                <a href="#markdown-template" class="secondary-nav-link">
+                    <i class="bi bi-file-earmark-text"></i>
+                    Markdown
+                </a>
+                <a href="#json-template" class="secondary-nav-link">
+                    <i class="bi bi-file-earmark-code"></i>
+                    JSON
+                </a>
+                <a href="#text-template" class="secondary-nav-link">
+                    <i class="bi bi-file-text"></i>
+                    Text
+                </a>
+                <a href="#pdf-template" class="secondary-nav-link">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    PDF
+                </a>
+                <a href="#rtf-template" class="secondary-nav-link">
+                    <i class="bi bi-file-richtext"></i>
+                    RTF
+                </a>
+                <a href="#word-template" class="secondary-nav-link">
+                    <i class="bi bi-file-word"></i>
+                    Word
+                </a>
+            </div>
+        </nav>
         <section id="templates-section" class="card">
             <h2><i class="bi bi-file-earmark-code"></i> Project Plan Templates</h2>
             <p>Download ready-to-use project plan templates for documenting your Microsoft Graph API integrations. Each template includes sections for permissions, security considerations, and risk assessment information.</p>
             
             <div class="templates-grid">
-                <div class="template-card">
+                <div class="template-card" id="markdown-template">
                     <div class="template-header">
                         <i class="bi bi-file-earmark-text template-icon"></i>
                         <div class="template-info">
@@ -55,7 +113,7 @@
                     </div>
                 </div>
 
-                <div class="template-card">
+                <div class="template-card" id="json-template">
                     <div class="template-header">
                         <i class="bi bi-file-earmark-code template-icon"></i>
                         <div class="template-info">
@@ -74,7 +132,7 @@
                     </div>
                 </div>
 
-                <div class="template-card">
+                <div class="template-card" id="text-template">
                     <div class="template-header">
                         <i class="bi bi-file-earmark-text template-icon"></i>
                         <div class="template-info">
@@ -93,7 +151,7 @@
                     </div>
                 </div>
 
-                <div class="template-card">
+                <div class="template-card" id="pdf-template">
                     <div class="template-header">
                         <i class="bi bi-file-earmark-pdf template-icon"></i>
                         <div class="template-info">
@@ -112,7 +170,7 @@
                     </div>
                 </div>
 
-                <div class="template-card">
+                <div class="template-card" id="rtf-template">
                     <div class="template-header">
                         <i class="bi bi-file-earmark-richtext template-icon"></i>
                         <div class="template-info">
@@ -131,7 +189,7 @@
                     </div>
                 </div>
 
-                <div class="template-card">
+                <div class="template-card" id="word-template">
                     <div class="template-header">
                         <i class="bi bi-file-earmark-word template-icon"></i>
                         <div class="template-info">
@@ -210,5 +268,6 @@
             <p>Powered by <a href="https://www.nist.gov/cyberframework" target="_blank">NIST CSF 2.0</a>, <a href="https://docs.microsoft.com/en-us/graph/permissions-reference" target="_blank">Microsoft Graph API</a>, and <a href="https://microsoft.copilot.com" target="_blank">Copilot</a></p>
         </div>
     </footer>
+    <script src="navigation.js"></script>
 </body>
 </html>
