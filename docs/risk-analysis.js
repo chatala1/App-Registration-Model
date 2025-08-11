@@ -734,6 +734,12 @@ class RiskAnalyzer {
         const riskScore = this.analysisResults.overallRisk.score;
         const riskLevel = this.analysisResults.overallRisk.level;
         
+        // Remove any existing CSS gauge first
+        const existingGauge = document.getElementById('css-gauge');
+        if (existingGauge) {
+            existingGauge.remove();
+        }
+        
         // Calculate rotation angle for needle (180 degrees for 0-100 scale)
         const needleAngle = (riskScore / 100) * 180 - 90; // -90 to start from left
         
