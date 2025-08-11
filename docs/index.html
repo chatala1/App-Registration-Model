@@ -235,9 +235,95 @@
         </section>
 
         <section id="sample-section" class="card">
-            <h2><i class="bi bi-file-earmark-check"></i> Sample Project Plan</h2>
-            <p>Don't have a project plan ready? Try our sample to see how the analysis works:</p>
-            <button id="load-sample" class="btn btn-outline"><i class="bi bi-file-earmark-plus"></i> Load Sample Plan</button>
+            <h2><i class="bi bi-file-earmark-check"></i> Sample Project Plans</h2>
+            <p>Don't have a project plan ready? Try one of our sample project plans to see how the analysis works. Each sample demonstrates a different document format and integration scenario:</p>
+            
+            <div class="sample-grid">
+                <div class="sample-card" data-sample="sales-crm" data-format="json">
+                    <div class="sample-header">
+                        <i class="bi bi-file-earmark-code sample-icon"></i>
+                        <div class="sample-info">
+                            <h3>Sales CRM Integration</h3>
+                            <span class="sample-format">JSON Format</span>
+                        </div>
+                    </div>
+                    <p class="sample-description">SalesMax CRM to Microsoft Graph API - Structured data format for API integration planning</p>
+                    <div class="sample-permissions">
+                        <span class="permission-badge critical">4 Critical</span>
+                        <span class="permission-badge high">3 High</span>
+                        <span class="permission-badge medium">3 Medium</span>
+                    </div>
+                </div>
+
+                <div class="sample-card" data-sample="mobile-sharepoint" data-format="txt">
+                    <div class="sample-header">
+                        <i class="bi bi-file-earmark-text sample-icon"></i>
+                        <div class="sample-info">
+                            <h3>Mobile App Integration</h3>
+                            <span class="sample-format">Plain Text</span>
+                        </div>
+                    </div>
+                    <p class="sample-description">FieldWorker Mobile to SharePoint Online - Simple text format for quick documentation</p>
+                    <div class="sample-permissions">
+                        <span class="permission-badge critical">2 Critical</span>
+                        <span class="permission-badge high">2 High</span>
+                        <span class="permission-badge medium">3 Medium</span>
+                    </div>
+                </div>
+
+                <div class="sample-card" data-sample="analytics-exchange" data-format="rtf">
+                    <div class="sample-header">
+                        <i class="bi bi-file-earmark-richtext sample-icon"></i>
+                        <div class="sample-info">
+                            <h3>Analytics Dashboard</h3>
+                            <span class="sample-format">Rich Text (RTF)</span>
+                        </div>
+                    </div>
+                    <p class="sample-description">PowerBI to Exchange Online - Rich formatted documents with styling and structure</p>
+                    <div class="sample-permissions">
+                        <span class="permission-badge critical">2 Critical</span>
+                        <span class="permission-badge high">3 High</span>
+                        <span class="permission-badge medium">3 Medium</span>
+                    </div>
+                </div>
+
+                <div class="sample-card" data-sample="hr-azuread" data-format="md">
+                    <div class="sample-header">
+                        <i class="bi bi-file-earmark-text sample-icon"></i>
+                        <div class="sample-info">
+                            <h3>HR System Integration</h3>
+                            <span class="sample-format">Markdown</span>
+                        </div>
+                    </div>
+                    <p class="sample-description">WorkdayHR to Azure Active Directory - Markdown format for technical documentation</p>
+                    <div class="sample-permissions">
+                        <span class="permission-badge critical">3 Critical</span>
+                        <span class="permission-badge high">2 High</span>
+                        <span class="permission-badge medium">4 Medium</span>
+                    </div>
+                </div>
+
+                <div class="sample-card" data-sample="reporting-teams" data-format="txt">
+                    <div class="sample-header">
+                        <i class="bi bi-file-earmark-text sample-icon"></i>
+                        <div class="sample-info">
+                            <h3>Teams Reporting</h3>
+                            <span class="sample-format">Text Document</span>
+                        </div>
+                    </div>
+                    <p class="sample-description">PowerBI to Microsoft Teams - Collaborative reporting and notification scenarios</p>
+                    <div class="sample-permissions">
+                        <span class="permission-badge critical">2 Critical</span>
+                        <span class="permission-badge high">3 High</span>
+                        <span class="permission-badge medium">3 Medium</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sample-footer">
+                <p><strong>Supported Formats:</strong> .md, .json, .txt, .pdf, .docx, .doc, .rtf</p>
+                <p><small>Test the app with realistic enterprise integration scenarios. Click any sample above to load and analyze it.</small></p>
+            </div>
         </section>
     </main>
 
@@ -245,15 +331,7 @@
         <div class="container">
             <p>&copy; 2024 Risk Analysis Tool - Built for GitHub Pages</p>
             <p>Powered by <a href="https://www.nist.gov/cyberframework" target="_blank">NIST CSF 2.0</a>, <a href="https://docs.microsoft.com/en-us/graph/permissions-reference" target="_blank">Microsoft Graph API</a>, and <a href="https://microsoft.copilot.com" target="_blank">Copilot</a></p>
-            <p>
-                <strong>Sample Project Plans:</strong><br>
-                <i class="bi bi-file-earmark-text"></i> <a href="project-plan-sales-crm-graph.md" download="project-plan-sales-crm-graph.md" target="_blank">Sales CRM ↔ Microsoft Graph</a> | 
-                <i class="bi bi-file-earmark-text"></i> <a href="project-plan-mobile-sharepoint.md" download="project-plan-mobile-sharepoint.md" target="_blank">Mobile App ↔ SharePoint</a> | 
-                <i class="bi bi-file-earmark-text"></i> <a href="project-plan-analytics-exchange.md" download="project-plan-analytics-exchange.md" target="_blank">Analytics ↔ Exchange</a> | 
-                <i class="bi bi-file-earmark-text"></i> <a href="project-plan-hr-azuread.md" download="project-plan-hr-azuread.md" target="_blank">HR System ↔ Azure AD</a> | 
-                <i class="bi bi-file-earmark-text"></i> <a href="project-plan-reporting-teams.md" download="project-plan-reporting-teams.md" target="_blank">Reporting ↔ Teams</a>
-                <br><small>Test the app with realistic enterprise integration scenarios</small>
-            </p>
+
         </div>
     </footer>
 

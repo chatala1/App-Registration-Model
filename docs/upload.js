@@ -7,7 +7,7 @@ class FileUploader {
         this.fileName = document.getElementById('file-name');
         this.fileSize = document.getElementById('file-size');
         this.analyzeBtn = document.getElementById('analyze-btn');
-        this.loadSampleBtn = document.getElementById('load-sample');
+        this.loadSampleBtn = document.getElementById('load-sample'); // May not exist with new design
         
         this.currentFile = null;
         this.currentContent = null;
@@ -61,10 +61,22 @@ class FileUploader {
             this.startAnalysis();
         });
         
-        // Load sample button
-        this.loadSampleBtn.addEventListener('click', () => {
-            this.loadSamplePlan();
+        // Sample card click handlers
+        document.addEventListener('click', (e) => {
+            const sampleCard = e.target.closest('.sample-card');
+            if (sampleCard) {
+                const sampleType = sampleCard.dataset.sample;
+                const sampleFormat = sampleCard.dataset.format;
+                this.loadSamplePlan(sampleType, sampleFormat);
+            }
         });
+        
+        // Legacy load sample button (if it exists)
+        if (this.loadSampleBtn) {
+            this.loadSampleBtn.addEventListener('click', () => {
+                this.loadSamplePlan('sales-crm', 'json');
+            });
+        }
     }
     
     handleFile(file) {
@@ -311,72 +323,99 @@ class FileUploader {
         return text;
     }
     
-    async loadSamplePlan() {
-        const sampleContent = `# Sales CRM to Microsoft Graph API Integration
-## Azure Application Registration Project Plan
+    async loadSamplePlan(sampleType = 'sales-crm', format = 'json') {
+        const samples = {
+            'sales-crm': {
+                json: {
+                    fileName: 'sample-sales-crm.json',
+                    path: 'samples/sample-sales-crm.json'
+                }
+            },
+            'mobile-sharepoint': {
+                txt: {
+                    fileName: 'sample-mobile-sharepoint.txt',
+                    path: 'samples/sample-mobile-sharepoint.txt'
+                }
+            },
+            'analytics-exchange': {
+                rtf: {
+                    fileName: 'sample-analytics-exchange.rtf',
+                    path: 'samples/sample-analytics-exchange.rtf'
+                }
+            },
+            'hr-azuread': {
+                md: {
+                    fileName: 'sample-hr-azuread.md',
+                    path: 'samples/sample-hr-azuread.md'
+                }
+            },
+            'reporting-teams': {
+                txt: {
+                    fileName: 'sample-reporting-teams.txt',
+                    path: 'samples/sample-reporting-teams.txt'
+                }
+            }
+        };
 
-**Project Name:** SalesMax CRM to Microsoft Graph API Integration  
-**Source Application:** SalesMax CRM v3.2  
-**Target Application:** Microsoft Graph API  
-**Connection Type:** REST API Integration via OAuth 2.0  
+        try {
+            const sample = samples[sampleType]?.[format];
+            if (!sample) {
+                throw new Error(`Sample ${sampleType} in ${format} format not found`);
+            }
 
-## Connection Overview
+            // Fetch the sample file
+            const response = await fetch(sample.path);
+            if (!response.ok) {
+                throw new Error(`Failed to load sample: ${response.statusText}`);
+            }
+            
+            const sampleContent = await response.text();
+            
+            // Simulate file upload with sample content
+            this.currentContent = sampleContent;
+            this.currentFile = { 
+                name: sample.fileName, 
+                size: sampleContent.length,
+                type: this.getFileType(format)
+            };
+            
+            this.displayFileInfo(this.currentFile);
+            this.analyzeBtn.disabled = false;
 
-**SalesMax CRM** (source application) connects to **Microsoft Graph API** (target application) to synchronize customer contact information, calendar events, and email communications for sales representatives.
+            // Show visual feedback
+            this.highlightSelectedSample(sampleType);
+            
+        } catch (error) {
+            console.error('Error loading sample:', error);
+            alert(`Failed to load sample: ${error.message}`);
+        }
+    }
 
-## Required Azure Application Permissions
+    highlightSelectedSample(sampleType) {
+        // Remove previous highlights
+        document.querySelectorAll('.sample-card').forEach(card => {
+            card.classList.remove('sample-selected');
+        });
+        
+        // Add highlight to selected sample
+        const selectedCard = document.querySelector(`[data-sample="${sampleType}"]`);
+        if (selectedCard) {
+            selectedCard.classList.add('sample-selected');
+            setTimeout(() => selectedCard.classList.remove('sample-selected'), 2000);
+        }
+    }
 
-### Critical Risk Permissions
-- **Contacts.ReadWrite**: Synchronize customer contacts bidirectionally
-- **Calendars.ReadWrite**: Create and update calendar events for sales meetings
-
-### High Risk Permissions  
-- **User.ReadWrite.All**: Access and modify user profiles for sales team management
-- **Mail.ReadWrite**: Read and categorize email communications
-- **Directory.Read.All**: Access organizational structure for territory management
-
-### Medium Risk Permissions
-- **User.Read.All**: Read user profiles for contact matching
-- **Mail.Read**: Monitor email interactions with prospects
-- **Calendars.Read**: View calendar availability for meeting scheduling
-
-### Low Risk Permissions
-- **User.Read**: Basic profile access for authentication
-- **profile**: Standard OpenID Connect profile claims
-- **openid**: Standard OpenID Connect authentication
-- **email**: Email address access for user identification
-
-## Data Integration Flows
-
-### Contact Synchronization
-**Direction:** Bidirectional (SalesMax CRM ↔ Microsoft Graph API)
-- Customer contact information
-- Business phone numbers and addresses
-- Personal notes and interaction history
-
-### Calendar Event Integration
-**Direction:** Read-only (Microsoft Graph API → SalesMax CRM)
-- Sales meeting scheduling
-- Customer appointment tracking
-- Availability management
-
-### Email Activity Tracking  
-**Direction:** Read-only (Microsoft Graph API → SalesMax CRM)
-- Email interaction monitoring
-- Response time tracking
-- Communication categorization
-
-## Compliance and Security
-- All API communications encrypted with TLS 1.3
-- Customer data stored in compliance with GDPR and SOX requirements
-- Access logs maintained for 7 years per regulatory requirements
-- Role-based permissions within SalesMax CRM`;
-
-        // Simulate file upload with sample content
-        this.currentContent = sampleContent;
-        this.currentFile = { name: 'project-plan-sales-crm-graph.md', size: sampleContent.length };
-        this.displayFileInfo(this.currentFile);
-        this.analyzeBtn.disabled = false;
+    getFileType(format) {
+        const typeMap = {
+            'json': 'application/json',
+            'txt': 'text/plain',
+            'rtf': 'application/rtf',
+            'md': 'text/markdown',
+            'pdf': 'application/pdf',
+            'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'doc': 'application/msword'
+        };
+        return typeMap[format] || 'text/plain';
     }
     
     startAnalysis() {

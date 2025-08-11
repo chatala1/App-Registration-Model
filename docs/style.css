@@ -738,6 +738,125 @@ footer a:hover {
     text-decoration: underline;
 }
 
+/* Sample Project Plans Grid */
+.sample-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.sample-card {
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    position: relative;
+}
+
+.sample-card:hover {
+    border-color: #58a6ff;
+    background: #1c2a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(88, 166, 255, 0.15);
+}
+
+.sample-card.sample-selected {
+    border-color: #3fb950;
+    background: #1a2f1a;
+    box-shadow: 0 4px 16px rgba(63, 185, 80, 0.2);
+}
+
+.sample-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sample-icon {
+    font-size: 1.5rem;
+    color: #58a6ff;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.sample-info h3 {
+    color: #f0f6fc;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.sample-format {
+    color: #8b949e;
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.sample-description {
+    color: #8b949e;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.sample-permissions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.permission-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.permission-badge.critical {
+    background: rgba(248, 81, 73, 0.15);
+    color: #f85149;
+    border: 1px solid rgba(248, 81, 73, 0.3);
+}
+
+.permission-badge.high {
+    background: rgba(255, 142, 78, 0.15);
+    color: #ff8e4e;
+    border: 1px solid rgba(255, 142, 78, 0.3);
+}
+
+.permission-badge.medium {
+    background: rgba(255, 212, 59, 0.15);
+    color: #ffd43b;
+    border: 1px solid rgba(255, 212, 59, 0.3);
+}
+
+.permission-badge.low {
+    background: rgba(63, 185, 80, 0.15);
+    color: #3fb950;
+    border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+.sample-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #30363d;
+}
+
+.sample-footer p {
+    color: #8b949e;
+    margin-bottom: 0.5rem;
+}
+
+.sample-footer strong {
+    color: #f0f6fc;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
