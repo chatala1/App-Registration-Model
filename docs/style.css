@@ -203,7 +203,7 @@ header p {
 /* Analysis Results */
 .analysis-summary {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 300px 300px 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
 }
@@ -211,22 +211,25 @@ header p {
 .risk-score-card {
     text-align: center;
     padding: 2rem;
-    background: #58a6ff;
-    color: white;
-    border-radius: 6px;
-    border: 1px solid #1c7ed6;
+    background: transparent;
+    color: #f0f6fc;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    position: relative;
 }
 
 .risk-score-card h3 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 1rem;
     font-weight: 500;
+    color: #8b949e;
 }
 
 .score-display {
     font-size: 3rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    color: #f0f6fc;
 }
 
 .risk-level {
@@ -234,7 +237,124 @@ header p {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: #8b949e;
 }
+
+/* iOS Style Gauge */
+.gauge-card {
+    text-align: center;
+    padding: 2rem;
+    background: transparent;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    position: relative;
+}
+
+.gauge-card h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #8b949e;
+}
+
+.gauge-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1rem auto;
+}
+
+.gauge-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: #21262d;
+    stroke-width: 8;
+}
+
+.gauge-progress {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 1s ease-in-out;
+}
+
+.gauge-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f0f6fc;
+    line-height: 1;
+}
+
+.gauge-label {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Risk Summary Card */
+.risk-summary-card {
+    padding: 2rem;
+    background: transparent;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    text-align: left;
+}
+
+.risk-summary-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #8b949e;
+}
+
+.risk-summary-content {
+    color: #f0f6fc;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.risk-summary-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #30363d;
+}
+
+.risk-summary-stat:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.stat-label {
+    color: #8b949e;
+    font-size: 0.875rem;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #f0f6fc;
+}
+
+.stat-value.critical { color: #f85149; }
+.stat-value.high { color: #d29922; }
+.stat-value.medium { color: #58a6ff; }
+.stat-value.low { color: #3fb950; }
 
 .chart-container {
     display: flex;
@@ -553,6 +673,15 @@ footer a:hover {
     
     .analysis-summary {
         grid-template-columns: 1fr;
+    }
+    
+    .gauge-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .gauge-value {
+        font-size: 2rem;
     }
     
     .results-grid {
