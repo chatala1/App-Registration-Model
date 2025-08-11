@@ -49,8 +49,13 @@
             <div class="analysis-summary">
                 <div class="risk-score-card">
                     <h3>Overall Risk Score</h3>
-                    <div id="overall-score" class="score-display">-</div>
-                    <div id="risk-level" class="risk-level">-</div>
+                    <div class="gauge-container">
+                        <canvas id="risk-gauge" width="200" height="120"></canvas>
+                        <div class="gauge-text">
+                            <div id="overall-score" class="score-display">-</div>
+                            <div id="risk-level" class="risk-level">-</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="chart-container">

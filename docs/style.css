@@ -211,29 +211,186 @@ header p {
 .risk-score-card {
     text-align: center;
     padding: 2rem;
-    background: #58a6ff;
+    background: #161b22;
     color: white;
     border-radius: 6px;
-    border: 1px solid #1c7ed6;
+    border: 1px solid #30363d;
+    position: relative;
 }
 
 .risk-score-card h3 {
     margin-bottom: 1rem;
     font-size: 1rem;
     font-weight: 500;
+    color: #f0f6fc;
+}
+
+.gauge-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gauge-text {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    z-index: 10;
 }
 
 .score-display {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .risk-level {
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Risk level color variations */
+.risk-score-card.low {
+    border-color: #238636;
+    background: linear-gradient(135deg, #1a2f23 0%, #0d2818 100%);
+}
+
+.risk-score-card.medium {
+    border-color: #bf8700;
+    background: linear-gradient(135deg, #2e2619 0%, #1f1a0f 100%);
+}
+
+.risk-score-card.high {
+    border-color: #da3633;
+    background: linear-gradient(135deg, #2d1517 0%, #1f0b0c 100%);
+}
+
+.risk-score-card.critical {
+    border-color: #82071e;
+    background: linear-gradient(135deg, #2d1517 0%, #1f0203 100%);
+}
+
+/* CSS-based gauge styles */
+.css-gauge {
+    position: relative;
+    width: 200px;
+    height: 120px;
+    margin: 10px auto;
+}
+
+.gauge-track {
+    position: relative;
+    width: 200px;
+    height: 100px;
+    border-radius: 100px 100px 0 0;
+    overflow: hidden;
+    background: #21262d;
+    border: 3px solid #30363d;
+}
+
+.gauge-segment {
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 100px;
+    transform-origin: right bottom;
+}
+
+.gauge-segment.low {
+    left: 0;
+    background: linear-gradient(45deg, #28a745, #238636);
+    transform: rotate(0deg);
+}
+
+.gauge-segment.medium {
+    left: 50px;
+    background: linear-gradient(45deg, #ffc107, #bf8700);
+    transform: rotate(0deg);
+}
+
+.gauge-segment.high {
+    left: 100px;
+    background: linear-gradient(45deg, #fd7e14, #da3633);
+    transform: rotate(0deg);
+}
+
+.gauge-segment.critical {
+    left: 150px;
+    background: linear-gradient(45deg, #dc3545, #82071e);
+    transform: rotate(0deg);
+}
+
+.gauge-needle {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    width: 2px;
+    height: 70px;
+    background: #ffffff;
+    transform-origin: bottom center;
+    transition: transform 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+    border-radius: 1px;
+    z-index: 10;
+}
+
+.gauge-needle::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+}
+
+.gauge-center {
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+}
+
+.gauge-labels {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: #8b949e;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.gauge-label-left {
+    position: absolute;
+    bottom: 5px;
+    left: 15px;
+}
+
+.gauge-label-right {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+}
+
+.gauge-label-top {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .chart-container {

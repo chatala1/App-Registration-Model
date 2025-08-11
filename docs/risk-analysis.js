@@ -436,6 +436,10 @@ class RiskAnalyzer {
         this.riskLevel.textContent = this.analysisResults.overallRisk.level.toUpperCase();
         this.riskLevel.className = `risk-level ${this.analysisResults.overallRisk.level}`;
         
+        // Update risk score card styling based on risk level
+        const riskScoreCard = document.querySelector('.risk-score-card');
+        riskScoreCard.className = `risk-score-card ${this.analysisResults.overallRisk.level}`;
+        
         // Update summary cards
         this.updateSummaryCards();
         
@@ -521,7 +525,8 @@ class RiskAnalyzer {
         // Populate overview tab
         this.populateOverviewTab();
         
-        // Try to create chart (if Chart.js is available)
+        // Try to create charts (if Chart.js is available)
+        this.createRiskGauge();
         this.createRiskChart();
     }
     
@@ -584,6 +589,183 @@ class RiskAnalyzer {
                     <div class="item-description">${rec.description}</div>
                 </div>
             `).join('') : '<p style="color: #8b949e; font-style: italic;">No immediate actions required</p>';
+    }
+    
+    createRiskGauge() {
+        // Check if Chart.js is available
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not available, using CSS fallback gauge');
+            this.createCSSGauge();
+            return;
+        }
+        
+        const ctx = document.getElementById('risk-gauge').getContext('2d');
+        const riskScore = this.analysisResults.overallRisk.score;
+        const riskLevel = this.analysisResults.overallRisk.level;
+        
+        // Define color schemes for different risk levels
+        const riskColors = {
+            low: '#28a745',      // Green
+            medium: '#ffc107',   // Yellow  
+            high: '#fd7e14',     // Orange
+            critical: '#dc3545' // Red
+        };
+        
+        // Calculate gauge segments (4 segments of 25 points each)
+        const segmentSize = 25;
+        const currentSegment = Math.floor(riskScore / segmentSize);
+        
+        // Create data for half-circle gauge
+        const gaugeData = [
+            segmentSize, // Low (0-25)
+            segmentSize, // Medium (25-50)  
+            segmentSize, // High (50-75)
+            segmentSize, // Critical (75-100)
+            100 // Empty half to create semi-circle
+        ];
+        
+        const gaugeColors = [
+            riskColors.low,
+            riskColors.medium,
+            riskColors.high,
+            riskColors.critical,
+            'transparent'
+        ];
+        
+        // Highlight the current risk level segment
+        const highlightedColors = gaugeColors.map((color, index) => {
+            if (index === currentSegment) {
+                return color; // Keep current segment bright
+            } else if (index < currentSegment) {
+                return color; // Keep lower segments bright
+            } else if (index < 4) {
+                return color + '40'; // Make future segments semi-transparent
+            }
+            return color;
+        });
+        
+        try {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: gaugeData,
+                        backgroundColor: highlightedColors,
+                        borderWidth: 0,
+                        circumference: 180, // Half circle
+                        rotation: 270,      // Start from bottom
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                },
+                plugins: [{
+                    id: 'gaugeNeedle',
+                    afterDraw: (chart) => {
+                        const { ctx, chartArea } = chart;
+                        if (!chartArea) return;
+                        
+                        const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
+                        const centerY = chartArea.bottom - 10;
+                        const radius = Math.min(chartArea.width, chartArea.height) / 2.8;
+                        
+                        // Calculate needle angle (180 degrees for 0-100 scale)
+                        const needleAngle = (riskScore / 100) * Math.PI - Math.PI / 2;
+                        
+                        // Draw needle
+                        ctx.save();
+                        ctx.translate(centerX, centerY);
+                        ctx.rotate(needleAngle);
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.lineWidth = 3;
+                        ctx.lineCap = 'round';
+                        
+                        // Needle line
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(radius - 20, 0);
+                        ctx.stroke();
+                        
+                        // Needle center dot
+                        ctx.beginPath();
+                        ctx.arc(0, 0, 6, 0, 2 * Math.PI);
+                        ctx.fill();
+                        
+                        ctx.restore();
+                        
+                        // Add gauge labels
+                        ctx.fillStyle = '#8b949e';
+                        ctx.font = '10px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+                        ctx.textAlign = 'center';
+                        
+                        // Low label (left)
+                        ctx.fillText('0', centerX - radius + 20, centerY + 15);
+                        // High label (right) 
+                        ctx.fillText('100', centerX + radius - 20, centerY + 15);
+                        // Medium label (top)
+                        ctx.fillText('50', centerX, centerY - radius + 25);
+                    }
+                }]
+            });
+        } catch (error) {
+            console.error('Error creating gauge:', error);
+            this.createCSSGauge();
+        }
+    }
+    
+    createCSSGauge() {
+        const gaugeElement = document.getElementById('risk-gauge');
+        const riskScore = this.analysisResults.overallRisk.score;
+        const riskLevel = this.analysisResults.overallRisk.level;
+        
+        // Calculate rotation angle for needle (180 degrees for 0-100 scale)
+        const needleAngle = (riskScore / 100) * 180 - 90; // -90 to start from left
+        
+        // Define colors for different risk levels
+        const riskColors = {
+            low: '#28a745',
+            medium: '#ffc107', 
+            high: '#fd7e14',
+            critical: '#dc3545'
+        };
+        
+        const currentColor = riskColors[riskLevel];
+        
+        // Create CSS gauge HTML
+        gaugeElement.style.display = 'none'; // Hide canvas
+        gaugeElement.insertAdjacentHTML('afterend', `
+            <div class="css-gauge" id="css-gauge">
+                <div class="gauge-track">
+                    <div class="gauge-segment low"></div>
+                    <div class="gauge-segment medium"></div>
+                    <div class="gauge-segment high"></div>
+                    <div class="gauge-segment critical"></div>
+                </div>
+                <div class="gauge-needle" style="transform: rotate(${needleAngle}deg)"></div>
+                <div class="gauge-center"></div>
+                <div class="gauge-labels">
+                    <span class="gauge-label-left">0</span>
+                    <span class="gauge-label-right">100</span>
+                    <span class="gauge-label-top">50</span>
+                </div>
+            </div>
+        `);
     }
     
     createRiskChart() {
