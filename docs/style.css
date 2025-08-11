@@ -381,7 +381,7 @@ header p {
 
 .detail-item {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: flex-start;
     margin-bottom: 0.75rem;
     padding: 0.5rem 0;
@@ -397,16 +397,12 @@ header p {
     color: #8b949e;
     font-size: 0.875rem;
     font-weight: 500;
-    min-width: 80px;
-    flex-shrink: 0;
 }
 
 .detail-value {
     font-weight: 400;
     color: #f0f6fc;
-    text-align: right;
-    flex: 1;
-    margin-left: 1rem;
+    margin-top: 0.25rem;
 }
 
 .chart-container {
