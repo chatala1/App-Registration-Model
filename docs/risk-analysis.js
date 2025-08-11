@@ -170,22 +170,79 @@ class RiskAnalyzer {
         
         // Search for pattern-based permissions (e.g., "read all users", "write directory")
         const permissionPatterns = [
+            // User permissions
             { pattern: /read.*all.*user/gi, permission: 'User.Read.All' },
             { pattern: /write.*all.*user/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /manage.*user.*profile/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /access.*user.*information/gi, permission: 'User.Read.All' },
+            { pattern: /user.*read.*basic/gi, permission: 'User.ReadBasic.All' },
+            
+            // Directory permissions
             { pattern: /read.*director/gi, permission: 'Directory.Read.All' },
             { pattern: /write.*director/gi, permission: 'Directory.ReadWrite.All' },
+            { pattern: /access.*director.*information/gi, permission: 'Directory.Read.All' },
+            { pattern: /organization.*director/gi, permission: 'Directory.Read.All' },
+            
+            // Application permissions
             { pattern: /manage.*application/gi, permission: 'Application.ReadWrite.All' },
             { pattern: /read.*application/gi, permission: 'Application.Read.All' },
+            { pattern: /integrated.*application/gi, permission: 'Application.Read.All' },
+            
+            // Group permissions
             { pattern: /manage.*group/gi, permission: 'Group.ReadWrite.All' },
             { pattern: /read.*group/gi, permission: 'Group.Read.All' },
+            { pattern: /group.*membership/gi, permission: 'Group.Read.All' },
+            { pattern: /support.*group/gi, permission: 'Group.ReadWrite.All' },
+            
+            // Mail permissions
             { pattern: /send.*mail/gi, permission: 'Mail.Send' },
             { pattern: /read.*mail/gi, permission: 'Mail.Read' },
+            { pattern: /mail.*read.*write/gi, permission: 'Mail.ReadWrite' },
+            
+            // Role management permissions
             { pattern: /manage.*role/gi, permission: 'RoleManagement.ReadWrite.All' },
             { pattern: /read.*role/gi, permission: 'RoleManagement.Read.All' },
-            { pattern: /manage.*polic/gi, permission: 'Policy.ReadWrite.All' },
-            { pattern: /read.*polic/gi, permission: 'Policy.Read.All' },
+            { pattern: /role.*assignment/gi, permission: 'RoleManagement.ReadWrite.All' },
+            
+            // Files permissions
             { pattern: /read.*file/gi, permission: 'Files.Read.All' },
             { pattern: /write.*file/gi, permission: 'Files.ReadWrite.All' },
+            { pattern: /upload.*file/gi, permission: 'Files.ReadWrite.All' },
+            { pattern: /file.*report/gi, permission: 'Files.ReadWrite.All' },
+            { pattern: /document.*librar/gi, permission: 'Files.Read.All' },
+            
+            // Sites/SharePoint permissions
+            { pattern: /sites.*read.*write/gi, permission: 'Sites.ReadWrite.All' },
+            { pattern: /sites.*read/gi, permission: 'Sites.Read.All' },
+            { pattern: /sharepoint.*site/gi, permission: 'Sites.Read.All' },
+            { pattern: /access.*site/gi, permission: 'Sites.Read.All' },
+            
+            // Calendars permissions
+            { pattern: /calendar.*read.*write/gi, permission: 'Calendars.ReadWrite' },
+            { pattern: /calendar.*read/gi, permission: 'Calendars.Read' },
+            { pattern: /meeting.*data/gi, permission: 'Calendars.Read' },
+            
+            // Teams permissions  
+            { pattern: /team.*member/gi, permission: 'TeamMember.Read.All' },
+            { pattern: /teams.*app/gi, permission: 'TeamsApp.ReadWrite.All' },
+            { pattern: /chat.*read.*write/gi, permission: 'Chat.ReadWrite.All' },
+            { pattern: /chat.*read/gi, permission: 'Chat.Read.All' },
+            { pattern: /channel.*create/gi, permission: 'Channel.Create' },
+            
+            // Reports permissions
+            { pattern: /reports.*read/gi, permission: 'Reports.Read.All' },
+            { pattern: /usage.*report/gi, permission: 'Reports.Read.All' },
+            
+            // Basic profile permissions
+            { pattern: /profile.*read/gi, permission: 'Profile.Read' },
+            { pattern: /basic.*profile/gi, permission: 'Profile.Read' },
+            { pattern: /openid/gi, permission: 'OpenId' },
+            
+            // Policy permissions
+            { pattern: /manage.*polic/gi, permission: 'Policy.ReadWrite.All' },
+            { pattern: /read.*polic/gi, permission: 'Policy.Read.All' },
+            
+            // Audit permissions
             { pattern: /audit.*log/gi, permission: 'AuditLog.Read.All' }
         ];
         
