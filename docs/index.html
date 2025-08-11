@@ -53,8 +53,50 @@
                     <div id="risk-level" class="risk-level">-</div>
                 </div>
                 
-                <div class="chart-container">
-                    <canvas id="risk-chart"></canvas>
+                <div class="gauge-card">
+                    <h3>Risk Gauge</h3>
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <circle 
+                                class="gauge-bg"
+                                cx="100" 
+                                cy="100" 
+                                r="85"
+                            />
+                            <circle 
+                                id="gauge-progress"
+                                class="gauge-progress"
+                                cx="100" 
+                                cy="100" 
+                                r="85"
+                                stroke-dasharray="0 534"
+                            />
+                        </svg>
+                        <div id="gauge-value" class="gauge-value">0</div>
+                        <div class="gauge-label">Risk Score</div>
+                    </div>
+                </div>
+                
+                <div class="risk-summary-card">
+                    <h3>Risk Summary</h3>
+                    <div class="risk-summary-content">
+                        <div class="risk-summary-stat">
+                            <span class="stat-label">Permissions Detected</span>
+                            <span id="summary-permissions" class="stat-value">0</span>
+                        </div>
+                        <div class="risk-summary-stat">
+                            <span class="stat-label">Critical Risks</span>
+                            <span id="summary-critical" class="stat-value critical">0</span>
+                        </div>
+                        <div class="risk-summary-stat">
+                            <span class="stat-label">Risk Indicators</span>
+                            <span id="summary-indicators" class="stat-value">0</span>
+                        </div>
+                        <div class="risk-summary-stat">
+                            <span class="stat-label">Recommendations</span>
+                            <span id="summary-recommendations" class="stat-value">0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 

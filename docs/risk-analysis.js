@@ -18,6 +18,16 @@ class RiskAnalyzer {
         this.riskIndicators = document.getElementById('risk-indicators');
         this.recommendations = document.getElementById('recommendations');
         
+        // Gauge elements
+        this.gaugeProgress = document.getElementById('gauge-progress');
+        this.gaugeValue = document.getElementById('gauge-value');
+        
+        // Risk summary elements
+        this.summaryPermissions = document.getElementById('summary-permissions');
+        this.summaryCritical = document.getElementById('summary-critical');
+        this.summaryIndicators = document.getElementById('summary-indicators');
+        this.summaryRecommendations = document.getElementById('summary-recommendations');
+        
         // New elements for enhanced UI
         this.permissionsCount = document.getElementById('permissions-count');
         this.csfCount = document.getElementById('csf-count');
@@ -426,6 +436,96 @@ class RiskAnalyzer {
         };
     }
     
+    updateGauge(score, level) {
+        // Update gauge value display
+        this.gaugeValue.textContent = score;
+        
+        // Calculate stroke properties
+        const circumference = 2 * Math.PI * 85; // radius is 85
+        const strokeDasharray = circumference;
+        const strokeDashoffset = circumference - (score / 100) * circumference;
+        
+        // Determine gauge color based on risk level
+        let gaugeColor;
+        switch (level) {
+            case 'critical':
+                gaugeColor = '#f85149';
+                break;
+            case 'high':
+                gaugeColor = '#d29922';
+                break;
+            case 'medium':
+                gaugeColor = '#58a6ff';
+                break;
+            case 'low':
+                gaugeColor = '#3fb950';
+                break;
+            default:
+                gaugeColor = '#8b949e';
+        }
+        
+        // Create gradient for iOS-style appearance
+        const svg = this.gaugeProgress.closest('svg');
+        let defs = svg.querySelector('defs');
+        if (!defs) {
+            defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            svg.appendChild(defs);
+        }
+        
+        // Remove existing gradient
+        const existingGradient = defs.querySelector('#gaugeGradient');
+        if (existingGradient) {
+            existingGradient.remove();
+        }
+        
+        // Create new gradient
+        const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        gradient.id = 'gaugeGradient';
+        gradient.setAttribute('x1', '0%');
+        gradient.setAttribute('y1', '0%');
+        gradient.setAttribute('x2', '100%');
+        gradient.setAttribute('y2', '100%');
+        
+        const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop1.setAttribute('offset', '0%');
+        stop1.setAttribute('stop-color', '#3fb950');
+        
+        const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop2.setAttribute('offset', '50%');
+        stop2.setAttribute('stop-color', '#58a6ff');
+        
+        const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stop3.setAttribute('offset', '100%');
+        stop3.setAttribute('stop-color', gaugeColor);
+        
+        gradient.appendChild(stop1);
+        gradient.appendChild(stop2);
+        gradient.appendChild(stop3);
+        defs.appendChild(gradient);
+        
+        // Update gauge progress
+        this.gaugeProgress.style.stroke = 'url(#gaugeGradient)';
+        this.gaugeProgress.style.strokeDasharray = `${strokeDasharray}`;
+        this.gaugeProgress.style.strokeDashoffset = `${strokeDashoffset}`;
+        
+        // Animate the gauge
+        setTimeout(() => {
+            this.gaugeProgress.style.strokeDasharray = `${(score / 100) * circumference} ${circumference}`;
+        }, 100);
+    }
+    
+    updateRiskSummary() {
+        const criticalCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length;
+        
+        this.summaryPermissions.textContent = this.analysisResults.detectedPermissions.length;
+        this.summaryCritical.textContent = criticalCount;
+        this.summaryIndicators.textContent = this.analysisResults.riskIndicators.length;
+        this.summaryRecommendations.textContent = this.analysisResults.recommendations.length;
+        
+        // Update the critical count color class
+        this.summaryCritical.className = `stat-value ${criticalCount > 0 ? 'critical' : 'low'}`;
+    }
+
     displayResults() {
         // Show analysis section
         this.analysisSection.style.display = 'block';
@@ -435,6 +535,10 @@ class RiskAnalyzer {
         this.overallScore.textContent = this.analysisResults.overallRisk.score;
         this.riskLevel.textContent = this.analysisResults.overallRisk.level.toUpperCase();
         this.riskLevel.className = `risk-level ${this.analysisResults.overallRisk.level}`;
+        
+        // Update gauge and summary
+        this.updateGauge(this.analysisResults.overallRisk.score, this.analysisResults.overallRisk.level);
+        this.updateRiskSummary();
         
         // Update summary cards
         this.updateSummaryCards();
@@ -587,14 +691,19 @@ class RiskAnalyzer {
     }
     
     createRiskChart() {
-        // Check if Chart.js is available
+        // Check if Chart.js is available and chart element exists
         if (typeof Chart === 'undefined') {
             console.warn('Chart.js not available, skipping chart creation');
-            document.getElementById('risk-chart').style.display = 'none';
             return;
         }
         
-        const ctx = document.getElementById('risk-chart').getContext('2d');
+        const chartElement = document.getElementById('risk-chart');
+        if (!chartElement) {
+            console.warn('Chart element not found, skipping chart creation');
+            return;
+        }
+        
+        const ctx = chartElement.getContext('2d');
         
         const riskData = {
             critical: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length,
