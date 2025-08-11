@@ -1,257 +1,257 @@
 {
   "summary": {
     "totalTests": 41,
-    "passedTests": 37,
-    "failedTests": 4,
-    "successRate": "90.2%",
-    "timestamp": "2025-08-11T13:18:19.951Z"
+    "passedTests": 35,
+    "failedTests": 6,
+    "successRate": "85.4%",
+    "timestamp": "2025-08-11T13:53:53.965Z"
   },
   "results": [
     {
       "test": "WEB_SERVER_AVAILABLE",
       "passed": true,
       "message": "Web server is running and accessible",
-      "timestamp": "2025-08-11T13:18:19.897Z"
+      "timestamp": "2025-08-11T13:53:53.896Z"
     },
     {
       "test": "CORE_FILE_INDEX_HTML",
       "passed": true,
       "message": "Main application page loads successfully",
-      "timestamp": "2025-08-11T13:18:19.900Z"
+      "timestamp": "2025-08-11T13:53:53.899Z"
     },
     {
       "test": "HTML_STRUCTURE_VALID",
-      "passed": true,
-      "message": "HTML structure validation - DOCTYPE: true, Title: true, Main: true",
-      "timestamp": "2025-08-11T13:18:19.900Z"
+      "passed": false,
+      "message": "HTML structure validation",
+      "timestamp": "2025-08-11T13:53:53.899Z"
     },
     {
       "test": "HTML_SCRIPTS_INCLUDED",
       "passed": true,
       "message": "Required JavaScript files included in HTML",
-      "timestamp": "2025-08-11T13:18:19.900Z"
+      "timestamp": "2025-08-11T13:53:53.899Z"
     },
     {
       "test": "CORE_FILE_RISK-ANALYSIS_JS",
       "passed": true,
       "message": "Risk analysis engine loads successfully",
-      "timestamp": "2025-08-11T13:18:19.902Z"
+      "timestamp": "2025-08-11T13:53:53.901Z"
     },
     {
       "test": "JS_CLASS_RISKANALYZER",
       "passed": true,
       "message": "RiskAnalyzer class found in JavaScript",
-      "timestamp": "2025-08-11T13:18:19.903Z"
+      "timestamp": "2025-08-11T13:53:53.902Z"
     },
     {
       "test": "JS_CONSTRUCTOR_RISKANALYZER",
       "passed": true,
       "message": "Constructor found in RiskAnalyzer class",
-      "timestamp": "2025-08-11T13:18:19.903Z"
+      "timestamp": "2025-08-11T13:53:53.902Z"
     },
     {
       "test": "CORE_FILE_UPLOAD_JS",
       "passed": true,
       "message": "File upload handler loads successfully",
-      "timestamp": "2025-08-11T13:18:19.904Z"
+      "timestamp": "2025-08-11T13:53:53.903Z"
     },
     {
       "test": "JS_CLASS_FILEUPLOADER",
       "passed": true,
       "message": "FileUploader class found in JavaScript",
-      "timestamp": "2025-08-11T13:18:19.905Z"
+      "timestamp": "2025-08-11T13:53:53.904Z"
     },
     {
       "test": "JS_CONSTRUCTOR_FILEUPLOADER",
       "passed": true,
       "message": "Constructor found in FileUploader class",
-      "timestamp": "2025-08-11T13:18:19.905Z"
+      "timestamp": "2025-08-11T13:53:53.904Z"
     },
     {
       "test": "CORE_FILE_STYLE_CSS",
       "passed": true,
       "message": "Application styles loads successfully",
-      "timestamp": "2025-08-11T13:18:19.907Z"
+      "timestamp": "2025-08-11T13:53:53.905Z"
     },
     {
       "test": "CORE_FILE_NAVIGATION_JS",
       "passed": true,
       "message": "Navigation functionality loads successfully",
-      "timestamp": "2025-08-11T13:18:19.909Z"
+      "timestamp": "2025-08-11T13:53:53.907Z"
     },
     {
       "test": "SAMPLE_FILE_SAMPLE_HR_AZUREAD_MD",
       "passed": true,
       "message": "Sample file sample-hr-azuread.md accessible",
-      "timestamp": "2025-08-11T13:18:19.911Z"
+      "timestamp": "2025-08-11T13:53:53.909Z"
     },
     {
       "test": "PERMISSIONS_IN_SAMPLE_HR_AZUREAD_MD",
       "passed": true,
-      "message": "Found 5 high-risk and 5 medium-risk permissions in sample-hr-azuread.md",
-      "timestamp": "2025-08-11T13:18:19.911Z"
+      "message": "Found 5 high-risk and 3 medium-risk permissions in sample-hr-azuread.md",
+      "timestamp": "2025-08-11T13:53:53.910Z"
     },
     {
       "test": "SAMPLE_FILE_SAMPLE_SALES_CRM_JSON",
       "passed": true,
       "message": "Sample file sample-sales-crm.json accessible",
-      "timestamp": "2025-08-11T13:18:19.912Z"
+      "timestamp": "2025-08-11T13:53:53.911Z"
     },
     {
       "test": "PERMISSIONS_IN_SAMPLE_SALES_CRM_JSON",
       "passed": true,
-      "message": "Found 1 high-risk and 6 medium-risk permissions in sample-sales-crm.json",
-      "timestamp": "2025-08-11T13:18:19.912Z"
+      "message": "Found 1 high-risk and 5 medium-risk permissions in sample-sales-crm.json",
+      "timestamp": "2025-08-11T13:53:53.911Z"
     },
     {
       "test": "SAMPLE_FILE_SAMPLE_MOBILE_SHAREPOINT_TXT",
       "passed": true,
       "message": "Sample file sample-mobile-sharepoint.txt accessible",
-      "timestamp": "2025-08-11T13:18:19.914Z"
+      "timestamp": "2025-08-11T13:53:53.913Z"
     },
     {
       "test": "PERMISSIONS_IN_SAMPLE_MOBILE_SHAREPOINT_TXT",
       "passed": true,
-      "message": "Found 1 high-risk and 2 medium-risk permissions in sample-mobile-sharepoint.txt",
-      "timestamp": "2025-08-11T13:18:19.914Z"
+      "message": "Found 1 high-risk and 1 medium-risk permissions in sample-mobile-sharepoint.txt",
+      "timestamp": "2025-08-11T13:53:53.913Z"
     },
     {
       "test": "SAMPLE_FILE_SAMPLE_REPORTING_TEAMS_TXT",
       "passed": true,
       "message": "Sample file sample-reporting-teams.txt accessible",
-      "timestamp": "2025-08-11T13:18:19.916Z"
+      "timestamp": "2025-08-11T13:53:53.915Z"
     },
     {
       "test": "PERMISSIONS_IN_SAMPLE_REPORTING_TEAMS_TXT",
       "passed": true,
-      "message": "Found 0 high-risk and 2 medium-risk permissions in sample-reporting-teams.txt",
-      "timestamp": "2025-08-11T13:18:19.916Z"
+      "message": "Found 0 high-risk and 1 medium-risk permissions in sample-reporting-teams.txt",
+      "timestamp": "2025-08-11T13:53:53.915Z"
     },
     {
       "test": "SAMPLE_FILE_SAMPLE_ANALYTICS_EXCHANGE_RTF",
       "passed": true,
       "message": "Sample file sample-analytics-exchange.rtf accessible",
-      "timestamp": "2025-08-11T13:18:19.918Z"
+      "timestamp": "2025-08-11T13:53:53.917Z"
     },
     {
       "test": "PERMISSIONS_IN_SAMPLE_ANALYTICS_EXCHANGE_RTF",
       "passed": true,
-      "message": "Found 1 high-risk and 5 medium-risk permissions in sample-analytics-exchange.rtf",
-      "timestamp": "2025-08-11T13:18:19.918Z"
+      "message": "Found 1 high-risk and 4 medium-risk permissions in sample-analytics-exchange.rtf",
+      "timestamp": "2025-08-11T13:53:53.917Z"
     },
     {
       "test": "SAMPLE_FILE_SAMPLE_CUSTOMER_PORTAL_PDF",
       "passed": true,
       "message": "Sample file sample-customer-portal.pdf accessible",
-      "timestamp": "2025-08-11T13:18:19.919Z"
+      "timestamp": "2025-08-11T13:53:53.918Z"
     },
     {
       "test": "PERMISSIONS_IN_SAMPLE_CUSTOMER_PORTAL_PDF",
-      "passed": true,
-      "message": "PDF file sample-customer-portal.pdf accessible and contains content (permission detection requires PDF processing)",
-      "timestamp": "2025-08-11T13:18:19.919Z"
+      "passed": false,
+      "message": "Found 0 high-risk and 0 medium-risk permissions in sample-customer-portal.pdf",
+      "timestamp": "2025-08-11T13:53:53.918Z"
     },
     {
       "test": "DATA_FILE_DATA_ENTRA_PERMISSIONS_JSON",
       "passed": true,
       "message": "Azure permissions database loads successfully",
-      "timestamp": "2025-08-11T13:18:19.921Z"
+      "timestamp": "2025-08-11T13:53:53.920Z"
     },
     {
       "test": "JSON_VALID_DATA_ENTRA_PERMISSIONS_JSON",
       "passed": true,
       "message": "JSON structure is valid in data/entra-permissions.json",
-      "timestamp": "2025-08-11T13:18:19.922Z"
+      "timestamp": "2025-08-11T13:53:53.921Z"
     },
     {
       "test": "ENTRA_PERMISSIONS_STRUCTURE",
       "passed": true,
       "message": "Entra permissions file has correct structure",
-      "timestamp": "2025-08-11T13:18:19.922Z"
+      "timestamp": "2025-08-11T13:53:53.921Z"
     },
     {
       "test": "ENTRA_PERMISSIONS_COUNT",
       "passed": true,
       "message": "Found 65 permissions in database",
-      "timestamp": "2025-08-11T13:18:19.922Z"
+      "timestamp": "2025-08-11T13:53:53.921Z"
     },
     {
       "test": "DATA_FILE_DATA_NIST_CSF_2_0_JSON",
       "passed": true,
       "message": "NIST CSF 2.0 framework data loads successfully",
-      "timestamp": "2025-08-11T13:18:19.923Z"
+      "timestamp": "2025-08-11T13:53:53.922Z"
     },
     {
       "test": "JSON_VALID_DATA_NIST_CSF_2_0_JSON",
       "passed": true,
       "message": "JSON structure is valid in data/nist-csf-2.0.json",
-      "timestamp": "2025-08-11T13:18:19.924Z"
+      "timestamp": "2025-08-11T13:53:53.922Z"
     },
     {
       "test": "NIST_CSF_STRUCTURE",
       "passed": true,
       "message": "NIST CSF file has expected framework structure",
-      "timestamp": "2025-08-11T13:18:19.924Z"
+      "timestamp": "2025-08-11T13:53:53.922Z"
     },
     {
       "test": "EXTERNAL_CHART_JS_LIBRARY",
       "passed": false,
       "message": "Error loading Chart.js library: getaddrinfo ENOTFOUND cdn.jsdelivr.net",
-      "timestamp": "2025-08-11T13:18:19.932Z"
+      "timestamp": "2025-08-11T13:53:53.930Z"
     },
     {
       "test": "EXTERNAL_BOOTSTRAP_ICONS",
       "passed": false,
       "message": "Error loading Bootstrap Icons: getaddrinfo ENOTFOUND cdn.jsdelivr.net",
-      "timestamp": "2025-08-11T13:18:19.934Z"
+      "timestamp": "2025-08-11T13:53:53.935Z"
     },
     {
       "test": "EXTERNAL_PDF_JS_LIBRARY",
       "passed": false,
       "message": "Error loading PDF.js library: getaddrinfo ENOTFOUND cdnjs.cloudflare.com",
-      "timestamp": "2025-08-11T13:18:19.936Z"
+      "timestamp": "2025-08-11T13:53:53.943Z"
     },
     {
       "test": "EXTERNAL_MAMMOTH_JS_LIBRARY",
       "passed": false,
       "message": "Error loading Mammoth.js library: getaddrinfo ENOTFOUND cdnjs.cloudflare.com",
-      "timestamp": "2025-08-11T13:18:19.938Z"
+      "timestamp": "2025-08-11T13:53:53.953Z"
     },
     {
       "test": "TEMPLATES_PAGE",
       "passed": true,
       "message": "Templates page loads successfully",
-      "timestamp": "2025-08-11T13:18:19.940Z"
+      "timestamp": "2025-08-11T13:53:53.955Z"
     },
     {
       "test": "FORMAT_SUPPORT_MARKDOWN",
       "passed": true,
       "message": "Markdown format supported and readable",
-      "timestamp": "2025-08-11T13:18:19.942Z"
+      "timestamp": "2025-08-11T13:53:53.956Z"
     },
     {
       "test": "FORMAT_SUPPORT_JSON",
       "passed": true,
       "message": "JSON format supported and readable",
-      "timestamp": "2025-08-11T13:18:19.943Z"
+      "timestamp": "2025-08-11T13:53:53.958Z"
     },
     {
       "test": "FORMAT_SUPPORT_PLAIN_TEXT",
       "passed": true,
       "message": "Plain Text format supported and readable",
-      "timestamp": "2025-08-11T13:18:19.945Z"
+      "timestamp": "2025-08-11T13:53:53.959Z"
     },
     {
       "test": "FORMAT_SUPPORT_RTF",
       "passed": true,
       "message": "RTF format supported and readable",
-      "timestamp": "2025-08-11T13:18:19.946Z"
+      "timestamp": "2025-08-11T13:53:53.961Z"
     },
     {
       "test": "FORMAT_SUPPORT_PDF",
       "passed": true,
       "message": "PDF format supported and readable",
-      "timestamp": "2025-08-11T13:18:19.947Z"
+      "timestamp": "2025-08-11T13:53:53.962Z"
     }
   ],
   "sampleFilesTested": [
