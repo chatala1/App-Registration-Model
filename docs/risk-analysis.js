@@ -447,10 +447,12 @@ class RiskAnalyzer {
         // Update gauge label with severity level instead of "Risk Score"
         this.gaugeLabel.textContent = level.toUpperCase();
         
-        // Calculate stroke properties
-        const circumference = 2 * Math.PI * 85; // radius is 85
-        const strokeDasharray = circumference;
-        const strokeDashoffset = circumference - (score / 100) * circumference;
+        // Calculate arc properties for partial gauge (180 degrees)
+        // Arc path: M 30 120 A 70 70 0 0 1 170 120
+        // This creates a semicircle arc with radius 70
+        const radius = 70;
+        const circumference = Math.PI * radius; // Half circle circumference
+        const progressLength = (score / 100) * circumference;
         
         // Determine gauge color based on risk level
         let gaugeColor;
@@ -471,53 +473,13 @@ class RiskAnalyzer {
                 gaugeColor = '#8b949e';
         }
         
-        // Create gradient for iOS-style appearance
-        const svg = this.gaugeProgress.closest('svg');
-        let defs = svg.querySelector('defs');
-        if (!defs) {
-            defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            svg.appendChild(defs);
-        }
-        
-        // Remove existing gradient
-        const existingGradient = defs.querySelector('#gaugeGradient');
-        if (existingGradient) {
-            existingGradient.remove();
-        }
-        
-        // Create new gradient
-        const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-        gradient.id = 'gaugeGradient';
-        gradient.setAttribute('x1', '0%');
-        gradient.setAttribute('y1', '0%');
-        gradient.setAttribute('x2', '100%');
-        gradient.setAttribute('y2', '100%');
-        
-        const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-        stop1.setAttribute('offset', '0%');
-        stop1.setAttribute('stop-color', '#3fb950');
-        
-        const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-        stop2.setAttribute('offset', '50%');
-        stop2.setAttribute('stop-color', '#58a6ff');
-        
-        const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-        stop3.setAttribute('offset', '100%');
-        stop3.setAttribute('stop-color', gaugeColor);
-        
-        gradient.appendChild(stop1);
-        gradient.appendChild(stop2);
-        gradient.appendChild(stop3);
-        defs.appendChild(gradient);
-        
-        // Update gauge progress
-        this.gaugeProgress.style.stroke = 'url(#gaugeGradient)';
-        this.gaugeProgress.style.strokeDasharray = `${strokeDasharray}`;
-        this.gaugeProgress.style.strokeDashoffset = `${strokeDashoffset}`;
+        // Update gauge progress with solid color (no gradient)
+        this.gaugeProgress.style.stroke = gaugeColor;
+        this.gaugeProgress.style.strokeDasharray = `${progressLength} ${circumference}`;
         
         // Animate the gauge
         setTimeout(() => {
-            this.gaugeProgress.style.strokeDasharray = `${(score / 100) * circumference} ${circumference}`;
+            this.gaugeProgress.style.strokeDasharray = `${progressLength} ${circumference}`;
         }, 100);
     }
     

@@ -260,32 +260,31 @@ header p {
 .gauge-container {
     position: relative;
     width: 200px;
-    height: 200px;
+    height: 140px;
     margin: 0 auto 1rem auto;
 }
 
 .gauge-svg {
     width: 100%;
     height: 100%;
-    transform: rotate(-90deg);
 }
 
 .gauge-bg {
-    fill: none;
     stroke: #21262d;
-    stroke-width: 8;
+    stroke-width: 12;
+    stroke-linecap: round;
 }
 
 .gauge-progress {
-    fill: none;
-    stroke-width: 8;
+    stroke-width: 12;
     stroke-linecap: round;
     transition: stroke-dasharray 1s ease-in-out;
+    stroke: #3fb950; /* Default green color */
 }
 
 .gauge-value {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2.5rem;
@@ -296,7 +295,7 @@ header p {
 
 .gauge-label {
     position: absolute;
-    bottom: 25%;
+    top: 65%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
@@ -304,6 +303,21 @@ header p {
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
+}
+
+.gauge-min-max {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+
+.gauge-min, .gauge-max {
+    font-size: 0.875rem;
+    color: #8b949e;
+    font-weight: 500;
 }
 
 /* Risk Summary Card */
