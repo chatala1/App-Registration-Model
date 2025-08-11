@@ -221,32 +221,41 @@ class FileUploader {
             
             reader.onload = async (e) => {
                 try {
-                    const typedArray = new Uint8Array(e.target.result);
-                    const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
-                    let textContent = '';
-                    
-                    for (let i = 1; i <= pdf.numPages; i++) {
-                        const page = await pdf.getPage(i);
-                        const content = await page.getTextContent();
-                        const pageText = content.items.map(item => item.str).join(' ');
-                        textContent += pageText + '\n';
-                    }
-                    
-                    // If text extraction resulted in minimal content, try OCR
-                    if (textContent.trim().length < 50) {
-                        console.log('Text extraction yielded minimal content, attempting OCR...');
-                        try {
-                            const ocrText = await this.performOCROnPDF(pdf);
-                            if (ocrText && ocrText.trim().length > textContent.trim().length) {
-                                textContent = ocrText;
-                            }
-                        } catch (ocrError) {
-                            console.warn('OCR failed:', ocrError.message);
-                            // Continue with original text even if OCR fails
+                    // Check if PDF.js is available
+                    if (typeof pdfjsLib !== 'undefined') {
+                        // Use PDF.js for proper PDF text extraction
+                        const typedArray = new Uint8Array(e.target.result);
+                        const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
+                        let textContent = '';
+                        
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            const page = await pdf.getPage(i);
+                            const content = await page.getTextContent();
+                            const pageText = content.items.map(item => item.str).join(' ');
+                            textContent += pageText + '\n';
                         }
+                        
+                        // If text extraction resulted in minimal content, try OCR
+                        if (textContent.trim().length < 50) {
+                            console.log('Text extraction yielded minimal content, attempting OCR...');
+                            try {
+                                const ocrText = await this.performOCROnPDF(pdf);
+                                if (ocrText && ocrText.trim().length > textContent.trim().length) {
+                                    textContent = ocrText;
+                                }
+                            } catch (ocrError) {
+                                console.warn('OCR failed:', ocrError.message);
+                                // Continue with original text even if OCR fails
+                            }
+                        }
+                        
+                        resolve(textContent);
+                    } else {
+                        // Fallback: Basic PDF text extraction when PDF.js is not available
+                        console.log('PDF.js not available, using fallback text extraction...');
+                        const textContent = await this.extractTextFromPDFBasic(e.target.result);
+                        resolve(textContent);
                     }
-                    
-                    resolve(textContent);
                 } catch (error) {
                     reject(new Error('Failed to parse PDF: ' + error.message));
                 }
@@ -300,6 +309,111 @@ class FileUploader {
         }
         
         return ocrText;
+    }
+    
+    // Basic PDF text extraction fallback method (when PDF.js is not available)
+    async extractTextFromPDFBasic(arrayBuffer) {
+        try {
+            // Convert ArrayBuffer to string for basic text extraction
+            const uint8Array = new Uint8Array(arrayBuffer);
+            const decoder = new TextDecoder('latin1');
+            const pdfString = decoder.decode(uint8Array);
+            
+            // Look for text content between stream markers
+            const streams = [];
+            const streamPattern = /stream\s*\n([\s\S]*?)\nendstream/g;
+            let match;
+            
+            while ((match = streamPattern.exec(pdfString)) !== null) {
+                streams.push(match[1]);
+            }
+            
+            // Also look for plain text content (works for simple PDFs)
+            let extractedText = '';
+            
+            // Look for common text patterns in PDF
+            const textPatterns = [
+                // Azure permissions patterns
+                /User\.Read(?:Write)?\.All/gi,
+                /Directory\.Read(?:Write)?\.All/gi,
+                /Group\.Read(?:Write)?\.All/gi,
+                /Application\.Read(?:Write)?\.All/gi,
+                /RoleManagement\.Read(?:Write)?\.All/gi,
+                /Mail\.Read(?:Write)?\.All/gi,
+                /Files\.Read(?:Write)?\.All/gi,
+                /Calendars\.Read(?:Write)?\.All/gi,
+                /Profile\.Read/gi,
+                /OpenId/gi,
+                // Look for readable text content
+                /[A-Za-z\s]{10,}/g
+            ];
+            
+            textPatterns.forEach(pattern => {
+                const matches = pdfString.match(pattern);
+                if (matches) {
+                    matches.forEach(match => {
+                        if (match.length > 3 && !extractedText.includes(match)) {
+                            extractedText += match + ' ';
+                        }
+                    });
+                }
+            });
+            
+            // Try to extract readable text from the PDF content
+            const readableTextPattern = /\(([\w\s\.\-\:\,\;]+)\)/g;
+            let textMatch;
+            while ((textMatch = readableTextPattern.exec(pdfString)) !== null) {
+                const text = textMatch[1];
+                if (text.length > 5 && /[A-Za-z]/.test(text)) {
+                    extractedText += text + ' ';
+                }
+            }
+            
+            // Clean up the extracted text
+            extractedText = extractedText
+                .replace(/\s+/g, ' ')
+                .replace(/[^\w\s\.\-\:]/g, ' ')
+                .trim();
+            
+            // If we found some meaningful content, return it
+            if (extractedText.length > 20) {
+                console.log('Basic PDF extraction found:', extractedText.substring(0, 200) + '...');
+                return extractedText;
+            } else {
+                // If basic extraction failed, try to extract any text-like content
+                const fallbackText = this.extractFallbackPDFText(pdfString);
+                return fallbackText;
+            }
+            
+        } catch (error) {
+            console.error('Basic PDF extraction failed:', error);
+            throw new Error('Unable to extract text from PDF using fallback method');
+        }
+    }
+    
+    // Last resort PDF text extraction
+    extractFallbackPDFText(pdfString) {
+        // Look for any sequence of readable characters
+        const textContent = pdfString
+            .replace(/[^\x20-\x7E]/g, ' ') // Keep only printable ASCII
+            .replace(/\s+/g, ' ')
+            .trim();
+        
+        // Extract words that look like Azure permissions or meaningful text
+        const words = textContent.split(' ').filter(word => {
+            return word.length > 3 && 
+                   /[A-Za-z]/.test(word) && 
+                   (word.includes('.') || word.length > 5);
+        });
+        
+        const meaningfulText = words.join(' ');
+        
+        if (meaningfulText.length > 10) {
+            console.log('Fallback PDF extraction found:', meaningfulText.substring(0, 200) + '...');
+            return meaningfulText;
+        } else {
+            throw new Error('No extractable text found in PDF');
+        }
     }
     
     // Extract text from DOCX files
