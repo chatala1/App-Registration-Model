@@ -284,7 +284,7 @@ header p {
 
 .gauge-value {
     position: absolute;
-    top: 42%;
+    top: 75%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2.5rem;
@@ -295,7 +295,7 @@ header p {
 
 .gauge-label {
     position: absolute;
-    top: 62%;
+    top: 88%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
