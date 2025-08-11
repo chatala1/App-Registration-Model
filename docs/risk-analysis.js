@@ -661,7 +661,11 @@ class RiskAnalyzer {
         this.updateSummaryCards();
         
         // Display detected permissions
-        this.permissionsList.innerHTML = this.analysisResults.detectedPermissions
+        this.permissionsList.innerHTML = `
+            <div class="section-header">
+                <p>The following Microsoft Graph API permissions were detected through automated analysis. Each permission includes a risk assessment and justification:</p>
+            </div>
+            ${this.analysisResults.detectedPermissions
             .map(permission => {
                 const permissionTypes = permission.permissionTypes || ['Unknown'];
                 const permissionTypeDisplay = permissionTypes.join(', ');
@@ -673,18 +677,25 @@ class RiskAnalyzer {
                 
                 return `
                 <div class="permission-item ${permission.riskLevel}">
-                    <div class="item-title">${permission.name}
-                        <span class="item-score score-${permission.riskLevel}">${permission.riskScore}/10</span>
+                    <div class="permission-header">
+                        <div class="item-title">${permission.name}
+                            <span class="item-score score-${permission.riskLevel}">${permission.riskScore}/10 (${permission.riskLevel.toUpperCase()})</span>
+                        </div>
+                        <a href="https://docs.microsoft.com/en-us/graph/permissions-reference#${permission.name.toLowerCase().replace(/\./g, '')}" target="_blank" class="ms-docs-link">📖 Microsoft Docs</a>
                     </div>
                     <div class="permission-types ${permissionTypeClass}">
                         <strong>Permission Types:</strong> ${permissionTypeDisplay}
                         ${permission.consentType ? `<span class="consent-type">• ${permission.consentType}</span>` : ''}
                     </div>
-                    <div class="item-description">${permission.description}</div>
+                    <div class="permission-description">${permission.description}</div>
+                    <div class="risk-justification">
+                        <strong>Risk Justification:</strong> ${this.getRiskJustification(permission)}
+                    </div>
                     ${permission.impact ? `<div class="permission-impact"><strong>Impact:</strong> ${permission.impact}</div>` : ''}
                 </div>
             `;
-            }).join('');
+            }).join('')}
+        `;
         
         // Display CSF categories
         this.csfCategories.innerHTML = this.analysisResults.csfMappings
@@ -701,8 +712,7 @@ class RiskAnalyzer {
                         <div class="csf-controls">
                             <strong>Specific Controls:</strong>
                             <ul>
-                                ${category.controls.slice(0, 3).map(control => `<li>${control}</li>`).join('')}
-                                ${category.controls.length > 3 ? `<li><em>... and ${category.controls.length - 3} more controls</em></li>` : ''}
+                                ${category.controls.map(control => `<li>${control}</li>`).join('')}
                             </ul>
                         </div>
                     ` : ''}
@@ -711,8 +721,7 @@ class RiskAnalyzer {
                         <div class="csf-remediation">
                             <strong>Remediation Advice:</strong>
                             <ul>
-                                ${category.remediation.slice(0, 3).map(advice => `<li>${advice}</li>`).join('')}
-                                ${category.remediation.length > 3 ? `<li><em>... and ${category.remediation.length - 3} more recommendations</em></li>` : ''}
+                                ${category.remediation.map(advice => `<li>${advice}</li>`).join('')}
                             </ul>
                         </div>
                     ` : ''}
@@ -720,16 +729,29 @@ class RiskAnalyzer {
             `).join('');
         
         // Display risk indicators
-        this.riskIndicators.innerHTML = this.analysisResults.riskIndicators
-            .map(indicator => `
-                <div class="risk-item ${indicator.level}">
-                    <div class="item-title">${indicator.indicator}</div>
-                    <div class="item-description">${indicator.description}</div>
-                </div>
-            `).join('');
+        this.riskIndicators.innerHTML = `
+            <div class="section-header">
+                <p><strong>Risk Indicators</strong> are security concerns identified through content analysis, including patterns that suggest elevated risk, compliance requirements, or potential security vulnerabilities.</p>
+            </div>
+            ${this.analysisResults.riskIndicators.length > 0 ? 
+                this.analysisResults.riskIndicators.map(indicator => `
+                    <div class="risk-item ${indicator.level}">
+                        <div class="item-title">${indicator.indicator}
+                            <span class="item-score score-${indicator.level}">${indicator.level.toUpperCase()}</span>
+                        </div>
+                        <div class="item-description">${indicator.description}</div>
+                    </div>
+                `).join('') :
+                '<div class="no-items">No specific risk indicators detected beyond permission-based risks.</div>'
+            }
+        `;
         
         // Display recommendations
-        this.recommendations.innerHTML = this.analysisResults.recommendations
+        this.recommendations.innerHTML = `
+            <div class="section-header">
+                <p><strong>Priority Actions</strong> are critical and high-priority security recommendations that require immediate attention, typically involving high-risk permissions or significant security gaps.</p>
+            </div>
+            ${this.analysisResults.recommendations
             .map(rec => `
                 <div class="recommendation-item">
                     <div class="item-title">${rec.title} 
@@ -737,7 +759,8 @@ class RiskAnalyzer {
                     </div>
                     <div class="item-description">${rec.description}</div>
                 </div>
-            `).join('');
+            `).join('')}
+        `;
         
         // Populate overview tab
         this.populateOverviewTab();
@@ -968,10 +991,18 @@ class RiskAnalyzer {
     
     <div class="section">
         <h2>🔐 Detected Permissions</h2>
+        <p>The following Microsoft Graph API permissions were detected through automated analysis. Each permission includes a risk assessment and justification:</p>
         ${results.detectedPermissions.map(p => `
             <div class="permission-item ${p.riskLevel}">
-                <strong>${p.name}</strong> (Risk Score: ${p.riskScore}/10)<br>
-                ${p.description}
+                <div class="permission-header">
+                    <strong>${p.name}</strong> 
+                    <span class="permission-risk">Risk Score: ${p.riskScore}/10 (${p.riskLevel.toUpperCase()})</span>
+                    <a href="https://docs.microsoft.com/en-us/graph/permissions-reference#${p.name.toLowerCase().replace(/\./g, '')}" target="_blank" class="ms-docs-link">📖 Microsoft Docs</a>
+                </div>
+                <div class="permission-description">${p.description}</div>
+                <div class="risk-justification">
+                    <strong>Risk Justification:</strong> ${this.getRiskJustification(p)}
+                </div>
             </div>
         `).join('')}
     </div>
@@ -988,16 +1019,14 @@ class RiskAnalyzer {
                 ${c.controls.length > 0 ? `
                     <br><br><strong>Specific Controls:</strong>
                     <ul>
-                        ${c.controls.slice(0, 3).map(control => `<li>${control}</li>`).join('')}
-                        ${c.controls.length > 3 ? `<li><em>... and ${c.controls.length - 3} more controls</em></li>` : ''}
+                        ${c.controls.map(control => `<li>${control}</li>`).join('')}
                     </ul>
                 ` : ''}
                 
                 ${c.remediation.length > 0 ? `
                     <br><strong>Remediation Advice:</strong>
                     <ul>
-                        ${c.remediation.slice(0, 3).map(advice => `<li>${advice}</li>`).join('')}
-                        ${c.remediation.length > 3 ? `<li><em>... and ${c.remediation.length - 3} more recommendations</em></li>` : ''}
+                        ${c.remediation.map(advice => `<li>${advice}</li>`).join('')}
                     </ul>
                 ` : ''}
             </div>
@@ -1024,8 +1053,38 @@ class RiskAnalyzer {
         `).join('')}
     </div>
     
+    <div class="section">
+        <h2>📊 Permission Risk Summary Table</h2>
+        <p>Comprehensive summary of all detected permissions with risk scores and recommended actions:</p>
+        <table class="permission-summary-table">
+            <thead>
+                <tr>
+                    <th>Permission</th>
+                    <th>Risk Score</th>
+                    <th>Risk Level</th>
+                    <th>Recommended Action</th>
+                    <th>Documentation</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${results.detectedPermissions.map(p => `
+                    <tr class="risk-${p.riskLevel}">
+                        <td><strong>${p.name}</strong></td>
+                        <td>${p.riskScore}/10</td>
+                        <td><span class="risk-badge ${p.riskLevel}">${p.riskLevel.toUpperCase()}</span></td>
+                        <td>${this.getRecommendedAction(p)}</td>
+                        <td><a href="https://docs.microsoft.com/en-us/graph/permissions-reference#${p.name.toLowerCase().replace(/\./g, '')}" target="_blank">📖 View Docs</a></td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    </div>
+    
+    ${this.generateGlossary()}
+    
     <footer style="text-align: center; margin-top: 40px; color: #666;">
         <p>Generated by Risk Analysis Web App - Powered by NIST CSF 2.0 and Microsoft Graph API</p>
+        <p><small>Report generated on: ${new Date().toLocaleString()} | Version: 3.0</small></p>
     </footer>
 </body>
 </html>`;
@@ -1071,6 +1130,131 @@ class RiskAnalyzer {
                 };
             }, 500);
         };
+    }
+    
+    generateGlossary() {
+        return `
+        <div class="section">
+            <h2>📖 Glossary and Definitions</h2>
+            
+            <div class="glossary-section">
+                <h3>Risk Level Definitions</h3>
+                <div class="definition-grid">
+                    <div class="definition-item critical">
+                        <strong>Critical (9-10/10)</strong>
+                        <p>Permissions that provide extensive administrative control or access to highly sensitive data. These permissions can significantly impact organizational security if misused and require immediate attention and strict governance.</p>
+                        <p><em>Examples: User.ReadWrite.All, Directory.ReadWrite.All</em></p>
+                    </div>
+                    <div class="definition-item high">
+                        <strong>High (7-8/10)</strong>
+                        <p>Permissions that allow significant access to organizational data or functionality. These require careful review and monitoring but may be necessary for specific business functions.</p>
+                        <p><em>Examples: Group.ReadWrite.All, Application.ReadWrite.All</em></p>
+                    </div>
+                    <div class="definition-item medium">
+                        <strong>Medium (4-6/10)</strong>
+                        <p>Permissions with moderate risk that provide read access to organizational data or limited write capabilities. Standard security practices should be applied.</p>
+                        <p><em>Examples: Directory.Read.All, User.Read.All</em></p>
+                    </div>
+                    <div class="definition-item low">
+                        <strong>Low (1-3/10)</strong>
+                        <p>Basic permissions with minimal security impact, typically required for standard application functionality and user authentication.</p>
+                        <p><em>Examples: User.Read, profile, openid</em></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glossary-section">
+                <h3>Key Terms</h3>
+                <div class="terms-grid">
+                    <div class="term-item">
+                        <strong>Detected Permissions</strong>
+                        <p>Azure Graph API permissions identified through automated analysis of the project plan content using pattern matching and keyword detection algorithms.</p>
+                    </div>
+                    <div class="term-item">
+                        <strong>Priority Actions</strong>
+                        <p>Critical and high-priority security recommendations that require immediate attention, typically involving high-risk permissions or significant security gaps.</p>
+                    </div>
+                    <div class="term-item">
+                        <strong>Risk Indicators</strong>
+                        <p>Security concerns identified through content analysis, including patterns that suggest elevated risk, compliance requirements, or potential security vulnerabilities.</p>
+                    </div>
+                    <div class="term-item">
+                        <strong>NIST CSF 2.0</strong>
+                        <p>NIST Cybersecurity Framework version 2.0 - A comprehensive framework for improving cybersecurity risk management, organized into six core functions: Govern, Identify, Protect, Detect, Respond, and Recover.</p>
+                    </div>
+                    <div class="term-item">
+                        <strong>Microsoft Graph API</strong>
+                        <p>A unified API endpoint for accessing Microsoft 365, Azure AD, and other Microsoft services. Permissions control what data and operations an application can access.</p>
+                    </div>
+                    <div class="term-item">
+                        <strong>Application Registration</strong>
+                        <p>A configuration object in Azure AD that defines how an application integrates with the Microsoft identity platform and what permissions it requires.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glossary-section">
+                <h3>Risk Assessment Methodology</h3>
+                <div class="methodology-content">
+                    <h4>Permission Risk Scoring</h4>
+                    <ul>
+                        <li><strong>Scope Impact</strong>: Permissions affecting all users/resources score higher than those with limited scope</li>
+                        <li><strong>Data Sensitivity</strong>: Access to PII, financial data, or administrative functions increases risk score</li>
+                        <li><strong>Write vs. Read</strong>: Write permissions generally score 2-3 points higher than equivalent read permissions</li>
+                        <li><strong>Privilege Level</strong>: Administrative permissions receive maximum risk scores (9-10/10)</li>
+                        <li><strong>Business Context</strong>: Risk scores consider typical usage patterns and business necessity</li>
+                    </ul>
+                    
+                    <h4>Content Analysis Methods</h4>
+                    <ul>
+                        <li><strong>Pattern Matching</strong>: Automated detection of permission names and API endpoints</li>
+                        <li><strong>Keyword Analysis</strong>: Identification of security-relevant terms and compliance indicators</li>
+                        <li><strong>Context Evaluation</strong>: Assessment of how permissions are described and justified</li>
+                        <li><strong>Risk Correlation</strong>: Cross-referencing permissions with known security risks and best practices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>`;
+    }
+    
+    getRiskJustification(permission) {
+        const riskJustifications = {
+            'User.ReadWrite.All': 'High risk due to organization-wide user management capabilities including creation, modification, and deletion of user accounts across all directories.',
+            'Directory.ReadWrite.All': 'Critical risk as it grants full read/write access to directory objects, organizational structure, and administrative configurations.',
+            'Group.ReadWrite.All': 'High risk due to ability to modify security group memberships, which directly affects access control and permissions inheritance.',
+            'Application.ReadWrite.All': 'High risk as it allows management of application registrations and service principals, potentially affecting security boundaries.',
+            'RoleManagement.ReadWrite.All': 'Critical risk due to ability to assign and remove privileged directory roles, effectively escalating privileges.',
+            'User.ManageIdentities.All': 'High risk as it enables management of user authentication methods and identity providers.',
+            'Directory.Read.All': 'Medium risk for read access to organizational structure, user profiles, and directory metadata.',
+            'User.Read.All': 'Medium risk due to organization-wide access to user profile information and contact details.',
+            'Group.Read.All': 'Medium risk for visibility into all security and distribution groups and their memberships.',
+            'AuditLog.Read.All': 'Medium risk as it provides access to audit logs which may contain sensitive activity information.',
+            'User.Read': 'Low risk for basic user profile access, typically required for standard authentication flows.',
+            'profile': 'Low risk standard OpenID Connect claim providing basic profile information.',
+            'openid': 'Low risk standard OpenID Connect authentication identifier.',
+            'email': 'Low risk for accessing user email address, commonly required for user identification.'
+        };
+        
+        return riskJustifications[permission.name] || `Risk assessment based on permission scope and typical usage patterns. ${permission.name.includes('ReadWrite') ? 'Write permissions generally pose higher risk than read-only equivalents.' : permission.name.includes('.All') ? 'Organization-wide scope increases risk compared to user-scoped permissions.' : 'Standard permission with typical security considerations.'}`;
+    }
+    
+    getRecommendedAction(permission) {
+        const actions = {
+            'critical': 'Implement PIM, require approval workflow, enable monitoring',
+            'high': 'Implement conditional access, regular access reviews, monitoring',
+            'medium': 'Apply standard security policies, periodic reviews',
+            'low': 'Standard implementation, regular security updates'
+        };
+        
+        const specificActions = {
+            'User.ReadWrite.All': 'Implement Privileged Identity Management (PIM) with approval workflow',
+            'Directory.ReadWrite.All': 'Require multi-person authorization and emergency access procedures',
+            'Group.ReadWrite.All': 'Implement conditional access and membership change monitoring',
+            'Application.ReadWrite.All': 'Enable application consent policies and admin approval',
+            'RoleManagement.ReadWrite.All': 'Implement PIM with break-glass emergency access only'
+        };
+        
+        return specificActions[permission.name] || actions[permission.riskLevel] || 'Review and implement appropriate security controls';
     }
     
     generatePrintableReport() {
@@ -1325,8 +1509,7 @@ class RiskAnalyzer {
                     <div class="csf-controls">
                         <strong>Specific Controls:</strong>
                         <ul>
-                            ${category.controls.slice(0, 5).map(control => `<li>${control}</li>`).join('')}
-                            ${category.controls.length > 5 ? `<li><em>... and ${category.controls.length - 5} more controls</em></li>` : ''}
+                            ${category.controls.map(control => `<li>${control}</li>`).join('')}
                         </ul>
                     </div>
                 ` : ''}
@@ -1335,8 +1518,7 @@ class RiskAnalyzer {
                     <div class="csf-remediation">
                         <strong>Remediation Advice:</strong>
                         <ul>
-                            ${category.remediation.slice(0, 5).map(advice => `<li>${advice}</li>`).join('')}
-                            ${category.remediation.length > 5 ? `<li><em>... and ${category.remediation.length - 5} more recommendations</em></li>` : ''}
+                            ${category.remediation.map(advice => `<li>${advice}</li>`).join('')}
                         </ul>
                     </div>
                 ` : ''}
