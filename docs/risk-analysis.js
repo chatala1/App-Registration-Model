@@ -11,8 +11,6 @@ class RiskAnalyzer {
     
     initializeElements() {
         this.analysisSection = document.getElementById('analysis-section');
-        this.overallScore = document.getElementById('overall-score');
-        this.riskLevel = document.getElementById('risk-level');
         this.permissionsList = document.getElementById('permissions-list');
         this.csfCategories = document.getElementById('csf-categories');
         this.riskIndicators = document.getElementById('risk-indicators');
@@ -21,12 +19,6 @@ class RiskAnalyzer {
         // Gauge elements
         this.gaugeProgress = document.getElementById('gauge-progress');
         this.gaugeValue = document.getElementById('gauge-value');
-        
-        // Risk summary elements
-        this.summaryPermissions = document.getElementById('summary-permissions');
-        this.summaryCritical = document.getElementById('summary-critical');
-        this.summaryIndicators = document.getElementById('summary-indicators');
-        this.summaryRecommendations = document.getElementById('summary-recommendations');
         
         // New elements for enhanced UI
         this.permissionsCount = document.getElementById('permissions-count');
@@ -440,6 +432,16 @@ class RiskAnalyzer {
         // Update gauge value display
         this.gaugeValue.textContent = score;
         
+        // Update gauge label based on risk level
+        const gaugeLabel = document.getElementById('gauge-label');
+        const levelText = {
+            'critical': 'Critical Risk',
+            'high': 'High Risk',
+            'medium': 'Medium Risk',
+            'low': 'Low Risk'
+        };
+        gaugeLabel.textContent = levelText[level] || 'Risk Level';
+        
         // Calculate stroke properties
         const circumference = 2 * Math.PI * 85; // radius is 85
         const strokeDasharray = circumference;
@@ -516,25 +518,20 @@ class RiskAnalyzer {
     
     updateRiskSummary() {
         const criticalCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length;
+        const highCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length;
+        const mediumCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'medium').length;
+        const lowCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length;
         
-        this.summaryPermissions.textContent = this.analysisResults.detectedPermissions.length;
-        this.summaryCritical.textContent = criticalCount;
-        this.summaryIndicators.textContent = this.analysisResults.riskIndicators.length;
-        this.summaryRecommendations.textContent = this.analysisResults.recommendations.length;
-        
-        // Update the critical count color class
-        this.summaryCritical.className = `stat-value ${criticalCount > 0 ? 'critical' : 'low'}`;
+        document.getElementById('summary-critical').textContent = criticalCount;
+        document.getElementById('summary-high').textContent = highCount;
+        document.getElementById('summary-medium').textContent = mediumCount;
+        document.getElementById('summary-low').textContent = lowCount;
     }
 
     displayResults() {
         // Show analysis section
         this.analysisSection.style.display = 'block';
         this.analysisSection.scrollIntoView({ behavior: 'smooth' });
-        
-        // Display overall risk
-        this.overallScore.textContent = this.analysisResults.overallRisk.score;
-        this.riskLevel.textContent = this.analysisResults.overallRisk.level.toUpperCase();
-        this.riskLevel.className = `risk-level ${this.analysisResults.overallRisk.level}`;
         
         // Update gauge and summary
         this.updateGauge(this.analysisResults.overallRisk.score, this.analysisResults.overallRisk.level);

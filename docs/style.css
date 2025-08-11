@@ -208,6 +208,51 @@ header p {
     margin-bottom: 2rem;
 }
 
+/* Application Details Card */
+.app-details-card {
+    padding: 2rem;
+    background: transparent;
+    color: #f0f6fc;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    position: relative;
+}
+
+.app-details-card h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #8b949e;
+}
+
+.app-detail {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #30363d;
+}
+
+.app-detail:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.detail-label {
+    font-size: 0.75rem;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.detail-value {
+    font-size: 0.875rem;
+    color: #f0f6fc;
+    font-weight: 500;
+}
+
+/* Updated Risk Score Card for better compatibility */
 .risk-score-card {
     text-align: center;
     padding: 2rem;
@@ -296,7 +341,7 @@ header p {
 
 .gauge-label {
     position: absolute;
-    bottom: 35%;
+    bottom: 25%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
