@@ -168,20 +168,31 @@ class RiskAnalyzer {
             }
         });
         
-        // Search for pattern-based permissions (e.g., "read all users", "write directory")
+        // Search for pattern-based permissions with enhanced detection patterns
         const permissionPatterns = [
-            // User permissions
+            // User permissions - enhanced patterns
             { pattern: /read.*all.*user/gi, permission: 'User.Read.All' },
             { pattern: /write.*all.*user/gi, permission: 'User.ReadWrite.All' },
             { pattern: /manage.*user.*profile/gi, permission: 'User.ReadWrite.All' },
             { pattern: /access.*user.*information/gi, permission: 'User.Read.All' },
             { pattern: /user.*read.*basic/gi, permission: 'User.ReadBasic.All' },
+            { pattern: /user.*management.*permission/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /modify.*user.*account/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /user.*profile.*access/gi, permission: 'User.Read.All' },
+            { pattern: /employee.*information.*access/gi, permission: 'User.Read.All' },
+            { pattern: /staff.*directory.*access/gi, permission: 'User.Read.All' },
             
-            // Directory permissions
+            // Directory permissions - enhanced patterns
             { pattern: /read.*director/gi, permission: 'Directory.Read.All' },
             { pattern: /write.*director/gi, permission: 'Directory.ReadWrite.All' },
             { pattern: /access.*director.*information/gi, permission: 'Directory.Read.All' },
             { pattern: /organization.*director/gi, permission: 'Directory.Read.All' },
+            { pattern: /company.*director.*access/gi, permission: 'Directory.Read.All' },
+            { pattern: /organizational.*structure/gi, permission: 'Directory.Read.All' },
+            { pattern: /active.*directory.*integration/gi, permission: 'Directory.Read.All' },
+            { pattern: /ad.*integration/gi, permission: 'Directory.Read.All' },
+            { pattern: /tenant.*information/gi, permission: 'Directory.Read.All' },
+            { pattern: /directory.*schema.*access/gi, permission: 'Directory.Read.All' },
             
             // Application permissions
             { pattern: /manage.*application/gi, permission: 'Application.ReadWrite.All' },
@@ -1040,6 +1051,25 @@ class RiskAnalyzer {
     }
     
     createRiskChart() {
+        // Use enhanced chart system with fallback support
+        if (typeof FallbackChart !== 'undefined') {
+            const fallbackChart = new FallbackChart();
+            const riskData = {
+                critical: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length,
+                high: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length,
+                medium: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'medium').length,
+                low: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length
+            };
+            
+            // Try to create chart using the fallback system (which will use Chart.js if available)
+            fallbackChart.createRiskChart('risk-chart', riskData);
+        } else {
+            // Legacy implementation
+            this.legacyCreateRiskChart();
+        }
+    }
+    
+    legacyCreateRiskChart() {
         // Check if Chart.js is available and chart element exists
         if (typeof Chart === 'undefined') {
             console.warn('Chart.js not available, skipping chart creation');

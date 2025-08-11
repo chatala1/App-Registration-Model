@@ -345,8 +345,46 @@
         if (el) el.textContent = new Date().getFullYear();
       });
     </script>
+    
+    <!-- Enhanced Core Application Scripts with Fallback Support -->
+    <script src="pdf-extractor.js"></script>
+    <script src="fallback-chart.js"></script>
     <script src="upload.js"></script>
     <script src="risk-analysis.js"></script>
     <script src="navigation.js"></script>
+
+    <!-- External Library Loading with Graceful Fallbacks -->
+    <script>
+        // Enhanced Chart.js loading with fallback
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.onerror = function() {
+                console.log('External Chart.js failed, using fallback visualization system');
+                // FallbackChart is already loaded and will handle visualization
+            };
+            script.onload = function() {
+                console.log('Chart.js loaded successfully from CDN');
+            };
+            document.head.appendChild(script);
+        })();
+
+        // Enhanced PDF.js loading with comprehensive fallback
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+            script.onerror = function() {
+                console.log('External PDF.js failed, using enhanced fallback extraction');
+                // PDFTextExtractor provides comprehensive fallback
+            };
+            script.onload = function() {
+                console.log('PDF.js loaded successfully from CDN');
+                if (typeof pdfjsLib !== 'undefined') {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                }
+            };
+            document.head.appendChild(script);
+        })();
+    </script>
 </body>
 </html>

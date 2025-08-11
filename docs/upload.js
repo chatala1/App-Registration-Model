@@ -214,8 +214,25 @@ class FileUploader {
         }
     }
     
-    // Extract text from PDF files
+    // Extract text from PDF files with enhanced fallback support
     async extractTextFromPDF(file) {
+        try {
+            // Use the enhanced PDF extractor if available
+            if (typeof PDFTextExtractor !== 'undefined') {
+                const extractor = new PDFTextExtractor();
+                return await extractor.extractTextFromPDF(file);
+            }
+            
+            // Fallback to original implementation
+            return await this.legacyExtractTextFromPDF(file);
+        } catch (error) {
+            console.warn('PDF extraction failed, using emergency fallback:', error);
+            return this.emergencyPDFfallback(file);
+        }
+    }
+    
+    // Legacy PDF extraction method (keeping for compatibility)
+    async legacyExtractTextFromPDF(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             
@@ -630,6 +647,33 @@ class FileUploader {
         this.uploadArea.style.display = 'block';
         this.fileInput.value = '';
         this.resetAnalyzeButton();
+    }
+    
+    // Emergency fallback for PDF processing when all else fails
+    async emergencyPDFfallback(file) {
+        const sizeKB = (file.size / 1024).toFixed(2);
+        return `PDF Analysis (Emergency Fallback Mode)
+
+File: ${file.name}
+Size: ${sizeKB} KB
+
+⚠️ NOTICE: PDF text extraction is currently limited due to technical constraints.
+
+For accurate permission analysis, please:
+
+1. Convert PDF to plain text (.txt) or Markdown (.md) format
+2. Copy and paste the relevant sections containing Azure permissions
+3. Use a text-based project plan template
+
+Common Azure Permissions to Look For:
+- User.Read.All, User.ReadWrite.All
+- Directory.Read.All, Directory.ReadWrite.All  
+- Group.Read.All, Group.ReadWrite.All
+- Application.Read.All, Application.ReadWrite.All
+- Mail.Send, Mail.Read
+- Files.Read.All, Files.ReadWrite.All
+
+The application requires readable text content to perform comprehensive security analysis.`;
     }
     
     // Method to be called by risk analyzer when analysis is complete
