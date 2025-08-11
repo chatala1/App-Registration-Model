@@ -47,14 +47,26 @@
             <h2><i class="bi bi-graph-up"></i> Risk Analysis Results</h2>
             
             <div class="analysis-summary">
-                <div class="risk-score-card">
-                    <h3>Overall Risk Score</h3>
-                    <div id="overall-score" class="score-display">-</div>
-                    <div id="risk-level" class="risk-level">-</div>
+                <div class="application-details-card">
+                    <h3>Application Information</h3>
+                    <div class="application-details-content">
+                        <div class="detail-item">
+                            <span class="detail-label">Purpose:</span>
+                            <span id="app-purpose" class="detail-value">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Application:</span>
+                            <span id="app-name" class="detail-value">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Connection:</span>
+                            <span id="app-description" class="detail-value">-</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="gauge-card">
-                    <h3>Risk Gauge</h3>
+                    <h3>Overall Risk Score</h3>
                     <div class="gauge-container">
                         <svg class="gauge-svg" viewBox="0 0 200 200">
                             <circle 
@@ -73,7 +85,7 @@
                             />
                         </svg>
                         <div id="gauge-value" class="gauge-value">0</div>
-                        <div class="gauge-label">Risk Score</div>
+                        <div id="gauge-label" class="gauge-label">Not Assessed</div>
                     </div>
                 </div>
                 
@@ -81,20 +93,20 @@
                     <h3>Risk Summary</h3>
                     <div class="risk-summary-content">
                         <div class="risk-summary-stat">
-                            <span class="stat-label">Permissions Detected</span>
-                            <span id="summary-permissions" class="stat-value">0</span>
-                        </div>
-                        <div class="risk-summary-stat">
-                            <span class="stat-label">Critical Risks</span>
+                            <span class="stat-label">Critical</span>
                             <span id="summary-critical" class="stat-value critical">0</span>
                         </div>
                         <div class="risk-summary-stat">
-                            <span class="stat-label">Risk Indicators</span>
-                            <span id="summary-indicators" class="stat-value">0</span>
+                            <span class="stat-label">High</span>
+                            <span id="summary-high" class="stat-value high">0</span>
                         </div>
                         <div class="risk-summary-stat">
-                            <span class="stat-label">Recommendations</span>
-                            <span id="summary-recommendations" class="stat-value">0</span>
+                            <span class="stat-label">Medium</span>
+                            <span id="summary-medium" class="stat-value medium">0</span>
+                        </div>
+                        <div class="risk-summary-stat">
+                            <span class="stat-label">Low</span>
+                            <span id="summary-low" class="stat-value low">0</span>
                         </div>
                     </div>
                 </div>
