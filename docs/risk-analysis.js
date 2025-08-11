@@ -11,8 +11,6 @@ class RiskAnalyzer {
     
     initializeElements() {
         this.analysisSection = document.getElementById('analysis-section');
-        this.overallScore = document.getElementById('overall-score');
-        this.riskLevel = document.getElementById('risk-level');
         this.permissionsList = document.getElementById('permissions-list');
         this.csfCategories = document.getElementById('csf-categories');
         this.riskIndicators = document.getElementById('risk-indicators');
@@ -21,14 +19,20 @@ class RiskAnalyzer {
         // Gauge elements
         this.gaugeProgress = document.getElementById('gauge-progress');
         this.gaugeValue = document.getElementById('gauge-value');
+        this.gaugeLabel = document.getElementById('gauge-label');
         
-        // Risk summary elements
-        this.summaryPermissions = document.getElementById('summary-permissions');
+        // Application details elements
+        this.appPurpose = document.getElementById('app-purpose');
+        this.appName = document.getElementById('app-name');
+        this.appDescription = document.getElementById('app-description');
+        
+        // Risk summary elements - now for severity levels
         this.summaryCritical = document.getElementById('summary-critical');
-        this.summaryIndicators = document.getElementById('summary-indicators');
-        this.summaryRecommendations = document.getElementById('summary-recommendations');
+        this.summaryHigh = document.getElementById('summary-high');
+        this.summaryMedium = document.getElementById('summary-medium');
+        this.summaryLow = document.getElementById('summary-low');
         
-        // New elements for enhanced UI
+        // Summary cards elements
         this.permissionsCount = document.getElementById('permissions-count');
         this.csfCount = document.getElementById('csf-count');
         this.risksCount = document.getElementById('risks-count');
@@ -440,6 +444,9 @@ class RiskAnalyzer {
         // Update gauge value display
         this.gaugeValue.textContent = score;
         
+        // Update gauge label with severity level instead of "Risk Score"
+        this.gaugeLabel.textContent = level.toUpperCase();
+        
         // Calculate stroke properties
         const circumference = 2 * Math.PI * 85; // radius is 85
         const strokeDasharray = circumference;
@@ -515,15 +522,31 @@ class RiskAnalyzer {
     }
     
     updateRiskSummary() {
+        // Calculate permission counts by severity level
         const criticalCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length;
+        const highCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length;
+        const mediumCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'medium').length;
+        const lowCount = this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length;
         
-        this.summaryPermissions.textContent = this.analysisResults.detectedPermissions.length;
+        // Update the risk summary with severity counts
         this.summaryCritical.textContent = criticalCount;
-        this.summaryIndicators.textContent = this.analysisResults.riskIndicators.length;
-        this.summaryRecommendations.textContent = this.analysisResults.recommendations.length;
+        this.summaryHigh.textContent = highCount;
+        this.summaryMedium.textContent = mediumCount;
+        this.summaryLow.textContent = lowCount;
         
-        // Update the critical count color class
-        this.summaryCritical.className = `stat-value ${criticalCount > 0 ? 'critical' : 'low'}`;
+        // Update color classes
+        this.summaryCritical.className = `stat-value critical`;
+        this.summaryHigh.className = `stat-value high`;
+        this.summaryMedium.className = `stat-value medium`;
+        this.summaryLow.className = `stat-value low`;
+    }
+
+    updateApplicationDetails() {
+        // Set application details based on analysis context
+        // This could be extracted from the content or set based on analysis type
+        this.appPurpose.textContent = "Customer Portal Integration";
+        this.appName.textContent = "Customer Portal App";
+        this.appDescription.textContent = "Provides secure access to customer data and user management functions";
     }
 
     displayResults() {
@@ -531,14 +554,10 @@ class RiskAnalyzer {
         this.analysisSection.style.display = 'block';
         this.analysisSection.scrollIntoView({ behavior: 'smooth' });
         
-        // Display overall risk
-        this.overallScore.textContent = this.analysisResults.overallRisk.score;
-        this.riskLevel.textContent = this.analysisResults.overallRisk.level.toUpperCase();
-        this.riskLevel.className = `risk-level ${this.analysisResults.overallRisk.level}`;
-        
         // Update gauge and summary
         this.updateGauge(this.analysisResults.overallRisk.score, this.analysisResults.overallRisk.level);
         this.updateRiskSummary();
+        this.updateApplicationDetails();
         
         // Update summary cards
         this.updateSummaryCards();
@@ -829,9 +848,23 @@ class RiskAnalyzer {
             <tr><th>Metric</th><th>Value</th></tr>
             <tr><td>Overall Risk Score</td><td>${results.overallRisk.score}/100</td></tr>
             <tr><td>Risk Level</td><td>${results.overallRisk.level.toUpperCase()}</td></tr>
-            <tr><td>Detected Permissions</td><td>${results.totalPermissions}</td></tr>
-            <tr><td>Risk Indicators</td><td>${results.totalIndicators}</td></tr>
+            <tr><td>Detected Permissions</td><td>${results.detectedPermissions.length}</td></tr>
+            <tr><td>Critical Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'critical').length}</td></tr>
+            <tr><td>High Risk Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'high').length}</td></tr>
+            <tr><td>Medium Risk Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'medium').length}</td></tr>
+            <tr><td>Low Risk Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'low').length}</td></tr>
+            <tr><td>Risk Indicators</td><td>${results.riskIndicators.length}</td></tr>
             <tr><td>CSF Categories Mapped</td><td>${results.csfMappings.length}</td></tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>📱 Application Information</h2>
+        <table>
+            <tr><th>Detail</th><th>Value</th></tr>
+            <tr><td>Purpose</td><td>Customer Portal Integration</td></tr>
+            <tr><td>Application</td><td>Customer Portal App</td></tr>
+            <tr><td>Connection</td><td>Provides secure access to customer data and user management functions</td></tr>
         </table>
     </div>
     
@@ -1123,6 +1156,43 @@ class RiskAnalyzer {
             <div class="summary-item">
                 <span class="summary-value">${this.analysisResults.recommendations.filter(r => r.priority === 'critical' || r.priority === 'high').length}</span>
                 <span class="summary-label">Priority Actions</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📱 Application Information</h2>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-value">Customer Portal Integration</span>
+                <span class="summary-label">Purpose</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">Customer Portal App</span>
+                <span class="summary-label">Application</span>
+            </div>
+            <div class="summary-item" style="grid-column: span 2;">
+                <span class="summary-value">Provides secure access to customer data and user management functions</span>
+                <span class="summary-label">Connection Description</span>
+            </div>
+        </div>
+        
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length}</span>
+                <span class="summary-label">Critical Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length}</span>
+                <span class="summary-label">High Risk Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'medium').length}</span>
+                <span class="summary-label">Medium Risk Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length}</span>
+                <span class="summary-label">Low Risk Permissions</span>
             </div>
         </div>
     </div>
