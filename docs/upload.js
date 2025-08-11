@@ -232,6 +232,20 @@ class FileUploader {
                         textContent += pageText + '\n';
                     }
                     
+                    // If text extraction resulted in minimal content, try OCR
+                    if (textContent.trim().length < 50) {
+                        console.log('Text extraction yielded minimal content, attempting OCR...');
+                        try {
+                            const ocrText = await this.performOCROnPDF(pdf);
+                            if (ocrText && ocrText.trim().length > textContent.trim().length) {
+                                textContent = ocrText;
+                            }
+                        } catch (ocrError) {
+                            console.warn('OCR failed:', ocrError.message);
+                            // Continue with original text even if OCR fails
+                        }
+                    }
+                    
                     resolve(textContent);
                 } catch (error) {
                     reject(new Error('Failed to parse PDF: ' + error.message));
@@ -241,6 +255,51 @@ class FileUploader {
             reader.onerror = () => reject(new Error('Failed to read PDF file'));
             reader.readAsArrayBuffer(file);
         });
+    }
+    
+    // Perform OCR on PDF pages
+    async performOCROnPDF(pdf) {
+        let ocrText = '';
+        const maxPages = Math.min(pdf.numPages, 3); // Limit to first 3 pages for performance
+        
+        for (let i = 1; i <= maxPages; i++) {
+            try {
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 2.0 });
+                
+                // Create canvas to render PDF page
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                // Render PDF page to canvas
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+                
+                // Convert canvas to image data for OCR
+                const imageData = canvas.toDataURL('image/png');
+                
+                // Perform OCR on the image
+                const { data: { text } } = await Tesseract.recognize(imageData, 'eng', {
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            console.log(`OCR Progress Page ${i}: ${Math.round(m.progress * 100)}%`);
+                        }
+                    }
+                });
+                
+                ocrText += text + '\n';
+                
+            } catch (error) {
+                console.warn(`OCR failed for page ${i}:`, error.message);
+                continue;
+            }
+        }
+        
+        return ocrText;
     }
     
     // Extract text from DOCX files
