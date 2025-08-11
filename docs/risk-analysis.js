@@ -848,9 +848,23 @@ class RiskAnalyzer {
             <tr><th>Metric</th><th>Value</th></tr>
             <tr><td>Overall Risk Score</td><td>${results.overallRisk.score}/100</td></tr>
             <tr><td>Risk Level</td><td>${results.overallRisk.level.toUpperCase()}</td></tr>
-            <tr><td>Detected Permissions</td><td>${results.totalPermissions}</td></tr>
-            <tr><td>Risk Indicators</td><td>${results.totalIndicators}</td></tr>
+            <tr><td>Detected Permissions</td><td>${results.detectedPermissions.length}</td></tr>
+            <tr><td>Critical Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'critical').length}</td></tr>
+            <tr><td>High Risk Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'high').length}</td></tr>
+            <tr><td>Medium Risk Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'medium').length}</td></tr>
+            <tr><td>Low Risk Permissions</td><td>${results.detectedPermissions.filter(p => p.riskLevel === 'low').length}</td></tr>
+            <tr><td>Risk Indicators</td><td>${results.riskIndicators.length}</td></tr>
             <tr><td>CSF Categories Mapped</td><td>${results.csfMappings.length}</td></tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>📱 Application Information</h2>
+        <table>
+            <tr><th>Detail</th><th>Value</th></tr>
+            <tr><td>Purpose</td><td>Customer Portal Integration</td></tr>
+            <tr><td>Application</td><td>Customer Portal App</td></tr>
+            <tr><td>Connection</td><td>Provides secure access to customer data and user management functions</td></tr>
         </table>
     </div>
     
@@ -1142,6 +1156,43 @@ class RiskAnalyzer {
             <div class="summary-item">
                 <span class="summary-value">${this.analysisResults.recommendations.filter(r => r.priority === 'critical' || r.priority === 'high').length}</span>
                 <span class="summary-label">Priority Actions</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📱 Application Information</h2>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-value">Customer Portal Integration</span>
+                <span class="summary-label">Purpose</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">Customer Portal App</span>
+                <span class="summary-label">Application</span>
+            </div>
+            <div class="summary-item" style="grid-column: span 2;">
+                <span class="summary-value">Provides secure access to customer data and user management functions</span>
+                <span class="summary-label">Connection Description</span>
+            </div>
+        </div>
+        
+        <div class="summary-grid">
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length}</span>
+                <span class="summary-label">Critical Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length}</span>
+                <span class="summary-label">High Risk Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'medium').length}</span>
+                <span class="summary-label">Medium Risk Permissions</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-value">${this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length}</span>
+                <span class="summary-label">Low Risk Permissions</span>
             </div>
         </div>
     </div>
