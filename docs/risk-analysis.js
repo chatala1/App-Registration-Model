@@ -129,6 +129,7 @@ class RiskAnalyzer {
         const riskIndicators = this.identifyRiskIndicators(content);
         const recommendations = this.generateRecommendations(detectedPermissions, riskIndicators);
         const overallRisk = this.calculateOverallRisk(detectedPermissions, riskIndicators);
+        const applicationInfo = this.extractApplicationInfo(content);
         
         this.analysisResults = {
             detectedPermissions,
@@ -136,6 +137,7 @@ class RiskAnalyzer {
             riskIndicators,
             recommendations,
             overallRisk,
+            applicationInfo,
             timestamp: new Date().toISOString(),
             content: content.substring(0, 1000) + '...' // Truncated for report
         };
@@ -344,6 +346,109 @@ class RiskAnalyzer {
         return descriptions[risk] || 'Potential security risk requiring attention';
     }
     
+    extractApplicationInfo(content) {
+        const applicationInfo = {
+            purpose: 'Not specified',
+            name: 'Not specified', 
+            description: 'Not specified'
+        };
+        
+        try {
+            // Try to parse as JSON first
+            const jsonData = JSON.parse(content);
+            if (jsonData) {
+                applicationInfo.name = jsonData.projectName || jsonData.sourceApplication || jsonData.name || 'Not specified';
+                applicationInfo.purpose = jsonData.overview?.purpose || jsonData.purpose || jsonData.description || 'Not specified';
+                applicationInfo.description = jsonData.overview?.description || jsonData.connectionType || jsonData.overview || 'Not specified';
+                return applicationInfo;
+            }
+        } catch (e) {
+            // Not JSON, continue with text parsing
+        }
+        
+        const lines = content.split('\n');
+        const contentLower = content.toLowerCase();
+        
+        // Extract project name / application name
+        const projectPatterns = [
+            /(?:project\s*name|application\s*name|app\s*name)\s*[:=]\s*(.+)/i,
+            /(?:source\s*application)\s*[:=]\s*(.+)/i,
+            /(?:target\s*application)\s*[:=]\s*(.+)/i,
+            /^#\s*(.+)$/im,
+            /^\*?\*?(.+?)\s*(?:to|integration|project|app|system).*$/im
+        ];
+        
+        for (const pattern of projectPatterns) {
+            const match = content.match(pattern);
+            if (match && match[1]) {
+                applicationInfo.name = match[1].trim().replace(/[*]/g, '');
+                break;
+            }
+        }
+        
+        // Extract purpose/description
+        const purposePatterns = [
+            /(?:purpose|objective|goal)\s*[:=]\s*(.+)/i,
+            /(?:description|overview)\s*[:=]\s*(.+)/i,
+            /(?:connection\s*type|integration\s*type)\s*[:=]\s*(.+)/i
+        ];
+        
+        for (const pattern of purposePatterns) {
+            const match = content.match(pattern);
+            if (match && match[1]) {
+                applicationInfo.purpose = match[1].trim();
+                break;
+            }
+        }
+        
+        // Extract connection/description info
+        const descriptionPatterns = [
+            /(?:connection\s*overview|integration\s*overview|overview)\s*[:=]?\s*\n\s*(.+)/i,
+            /(?:enables?|provides?|allows?)\s+(.+?)(?:\.|$)/i,
+            /(?:connects?|integrates?)\s+(.+?)(?:\.|$)/i
+        ];
+        
+        for (const pattern of descriptionPatterns) {
+            const match = content.match(pattern);
+            if (match && match[1]) {
+                applicationInfo.description = match[1].trim();
+                break;
+            }
+        }
+        
+        // Special handling for markdown headers
+        if (content.includes('#') && content.includes('##')) {
+            const headerMatch = content.match(/^#\s*(.+)$/m);
+            if (headerMatch) {
+                applicationInfo.name = headerMatch[1].trim();
+            }
+            
+            // Look for connection overview in markdown
+            const overviewMatch = content.match(/##\s*connection\s*overview\s*\n\s*(.+?)(?:\n##|\n$)/is);
+            if (overviewMatch) {
+                applicationInfo.description = overviewMatch[1].trim().replace(/\*\*/g, '').split('\n')[0];
+            }
+        }
+        
+        // Clean up extracted values
+        applicationInfo.name = applicationInfo.name.replace(/^\*+|\*+$/g, '').trim();
+        applicationInfo.purpose = applicationInfo.purpose.replace(/^\*+|\*+$/g, '').trim();
+        applicationInfo.description = applicationInfo.description.replace(/^\*+|\*+$/g, '').trim();
+        
+        // Truncate long values
+        if (applicationInfo.name.length > 60) {
+            applicationInfo.name = applicationInfo.name.substring(0, 57) + '...';
+        }
+        if (applicationInfo.purpose.length > 100) {
+            applicationInfo.purpose = applicationInfo.purpose.substring(0, 97) + '...';
+        }
+        if (applicationInfo.description.length > 120) {
+            applicationInfo.description = applicationInfo.description.substring(0, 117) + '...';
+        }
+        
+        return applicationInfo;
+    }
+    
     generateRecommendations(detectedPermissions, riskIndicators) {
         const recommendations = [];
         
@@ -528,11 +633,18 @@ class RiskAnalyzer {
     }
 
     updateApplicationDetails() {
-        // Set application details based on analysis context
-        // This could be extracted from the content or set based on analysis type
-        this.appPurpose.textContent = "Customer Portal Integration";
-        this.appName.textContent = "Customer Portal App";
-        this.appDescription.textContent = "Provides secure access to customer data and user management functions";
+        // Use extracted application details from analysis results
+        if (this.analysisResults && this.analysisResults.applicationInfo) {
+            const appInfo = this.analysisResults.applicationInfo;
+            this.appPurpose.textContent = appInfo.purpose;
+            this.appName.textContent = appInfo.name;
+            this.appDescription.textContent = appInfo.description;
+        } else {
+            // Fallback to default values if extraction failed
+            this.appPurpose.textContent = "Not specified";
+            this.appName.textContent = "Not specified";
+            this.appDescription.textContent = "Not specified";
+        }
     }
 
     displayResults() {
