@@ -1,0 +1,80 @@
+{\rtf1\ansi\deff0 {\fonttbl {\f0 Times New Roman;}}
+\f0\fs24 
+{\b ANALYTICS DASHBOARD TO EXCHANGE ONLINE INTEGRATION}
+\par {\b AZURE APPLICATION REGISTRATION PROJECT PLAN}
+\par 
+\par {\b Project Name:} Executive Analytics Dashboard to Exchange Online Integration
+\par {\b Source Application:} PowerBI Executive Dashboard v4.1
+\par {\b Target Application:} Exchange Online (Microsoft 365)
+\par {\b Connection Type:} Microsoft Graph API via REST endpoints
+\par {\b Date:} December 15, 2024
+\par {\b Author:} Business Intelligence Team
+\par {\b Classification:} Executive Confidential
+\par 
+\par {\b CONNECTION OVERVIEW}
+\par 
+\par PowerBI Executive Dashboard (source application) connects to Exchange Online (target application) to analyze email communication patterns, meeting productivity metrics, and executive time allocation. This integration provides leadership insights into organizational communication efficiency and collaboration trends.
+\par 
+\par {\b APPLICATIONS INVOLVED}
+\par 
+\par {\b 1. PowerBI Executive Dashboard}
+\par    - Platform: Power BI Premium workspace
+\par    - Version: 4.1.2
+\par    - Deployment: Microsoft 365 tenant
+\par    - Refresh Schedule: Real-time and daily aggregations
+\par 
+\par {\b 2. Exchange Online}
+\par    - Service: Microsoft 365 Exchange Online
+\par    - Data Sources: Executive mailboxes, calendar data, meeting insights
+\par    - Time Range: Rolling 12-month analysis window
+\par    - Authentication: Service principal with certificate
+\par 
+\par {\b REQUIRED AZURE APPLICATION PERMISSIONS}
+\par 
+\par {\b Critical Risk Permissions:}
+\par - {\i Mail.ReadWrite.All:} Analyze email communication patterns across executive mailboxes
+\par - {\i Calendars.ReadWrite.All:} Access meeting data for productivity analysis
+\par 
+\par {\b High Risk Permissions:}
+\par - {\i Mail.Read.All:} Read email metadata for communication analytics
+\par - {\i User.ReadWrite.All:} Access executive profiles for organizational mapping
+\par - {\i Reports.Read.All:} Access Microsoft 365 usage reports
+\par 
+\par {\b Medium Risk Permissions:}
+\par - {\i Calendars.Read.All:} Read calendar data for meeting analytics
+\par - {\i User.Read.All:} Read user profiles for departmental analysis
+\par - {\i Directory.Read.All:} Access organizational structure
+\par 
+\par {\b Low Risk Permissions:}
+\par - {\i User.Read:} Basic profile access for authentication
+\par - {\i Mail.Read:} Basic email access for individual analytics
+\par - {\i Calendars.Read:} Basic calendar access for time analysis
+\par 
+\par {\b DATA INTEGRATION FLOWS}
+\par 
+\par {\b Email Analytics Processing}
+\par {\b Direction:} Read-only (Exchange Online → PowerBI Dashboard)
+\par - Email volume and response time metrics
+\par - Communication pattern analysis
+\par - Executive engagement scoring
+\par 
+\par {\b Meeting Productivity Analysis}
+\par {\b Direction:} Read-only (Exchange Online → PowerBI Dashboard)
+\par - Meeting frequency and duration tracking
+\par - Attendee participation metrics
+\par - Calendar efficiency scoring
+\par 
+\par {\b Executive Time Allocation}
+\par {\b Direction:} Read-only (Exchange Online → PowerBI Dashboard)
+\par - Time spent in meetings vs. focused work
+\par - Cross-departmental collaboration metrics
+\par - Leadership accessibility analysis
+\par 
+\par {\b COMPLIANCE AND SECURITY}
+\par - All analytics aggregated and anonymized where possible
+\par - Executive data access restricted to authorized leadership team
+\par - Data retention aligned with corporate governance policies
+\par - Real-time monitoring with automated privacy compliance checks
+\par - GDPR and privacy regulation compliance for executive communications
+\par 
+}

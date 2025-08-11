@@ -1,0 +1,128 @@
+{
+  "projectName": "SalesMax CRM to Microsoft Graph API Integration",
+  "sourceApplication": "SalesMax CRM v3.2",
+  "targetApplication": "Microsoft Graph API",
+  "connectionType": "REST API Integration via OAuth 2.0",
+  "date": "2024-12-15",
+  "author": "Integration Development Team",
+  "classification": "Business Critical",
+  "overview": {
+    "description": "SalesMax CRM (source application) connects to Microsoft Graph API (target application) to synchronize customer contact information, calendar events, and email communications for sales representatives.",
+    "purpose": "Enable sales teams to access Microsoft 365 data directly within their CRM workflow"
+  },
+  "applications": [
+    {
+      "name": "SalesMax CRM System",
+      "vendor": "SalesMax Technologies",
+      "version": "3.2.1",
+      "deployment": "Cloud-hosted SaaS",
+      "authentication": "Azure AD integrated"
+    },
+    {
+      "name": "Microsoft Graph API",
+      "service": "Microsoft 365 Graph API",
+      "version": "v1.0",
+      "endpoints": ["Users", "Calendar", "Mail", "Contacts"],
+      "authentication": "OAuth 2.0 with PKCE"
+    }
+  ],
+  "permissions": {
+    "critical": [
+      {
+        "permission": "Contacts.ReadWrite",
+        "purpose": "Synchronize customer contacts bidirectionally",
+        "riskLevel": "Critical"
+      },
+      {
+        "permission": "Calendars.ReadWrite", 
+        "purpose": "Create and update calendar events for sales meetings",
+        "riskLevel": "Critical"
+      }
+    ],
+    "high": [
+      {
+        "permission": "User.ReadWrite.All",
+        "purpose": "Access and modify user profiles for sales team management",
+        "riskLevel": "High"
+      },
+      {
+        "permission": "Mail.ReadWrite",
+        "purpose": "Read and categorize email communications",
+        "riskLevel": "High"
+      },
+      {
+        "permission": "Directory.Read.All",
+        "purpose": "Access organizational structure for territory management",
+        "riskLevel": "High"
+      }
+    ],
+    "medium": [
+      {
+        "permission": "User.Read.All",
+        "purpose": "Read user profiles for contact matching",
+        "riskLevel": "Medium"
+      },
+      {
+        "permission": "Mail.Read",
+        "purpose": "Monitor email interactions with prospects",
+        "riskLevel": "Medium"
+      },
+      {
+        "permission": "Calendars.Read",
+        "purpose": "View calendar availability for meeting scheduling",
+        "riskLevel": "Medium"
+      }
+    ],
+    "low": [
+      {
+        "permission": "User.Read",
+        "purpose": "Basic profile access for authentication",
+        "riskLevel": "Low"
+      },
+      {
+        "permission": "profile",
+        "purpose": "Standard OpenID Connect profile claims",
+        "riskLevel": "Low"
+      },
+      {
+        "permission": "openid",
+        "purpose": "Standard OpenID Connect authentication",
+        "riskLevel": "Low"
+      },
+      {
+        "permission": "email",
+        "purpose": "Email address access for user identification",
+        "riskLevel": "Low"
+      }
+    ]
+  },
+  "dataFlows": [
+    {
+      "name": "Contact Synchronization",
+      "direction": "Bidirectional",
+      "source": "SalesMax CRM",
+      "target": "Microsoft Graph API",
+      "dataTypes": ["Customer contact information", "Business phone numbers and addresses", "Personal notes and interaction history"]
+    },
+    {
+      "name": "Calendar Event Integration",
+      "direction": "Read-only",
+      "source": "Microsoft Graph API",
+      "target": "SalesMax CRM",
+      "dataTypes": ["Sales meeting scheduling", "Customer appointment tracking", "Availability management"]
+    },
+    {
+      "name": "Email Activity Tracking",
+      "direction": "Read-only",
+      "source": "Microsoft Graph API", 
+      "target": "SalesMax CRM",
+      "dataTypes": ["Email interaction monitoring", "Response time tracking", "Communication categorization"]
+    }
+  ],
+  "security": {
+    "encryption": "TLS 1.3",
+    "compliance": ["GDPR", "SOX"],
+    "dataRetention": "7 years per regulatory requirements",
+    "accessControl": "Role-based permissions within SalesMax CRM"
+  }
+}

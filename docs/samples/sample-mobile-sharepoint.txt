@@ -1,0 +1,75 @@
+MOBILE FIELD SERVICE APP TO SHAREPOINT ONLINE INTEGRATION
+AZURE APPLICATION REGISTRATION PROJECT PLAN
+
+Project Name: FieldWorker Mobile App to SharePoint Online Integration
+Source Application: FieldWorker Mobile v2.8 (iOS/Android)
+Target Application: SharePoint Online
+Connection Type: Microsoft Graph API via Mobile SDK
+Date: December 15, 2024
+Author: Mobile Development Team
+Classification: Operational Critical
+
+CONNECTION OVERVIEW
+
+FieldWorker Mobile App (source application) connects to SharePoint Online (target application) to access work orders, upload field reports, synchronize equipment manuals, and submit inspection photos. This integration enables field technicians to access corporate documentation and submit work completion data while working offline.
+
+APPLICATIONS INVOLVED
+
+1. FieldWorker Mobile Application
+   - Platform: Native iOS 16+/Android 12+
+   - Framework: React Native 0.72
+   - Deployment: Apple App Store / Google Play Store
+   - Authentication: Azure AD B2B
+
+2. SharePoint Online
+   - Service: Microsoft 365 SharePoint Online
+   - Sites: Field Operations, Equipment Library, Quality Assurance
+   - Document Libraries: Work Orders, Manuals, Reports, Photos
+   - Authentication: OAuth 2.0 with device code flow
+
+REQUIRED AZURE APPLICATION PERMISSIONS
+
+Critical Risk Permissions:
+- Sites.ReadWrite.All: Access and modify all SharePoint sites for work order management
+- Files.ReadWrite.All: Upload field reports and inspection photos
+
+High Risk Permissions:
+- Sites.Read.All: Read access to equipment manuals and documentation
+- User.ReadWrite.All: Manage field technician profiles and assignments
+
+Medium Risk Permissions:
+- Files.Read.All: Download equipment manuals and reference documents
+- Sites.Selected: Access specific SharePoint sites for field operations
+- User.Read.All: Read technician profiles for work assignment
+
+Low Risk Permissions:
+- User.Read: Basic profile access for authentication
+- Sites.Read: Basic site access for navigation
+- Files.Read: Basic file access for viewing documents
+
+DATA INTEGRATION FLOWS
+
+Work Order Synchronization
+Direction: Bidirectional (FieldWorker Mobile ↔ SharePoint Online)
+- Work order assignments and updates
+- Job status and completion tracking
+- Parts inventory and usage reporting
+
+Equipment Manual Access
+Direction: Read-only (SharePoint Online → FieldWorker Mobile)
+- Equipment specification documents
+- Maintenance procedures and safety guides
+- Technical diagrams and schematics
+
+Field Report Submission
+Direction: Write-only (FieldWorker Mobile → SharePoint Online)
+- Completed work reports
+- Inspection photos and documentation
+- Time tracking and expense reporting
+
+COMPLIANCE AND SECURITY
+- All API communications encrypted with TLS 1.3
+- Field data cached locally with device encryption
+- Offline capabilities with secure sync when connectivity restored
+- Role-based access ensuring technicians only see assigned work orders
+- Photo metadata scrubbed before upload to protect location privacy
