@@ -496,8 +496,10 @@ class RiskAnalyzer {
             'low': 'Low risk indicates minimal security impact with standard permissions. This typically includes read-only access to non-sensitive data or well-scoped permissions with limited potential for misuse.'
         };
         
-        const definitionText = definitions[level] || 'Risk level assessment not available.';
-        this.gaugeDefinitionText.textContent = definitionText;
+        const fullDefinition = definitions[level] || 'Risk level assessment not available.';
+        // Extract only the first sentence
+        const firstSentence = fullDefinition.split('.')[0] + '.';
+        this.gaugeDefinitionText.textContent = firstSentence;
         
         // Show the definition section
         if (this.gaugeDefinition) {

@@ -284,7 +284,7 @@ header p {
 
 .gauge-value {
     position: absolute;
-    top: 42%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2.5rem;
