@@ -450,6 +450,105 @@
       "permissionTypes": ["Delegated"],
       "consentType": "User consent"
     },
+    "Chat.Read.All": {
+      "riskLevel": "high",
+      "description": "Read all chat messages",
+      "impact": "Can read all chat messages in Teams and other applications",
+      "csfMapping": ["PR.DS", "DE.CM"],
+      "riskScore": 8,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "Chat.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write all chat messages",
+      "impact": "Can read and write all chat messages in Teams and other applications",
+      "csfMapping": ["PR.DS", "PR.AC"],
+      "riskScore": 9,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "Calls.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read all call records",
+      "impact": "Can read call logs and records",
+      "csfMapping": ["DE.CM", "PR.DS"],
+      "riskScore": 6,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "OnlineMeetings.ReadWrite.All": {
+      "riskLevel": "medium",
+      "description": "Read and write all online meetings",
+      "impact": "Can create, read, and modify online meetings",
+      "csfMapping": ["PR.AC"],
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "TeamsAppInstallation.ReadWriteForUser.All": {
+      "riskLevel": "medium",
+      "description": "Manage Teams app installation for all users",
+      "impact": "Can install and manage Teams apps for all users",
+      "csfMapping": ["PR.AC", "ID.AM"],
+      "riskScore": 6,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "User.Export.All": {
+      "riskLevel": "critical",
+      "description": "Export user data",
+      "impact": "Can export user data including sensitive information",
+      "csfMapping": ["PR.DS", "GV.RM"],
+      "riskScore": 10,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "User.ManageIdentities.All": {
+      "riskLevel": "critical",
+      "description": "Manage all users' identities",
+      "impact": "Can manage authentication methods and identity providers for all users",
+      "csfMapping": ["PR.AC", "ID.RA"],
+      "riskScore": 10,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "ThreatIndicators.ReadWrite.OwnedBy": {
+      "riskLevel": "high",
+      "description": "Read and write threat indicators",
+      "impact": "Can manage threat indicators and security intelligence",
+      "csfMapping": ["DE.AE", "RS.AN"],
+      "riskScore": 7,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
+    "CrossTenantInformation.ReadBasic.All": {
+      "riskLevel": "medium",
+      "description": "Read basic cross-tenant information",
+      "impact": "Can read basic information about other tenants",
+      "csfMapping": ["ID.AM"],
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "EntitlementManagement.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write entitlement management data",
+      "impact": "Can manage access packages and entitlement management",
+      "csfMapping": ["PR.AC", "GV.RM"],
+      "riskScore": 8,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "IdentityProvider.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Read and write identity providers",
+      "impact": "Can configure external identity providers and federation settings",
+      "csfMapping": ["PR.AC", "ID.RA"],
+      "riskScore": 10,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
+    },
     "Device.Read.All": {
       "riskLevel": "medium",
       "description": "Read all devices",

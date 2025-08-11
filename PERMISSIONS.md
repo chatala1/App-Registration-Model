@@ -1,12 +1,15 @@
 # Supported Azure Application Registration Permissions
 
-The Risk Analysis Web App analyzes **54 Azure Application Registration permissions** categorized by risk level and impact:
+The Risk Analysis Web App analyzes **65 Azure Application Registration permissions** categorized by risk level and impact:
 
 ## Critical Risk (Score: 10)
 - **Directory.ReadWrite.All** - Read and write directory data
 - **RoleManagement.ReadWrite.All** - Read and write role management data  
 - **AppRoleAssignment.ReadWrite.All** - Manage app permission grants and app role assignments
 - **DelegatedPermissionGrant.ReadWrite.All** - Manage delegated permission grants
+- **User.Export.All** - Export user data
+- **User.ManageIdentities.All** - Manage all users' identities
+- **IdentityProvider.ReadWrite.All** - Read and write identity providers
 
 ## High Risk (Score: 7-9)  
 - **Application.ReadWrite.All** - Read and write all applications
@@ -23,6 +26,10 @@ The Risk Analysis Web App analyzes **54 Azure Application Registration permissio
 - **Organization.ReadWrite.All** - Read and write organization information
 - **Sites.Manage.All** - Create, edit, and delete items and lists in all site collections
 - **PrivilegedAccess.Read.AzureAD** - Read privileged access to Azure AD
+- **Chat.Read.All** - Read all chat messages
+- **Chat.ReadWrite.All** - Read and write all chat messages
+- **ThreatIndicators.ReadWrite.OwnedBy** - Read and write threat indicators
+- **EntitlementManagement.ReadWrite.All** - Read and write entitlement management data
 
 ## Medium Risk (Score: 4-6)
 - **Directory.Read.All** - Read directory data
@@ -53,6 +60,10 @@ The Risk Analysis Web App analyzes **54 Azure Application Registration permissio
 - **GroupMember.Read.All** - Read group memberships
 - **AdministrativeUnit.Read.All** - Read administrative units
 - **InformationProtectionPolicy.Read** - Read information protection policies
+- **Calls.Read.All** - Read all call records
+- **OnlineMeetings.ReadWrite.All** - Read and write all online meetings
+- **TeamsAppInstallation.ReadWriteForUser.All** - Manage Teams app installation for all users
+- **CrossTenantInformation.ReadBasic.All** - Read basic cross-tenant information
 
 ## Low Risk (Score: 1-3)
 - **User.Read** - Sign you in and read your profile

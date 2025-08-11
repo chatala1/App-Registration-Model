@@ -207,11 +207,23 @@ class RiskAnalyzer {
     
     mapToCSFCategories(detectedPermissions, content) {
         const csfMappings = new Set();
+        const findingToCategory = new Map(); // Track which findings trigger each category
         
         // Add CSF categories from detected permissions
         detectedPermissions.forEach(permission => {
             if (permission.csfMapping) {
-                permission.csfMapping.forEach(category => csfMappings.add(category));
+                permission.csfMapping.forEach(category => {
+                    csfMappings.add(category);
+                    if (!findingToCategory.has(category)) {
+                        findingToCategory.set(category, []);
+                    }
+                    findingToCategory.get(category).push({
+                        type: 'permission',
+                        name: permission.name,
+                        riskLevel: permission.riskLevel,
+                        description: permission.description
+                    });
+                });
             }
         });
         
@@ -235,8 +247,17 @@ class RiskAnalyzer {
         
         Object.keys(csfKeywords).forEach(category => {
             const keywords = csfKeywords[category];
-            if (keywords.some(keyword => contentLower.includes(keyword))) {
+            const matchedKeywords = keywords.filter(keyword => contentLower.includes(keyword));
+            if (matchedKeywords.length > 0) {
                 csfMappings.add(category);
+                if (!findingToCategory.has(category)) {
+                    findingToCategory.set(category, []);
+                }
+                findingToCategory.get(category).push({
+                    type: 'content',
+                    keywords: matchedKeywords,
+                    description: `Content analysis detected keywords: ${matchedKeywords.join(', ')}`
+                });
             }
         });
         
@@ -244,14 +265,20 @@ class RiskAnalyzer {
             const [mainCategory, subCategory] = category.split('.');
             const categoryInfo = this.nistData.categories[mainCategory];
             const subcategoryInfo = categoryInfo ? categoryInfo.subcategories[category] : null;
+            const findings = findingToCategory.get(category) || [];
+            
+            // Filter controls and remediation to be specific to findings
+            const specificControls = this.getSpecificControls(category, findings, subcategoryInfo);
+            const specificRemediation = this.getSpecificRemediation(category, findings, subcategoryInfo);
             
             return {
                 category,
                 name: subcategoryInfo ? subcategoryInfo.name : category,
                 description: subcategoryInfo ? subcategoryInfo.description : 'NIST CSF 2.0 Category',
                 mainCategory: categoryInfo ? categoryInfo.name : mainCategory,
-                controls: subcategoryInfo ? subcategoryInfo.controls || [] : [],
-                remediation: subcategoryInfo ? subcategoryInfo.remediation || [] : [],
+                controls: specificControls,
+                remediation: specificRemediation,
+                findings: findings,
                 severity: this.calculateCSFSeverity(category, detectedPermissions)
             };
         });
@@ -276,6 +303,131 @@ class RiskAnalyzer {
         if (avgRiskScore >= 7) return 'high';
         if (avgRiskScore >= 4) return 'medium';
         return 'low';
+    }
+    
+    getSpecificControls(category, findings, subcategoryInfo) {
+        if (!subcategoryInfo || !subcategoryInfo.controls) return [];
+        
+        // Map findings to specific controls based on the category and finding type
+        const allControls = subcategoryInfo.controls;
+        const specificControls = [];
+        
+        // Define control mappings for specific permission/finding combinations
+        const controlMappings = {
+            'PR.AC': {
+                'User.ReadWrite.All': ['PR.AC-01: Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes'],
+                'Directory.ReadWrite.All': ['PR.AC-01: Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes', 'PR.AC-04: Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties'],
+                'Group.ReadWrite.All': ['PR.AC-04: Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties'],
+                'Application.ReadWrite.All': ['PR.AC-01: Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes'],
+                'RoleManagement.ReadWrite.All': ['PR.AC-04: Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties']
+            },
+            'ID.AM': {
+                'Directory.Read.All': ['ID.AM-01: Physical devices and systems within the organization are inventoried'],
+                'User.Read.All': ['ID.AM-02: Software platforms and applications within the organization are inventoried'],
+                'Application.Read.All': ['ID.AM-02: Software platforms and applications within the organization are inventoried']
+            },
+            'ID.RA': {
+                'high_risk_permissions': ['ID.RA-01: Asset vulnerabilities are identified and documented'],
+                'critical_permissions': ['ID.RA-02: Cyber threat intelligence is received from information sharing forums and sources']
+            },
+            'GV.RM': {
+                'critical_permissions': ['GV.RM-01: Risk management processes are established and managed'],
+                'RoleManagement.ReadWrite.All': ['GV.RM-02: Risk appetite and risk tolerance statements are established']
+            }
+        };
+        
+        if (controlMappings[category]) {
+            findings.forEach(finding => {
+                if (finding.type === 'permission') {
+                    const permissionControls = controlMappings[category][finding.name];
+                    if (permissionControls) {
+                        permissionControls.forEach(control => {
+                            if (!specificControls.includes(control)) {
+                                specificControls.push(control);
+                            }
+                        });
+                    }
+                    
+                    // Add controls based on risk level
+                    if (finding.riskLevel === 'critical' && controlMappings[category]['critical_permissions']) {
+                        controlMappings[category]['critical_permissions'].forEach(control => {
+                            if (!specificControls.includes(control)) {
+                                specificControls.push(control);
+                            }
+                        });
+                    } else if (finding.riskLevel === 'high' && controlMappings[category]['high_risk_permissions']) {
+                        controlMappings[category]['high_risk_permissions'].forEach(control => {
+                            if (!specificControls.includes(control)) {
+                                specificControls.push(control);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        
+        // If no specific controls found, return the first 2-3 most relevant controls from the category
+        if (specificControls.length === 0) {
+            return allControls.slice(0, Math.min(3, allControls.length));
+        }
+        
+        return specificControls;
+    }
+    
+    getSpecificRemediation(category, findings, subcategoryInfo) {
+        if (!subcategoryInfo || !subcategoryInfo.remediation) return [];
+        
+        const allRemediation = subcategoryInfo.remediation;
+        const specificRemediation = [];
+        
+        // Define remediation mappings for specific findings
+        const remediationMappings = {
+            'PR.AC': {
+                'User.ReadWrite.All': ['Implement Privileged Identity Management (PIM) for user management permissions', 'Require multi-factor authentication for high-privilege operations'],
+                'Directory.ReadWrite.All': ['Establish approval workflows for directory modifications', 'Implement just-in-time access for directory write operations'],
+                'Group.ReadWrite.All': ['Monitor group membership changes with alerting', 'Implement conditional access policies for group management'],
+                'RoleManagement.ReadWrite.All': ['Require dual authorization for role assignments', 'Implement emergency access procedures with break-glass accounts']
+            },
+            'ID.AM': {
+                'Directory.Read.All': ['Regularly audit directory access and usage patterns', 'Maintain inventory of applications with directory access'],
+                'User.Read.All': ['Document all applications accessing user data', 'Implement data classification for user information']
+            },
+            'GV.RM': {
+                'critical_permissions': ['Establish risk assessment process for high-privilege permissions', 'Document risk acceptance criteria for critical applications'],
+                'RoleManagement.ReadWrite.All': ['Implement governance framework for privilege escalation', 'Regular review of administrative role assignments']
+            }
+        };
+        
+        if (remediationMappings[category]) {
+            findings.forEach(finding => {
+                if (finding.type === 'permission') {
+                    const permissionRemediation = remediationMappings[category][finding.name];
+                    if (permissionRemediation) {
+                        permissionRemediation.forEach(remediation => {
+                            if (!specificRemediation.includes(remediation)) {
+                                specificRemediation.push(remediation);
+                            }
+                        });
+                    }
+                    
+                    // Add remediation based on risk level
+                    if (finding.riskLevel === 'critical' && remediationMappings[category]['critical_permissions']) {
+                        remediationMappings[category]['critical_permissions'].forEach(remediation => {
+                            if (!specificRemediation.includes(remediation)) {
+                                specificRemediation.push(remediation);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        
+        // If no specific remediation found, return the first 2-3 most relevant items
+        if (specificRemediation.length === 0) {
+            return allRemediation.slice(0, Math.min(3, allRemediation.length));
+        }
+        
+        return specificRemediation;
     }
 
     identifyRiskIndicators(content) {
@@ -957,14 +1109,14 @@ class RiskAnalyzer {
 </head>
 <body>
     <div class="header">
-        <h1>🔒 Risk Analysis Report</h1>
+        <h1>Risk Analysis Report</h1>
         <div class="risk-score">${results.overallRisk.score}/100</div>
         <h2>Risk Level: ${results.overallRisk.level.toUpperCase()}</h2>
         <p>Generated on: ${new Date().toLocaleString()}</p>
     </div>
     
     <div class="section">
-        <h2>📊 Summary</h2>
+        <h2>Summary</h2>
         <table>
             <tr><th>Metric</th><th>Value</th></tr>
             <tr><td>Overall Risk Score</td><td>${results.overallRisk.score}/100</td></tr>
@@ -980,7 +1132,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>📱 Application Information</h2>
+        <h2>Application Information</h2>
         <table>
             <tr><th>Detail</th><th>Value</th></tr>
             <tr><td>Purpose</td><td>Customer Portal Integration</td></tr>
@@ -990,7 +1142,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>🔐 Detected Permissions</h2>
+        <h2>Detected Permissions</h2>
         <p>The following Microsoft Graph API permissions were detected through automated analysis. Each permission includes a risk assessment and justification:</p>
         ${results.detectedPermissions.map(p => `
             <div class="permission-item ${p.riskLevel}">
@@ -1008,7 +1160,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>🎯 NIST CSF 2.0 Categories</h2>
+        <h2>NIST CSF 2.0 Categories</h2>
         ${results.csfMappings.map(c => `
             <div class="csf-item ${c.severity}">
                 <strong>${c.category}</strong> - ${c.mainCategory} 
@@ -1034,7 +1186,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>⚠️ Risk Indicators</h2>
+        <h2>Risk Indicators</h2>
         ${results.riskIndicators.map(r => `
             <div class="risk-item ${r.level}">
                 <strong>${r.indicator}</strong> (${r.level.toUpperCase()})<br>
@@ -1044,7 +1196,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>💡 Recommendations</h2>
+        <h2>Security Recommendations</h2>
         ${results.recommendations.map(r => `
             <div class="recommendation-item">
                 <strong>${r.title}</strong> (Priority: ${r.priority.toUpperCase()})<br>
@@ -1054,7 +1206,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>📊 Permission Risk Summary Table</h2>
+        <h2>Permission Risk Summary Table</h2>
         <p>Comprehensive summary of all detected permissions with risk scores and recommended actions:</p>
         <table class="permission-summary-table">
             <thead>
@@ -1135,7 +1287,7 @@ class RiskAnalyzer {
     generateGlossary() {
         return `
         <div class="section">
-            <h2>📖 Glossary and Definitions</h2>
+            <h2>Glossary and Definitions</h2>
             
             <div class="glossary-section">
                 <h3>Risk Level Definitions</h3>
@@ -1412,14 +1564,14 @@ class RiskAnalyzer {
 </head>
 <body>
     <div class="header">
-        <h1>🔒 Azure Application Registration Risk Analysis Report</h1>
+        <h1>Azure Application Registration Risk Analysis Report</h1>
         <div class="risk-score">${this.analysisResults.overallRisk.score}/100</div>
         <h2>Risk Level: ${this.analysisResults.overallRisk.level.toUpperCase()}</h2>
         <p>Generated on: ${currentDate}</p>
     </div>
     
     <div class="section">
-        <h2>📊 Executive Summary</h2>
+        <h2>Executive Summary</h2>
         <p>This comprehensive risk analysis evaluates Azure Application Registration permissions against the NIST Cybersecurity Framework 2.0. The analysis identified <strong>${this.analysisResults.detectedPermissions.length} permissions</strong> with varying risk levels, mapped to <strong>${this.analysisResults.csfMappings.length} NIST CSF 2.0 categories</strong>, and found <strong>${this.analysisResults.riskIndicators.length} risk indicators</strong>.</p>
         
         <div class="summary-grid">
@@ -1443,7 +1595,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>📱 Application Information</h2>
+        <h2>Application Information</h2>
         <div class="summary-grid">
             <div class="summary-item">
                 <span class="summary-value">Customer Portal Integration</span>
@@ -1480,7 +1632,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>🔐 Detected Permissions</h2>
+        <h2>Detected Permissions</h2>
         <p>The following Azure Application Registration permissions were identified and analyzed:</p>
         ${this.analysisResults.detectedPermissions.map(permission => `
             <div class="item ${permission.riskLevel}">
@@ -1494,7 +1646,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section page-break">
-        <h2>🎯 NIST CSF 2.0 Categories</h2>
+        <h2>NIST CSF 2.0 Categories</h2>
         <p>The identified permissions and content map to the following NIST Cybersecurity Framework 2.0 categories:</p>
         ${this.analysisResults.csfMappings.map(category => `
             <div class="item">
@@ -1527,7 +1679,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>⚠️ Risk Indicators</h2>
+        <h2>Risk Indicators</h2>
         <p>The following risk indicators were identified through content analysis:</p>
         ${this.analysisResults.riskIndicators.map(indicator => `
             <div class="item ${indicator.level}">
@@ -1541,7 +1693,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section page-break">
-        <h2>💡 Security Recommendations</h2>
+        <h2>Security Recommendations</h2>
         <p>Based on the risk analysis, the following recommendations should be implemented:</p>
         ${this.analysisResults.recommendations.map(rec => `
             <div class="item">
@@ -1555,7 +1707,7 @@ class RiskAnalyzer {
     </div>
     
     <div class="section">
-        <h2>📋 Next Steps</h2>
+        <h2>Implementation Roadmap</h2>
         <div class="item">
             <div class="item-title">Immediate Actions (1-7 days)</div>
             <div class="item-description">Address critical and high-priority recommendations, implement conditional access policies</div>
