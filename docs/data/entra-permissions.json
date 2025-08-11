@@ -5,133 +5,288 @@
       "description": "Read applications and service principals",
       "impact": "Can read application configurations and secrets",
       "csfMapping": ["ID.AM", "PR.AC"],
-      "riskScore": 6
+      "riskScore": 6,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Application.ReadWrite.All": {
       "riskLevel": "high",
       "description": "Read and write all applications",
       "impact": "Can create, modify, and delete applications and their credentials",
       "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
-      "riskScore": 9
+      "riskScore": 9,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Directory.Read.All": {
       "riskLevel": "medium",
       "description": "Read directory data",
       "impact": "Can read all directory information including users, groups, and applications",
       "csfMapping": ["ID.AM", "PR.AC"],
-      "riskScore": 6
+      "riskScore": 6,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Directory.ReadWrite.All": {
       "riskLevel": "high",
       "description": "Read and write directory data",
       "impact": "Can read and write all directory information",
       "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
-      "riskScore": 10
+      "riskScore": 10,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "User.Read.All": {
       "riskLevel": "medium",
       "description": "Read all users' full profiles",
       "impact": "Can read user profiles and organizational information",
       "csfMapping": ["ID.AM", "PR.DS"],
-      "riskScore": 5
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "User.ReadWrite.All": {
       "riskLevel": "high",
       "description": "Read and write all users' full profiles",
       "impact": "Can read and write user profiles and manage user accounts",
       "csfMapping": ["PR.AC", "ID.RA", "PR.DS"],
-      "riskScore": 8
+      "riskScore": 8,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Group.Read.All": {
       "riskLevel": "medium",
       "description": "Read all groups",
       "impact": "Can read group information and memberships",
       "csfMapping": ["ID.AM", "PR.AC"],
-      "riskScore": 4
+      "riskScore": 4,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Group.ReadWrite.All": {
       "riskLevel": "high",
       "description": "Read and write all groups",
       "impact": "Can manage groups and group memberships",
       "csfMapping": ["PR.AC", "ID.RA"],
-      "riskScore": 7
+      "riskScore": 7,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "RoleManagement.Read.All": {
       "riskLevel": "medium",
       "description": "Read role management data",
       "impact": "Can read role assignments and role definitions",
       "csfMapping": ["ID.AM", "PR.AC"],
-      "riskScore": 6
+      "riskScore": 6,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "RoleManagement.ReadWrite.All": {
       "riskLevel": "critical",
       "description": "Read and write role management data",
       "impact": "Can manage role assignments and create custom roles",
       "csfMapping": ["PR.AC", "ID.RA", "GV.RM"],
-      "riskScore": 10
+      "riskScore": 10,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
     },
     "Policy.Read.All": {
       "riskLevel": "medium",
       "description": "Read your organization's policies",
       "impact": "Can read conditional access and other policies",
       "csfMapping": ["ID.AM", "PR.AC"],
-      "riskScore": 5
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Policy.ReadWrite.All": {
       "riskLevel": "high",
       "description": "Read and write your organization's policies",
       "impact": "Can manage conditional access and security policies",
       "csfMapping": ["PR.AC", "ID.RA", "GV.PO"],
-      "riskScore": 9
+      "riskScore": 9,
+      "permissionTypes": ["Application"],
+      "consentType": "Admin consent required"
     },
     "AuditLog.Read.All": {
       "riskLevel": "medium",
       "description": "Read audit log data",
       "impact": "Can read audit logs and sign-in reports",
       "csfMapping": ["DE.CM", "ID.AM"],
-      "riskScore": 4
+      "riskScore": 4,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "SecurityEvents.Read.All": {
       "riskLevel": "medium",
       "description": "Read your organization's security events",
       "impact": "Can read security events and alerts",
       "csfMapping": ["DE.AE", "DE.CM"],
-      "riskScore": 5
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "SecurityActions.Read.All": {
       "riskLevel": "medium",
       "description": "Read your organization's security actions",
       "impact": "Can read security actions and investigations",
       "csfMapping": ["RS.AN", "DE.CM"],
-      "riskScore": 5
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Mail.Read": {
       "riskLevel": "low",
       "description": "Read user mail",
       "impact": "Can read user's mailbox",
       "csfMapping": ["PR.DS"],
-      "riskScore": 3
+      "riskScore": 3,
+      "permissionTypes": ["Delegated"],
+      "consentType": "User or admin consent"
     },
     "Mail.ReadWrite": {
       "riskLevel": "medium",
       "description": "Read and write access to user mail",
       "impact": "Can read and send emails on behalf of user",
       "csfMapping": ["PR.DS", "PR.AC"],
-      "riskScore": 5
+      "riskScore": 5,
+      "permissionTypes": ["Delegated"],
+      "consentType": "User or admin consent"
     },
     "Files.Read.All": {
       "riskLevel": "medium",
       "description": "Read all files that the user can access",
       "impact": "Can read all files across the organization",
       "csfMapping": ["PR.DS", "ID.AM"],
-      "riskScore": 6
+      "riskScore": 6,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     },
     "Files.ReadWrite.All": {
       "riskLevel": "high",
       "description": "Have full access to all files user can access",
       "impact": "Can read, write, and delete files across the organization",
       "csfMapping": ["PR.DS", "PR.AC", "ID.RA"],
-      "riskScore": 8
+      "riskScore": 8,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "User.Read": {
+      "riskLevel": "low",
+      "description": "Sign you in and read your profile",
+      "impact": "Can read basic user profile information",
+      "csfMapping": ["ID.AM"],
+      "riskScore": 1,
+      "permissionTypes": ["Delegated"],
+      "consentType": "User consent"
+    },
+    "Mail.Send": {
+      "riskLevel": "medium",
+      "description": "Send mail as a user",
+      "impact": "Can send emails on behalf of the user",
+      "csfMapping": ["PR.AC"],
+      "riskScore": 4,
+      "permissionTypes": ["Delegated"],
+      "consentType": "User or admin consent"
+    },
+    "Calendars.ReadWrite": {
+      "riskLevel": "medium",
+      "description": "Have full access to user calendars",
+      "impact": "Can read and write calendar events",
+      "csfMapping": ["PR.DS", "PR.AC"],
+      "riskScore": 4,
+      "permissionTypes": ["Delegated"],
+      "consentType": "User or admin consent"
+    },
+    "Contacts.ReadWrite": {
+      "riskLevel": "medium",
+      "description": "Have full access to user contacts",
+      "impact": "Can read and write user contacts",
+      "csfMapping": ["PR.DS", "PR.AC"],
+      "riskScore": 4,
+      "permissionTypes": ["Delegated"],
+      "consentType": "User or admin consent"
+    },
+    "DeviceManagementApps.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write Microsoft Intune apps",
+      "impact": "Can manage mobile application management policies",
+      "csfMapping": ["PR.AC", "ID.RA"],
+      "riskScore": 8,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "DeviceManagementConfiguration.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write Microsoft Intune device configuration and policies",
+      "impact": "Can manage device configuration policies",
+      "csfMapping": ["PR.AC", "GV.PO"],
+      "riskScore": 9,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "DeviceManagementManagedDevices.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write Microsoft Intune managed devices",
+      "impact": "Can manage enrolled devices and perform device actions",
+      "csfMapping": ["PR.AC", "ID.AM"],
+      "riskScore": 8,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "Sites.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read items in all site collections",
+      "impact": "Can read all SharePoint sites and content",
+      "csfMapping": ["PR.DS", "ID.AM"],
+      "riskScore": 6,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "Sites.ReadWrite.All": {
+      "riskLevel": "high",
+      "description": "Read and write items in all site collections",
+      "impact": "Can read and write all SharePoint sites and content",
+      "csfMapping": ["PR.DS", "PR.AC", "ID.RA"],
+      "riskScore": 8,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "Reports.Read.All": {
+      "riskLevel": "medium",
+      "description": "Read usage reports",
+      "impact": "Can read organization usage reports",
+      "csfMapping": ["DE.CM", "ID.AM"],
+      "riskScore": 5,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "Directory.AccessAsUser.All": {
+      "riskLevel": "high",
+      "description": "Access directory as the signed-in user",
+      "impact": "Can perform any directory operation that the user can perform",
+      "csfMapping": ["PR.AC", "ID.RA"],
+      "riskScore": 8,
+      "permissionTypes": ["Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "AppRoleAssignment.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Manage app permission grants and app role assignments",
+      "impact": "Can grant permissions to applications and assign app roles",
+      "csfMapping": ["PR.AC", "GV.RM"],
+      "riskScore": 10,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
+    },
+    "DelegatedPermissionGrant.ReadWrite.All": {
+      "riskLevel": "critical",
+      "description": "Manage delegated permission grants",
+      "impact": "Can manage OAuth2 permission grants for applications",
+      "csfMapping": ["PR.AC", "GV.RM"],
+      "riskScore": 10,
+      "permissionTypes": ["Application", "Delegated"],
+      "consentType": "Admin consent required"
     }
   },
   "riskLevels": {

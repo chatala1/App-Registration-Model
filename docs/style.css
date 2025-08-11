@@ -466,6 +466,47 @@ header p {
 .score-low { background: #1a7f37; }
 .score-critical { background: #82071e; }
 
+/* Permission Type Styles */
+.permission-types {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    color: #8b949e;
+}
+
+.permission-types strong {
+    color: #f0f6fc;
+}
+
+.permission-types.app-only {
+    color: #ff9800;
+}
+
+.permission-types.delegated-only {
+    color: #4caf50;
+}
+
+.permission-types.both-types {
+    color: #2196f3;
+}
+
+.consent-type {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.permission-impact {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #8b949e;
+    line-height: 1.4;
+}
+
+.permission-impact strong {
+    color: #f0f6fc;
+}
+
 /* Action Buttons */
 .action-buttons {
     text-align: center;

@@ -441,14 +441,29 @@ class RiskAnalyzer {
         
         // Display detected permissions
         this.permissionsList.innerHTML = this.analysisResults.detectedPermissions
-            .map(permission => `
+            .map(permission => {
+                const permissionTypes = permission.permissionTypes || ['Unknown'];
+                const permissionTypeDisplay = permissionTypes.join(', ');
+                const permissionTypeClass = permissionTypes.includes('Application') && permissionTypes.includes('Delegated') 
+                    ? 'both-types' 
+                    : permissionTypes.includes('Application') 
+                        ? 'app-only' 
+                        : 'delegated-only';
+                
+                return `
                 <div class="permission-item ${permission.riskLevel}">
                     <div class="item-title">${permission.name}
                         <span class="item-score score-${permission.riskLevel}">${permission.riskScore}/10</span>
                     </div>
+                    <div class="permission-types ${permissionTypeClass}">
+                        <strong>Permission Types:</strong> ${permissionTypeDisplay}
+                        ${permission.consentType ? `<span class="consent-type">• ${permission.consentType}</span>` : ''}
+                    </div>
                     <div class="item-description">${permission.description}</div>
+                    ${permission.impact ? `<div class="permission-impact"><strong>Impact:</strong> ${permission.impact}</div>` : ''}
                 </div>
-            `).join('');
+            `;
+            }).join('');
         
         // Display CSF categories
         this.csfCategories.innerHTML = this.analysisResults.csfMappings
