@@ -47,14 +47,9 @@ Visit the live application: [https://chatala1.github.io/App-Registration-Model/]
 
 ## Supported Permissions
 
-The application analyzes the following Azure Application Registration permissions:
+The application analyzes **54 Azure Application Registration permissions** across critical, high, medium, and low risk categories, covering enterprise authentication, security & compliance, Teams collaboration, device management, and more.
 
-| Risk Level    | Score   | Permissions                                                                                  |
-|--------------|---------|---------------------------------------------------------------------------------------------|
-| Critical     | 10      | Directory.ReadWrite.All, RoleManagement.ReadWrite.All                                        |
-| High         | 7-9     | Application.ReadWrite.All, User.ReadWrite.All, Group.ReadWrite.All, Policy.ReadWrite.All, Files.ReadWrite.All |
-| Medium       | 4-6     | Directory.Read.All, Application.Read.All, User.Read.All, AuditLog.Read.All, SecurityEvents.Read.All |
-| Low          | 1-3     | Mail.Read, Group.Read.All, Basic profile permissions                                         |
+📋 **[View Complete Permissions List](PERMISSIONS.md)** - Detailed breakdown of all 54 supported permissions with risk scores and descriptions
 
 ## NIST CSF 2.0 Categories
 
@@ -75,10 +70,10 @@ The application maps detected permissions to these NIST framework categories:
 # Customer Portal Application
 
 ## Required Permissions
-- User.Read.All: Read customer profiles
-- Directory.Read.All: Access organizational structure
-- Application.ReadWrite.All: Manage app configurations
-- Files.ReadWrite.All: Access customer documents
+- **User.Read.All**: Read customer profiles
+- **Directory.Read.All**: Access organizational structure  
+- **Application.ReadWrite.All**: Manage app configurations
+- **Files.ReadWrite.All**: Access customer documents
 
 ## Security Features
 - Multi-factor authentication
@@ -88,10 +83,10 @@ The application maps detected permissions to these NIST framework categories:
 
 ### Expected Analysis Output
 
-- **Overall Risk Score**: 75/100 (HIGH)
+- **Overall Risk Score**: 28/100 (HIGH)
 - **Detected Permissions**: 4 permissions identified
 - **CSF Categories**: PR.AC, ID.RA, GV.RM, PR.DS
-- **Recommendations**: 7 actionable items
+- **Recommendations**: Multiple actionable security recommendations
 
 ## Local Development
 
