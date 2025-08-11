@@ -68,16 +68,16 @@
                 <div class="gauge-card">
                     <h3>Overall Risk Score</h3>
                     <div class="gauge-container">
-                        <svg class="gauge-svg" viewBox="0 0 200 140">
+                        <svg class="gauge-svg" viewBox="0 0 240 160">
                             <path 
                                 class="gauge-bg"
-                                d="M 30 120 A 70 70 0 0 1 170 120"
+                                d="M 50 140 A 70 70 0 0 1 190 140"
                                 fill="none"
                             />
                             <path 
                                 id="gauge-progress"
                                 class="gauge-progress"
-                                d="M 30 120 A 70 70 0 0 1 170 120"
+                                d="M 50 140 A 70 70 0 0 1 190 140"
                                 fill="none"
                                 stroke-dasharray="0 219.91"
                             />
@@ -88,6 +88,10 @@
                             <span class="gauge-min">0</span>
                             <span class="gauge-max">100</span>
                         </div>
+                    </div>
+                    <div id="gauge-definition" class="gauge-definition" style="display: none;">
+                        <div class="gauge-definition-title">Risk Level Definition:</div>
+                        <div id="gauge-definition-text"></div>
                     </div>
                 </div>
                 

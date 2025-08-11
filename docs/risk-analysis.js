@@ -20,6 +20,8 @@ class RiskAnalyzer {
         this.gaugeProgress = document.getElementById('gauge-progress');
         this.gaugeValue = document.getElementById('gauge-value');
         this.gaugeLabel = document.getElementById('gauge-label');
+        this.gaugeDefinition = document.getElementById('gauge-definition');
+        this.gaugeDefinitionText = document.getElementById('gauge-definition-text');
         
         // Application details elements
         this.appPurpose = document.getElementById('app-purpose');
@@ -481,6 +483,26 @@ class RiskAnalyzer {
         setTimeout(() => {
             this.gaugeProgress.style.strokeDasharray = `${progressLength} ${circumference}`;
         }, 100);
+        
+        // Update risk level definition
+        this.updateRiskDefinition(level);
+    }
+    
+    updateRiskDefinition(level) {
+        const definitions = {
+            'critical': 'Critical risk indicates potentially catastrophic impact to the organization. This may include unauthorized access to all company data, ability to modify security settings, or complete administrative control over Azure resources.',
+            'high': 'High risk indicates significant potential for security breaches or data compromise. This may include access to sensitive user data, ability to modify directory settings, or elevated privileges that could lead to privilege escalation.',
+            'medium': 'Medium risk indicates moderate security concerns that should be addressed. This may include limited data access, standard user permissions, or integrations that require monitoring but pose manageable risks.',
+            'low': 'Low risk indicates minimal security impact with standard permissions. This typically includes read-only access to non-sensitive data or well-scoped permissions with limited potential for misuse.'
+        };
+        
+        const definitionText = definitions[level] || 'Risk level assessment not available.';
+        this.gaugeDefinitionText.textContent = definitionText;
+        
+        // Show the definition section
+        if (this.gaugeDefinition) {
+            this.gaugeDefinition.style.display = 'block';
+        }
     }
     
     updateRiskSummary() {

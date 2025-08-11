@@ -259,8 +259,8 @@ header p {
 
 .gauge-container {
     position: relative;
-    width: 200px;
-    height: 140px;
+    width: 240px;
+    height: 160px;
     margin: 0 auto 1rem auto;
 }
 
@@ -284,7 +284,7 @@ header p {
 
 .gauge-value {
     position: absolute;
-    top: 45%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2.5rem;
@@ -295,7 +295,7 @@ header p {
 
 .gauge-label {
     position: absolute;
-    top: 65%;
+    top: 62%;
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
@@ -318,6 +318,24 @@ header p {
     font-size: 0.875rem;
     color: #8b949e;
     font-weight: 500;
+}
+
+.gauge-definition {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #8b949e;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.gauge-definition-title {
+    font-weight: 600;
+    color: #f0f6fc;
+    margin-bottom: 0.25rem;
 }
 
 /* Risk Summary Card */
@@ -739,8 +757,8 @@ footer a:hover {
     }
     
     .gauge-container {
-        width: 150px;
-        height: 150px;
+        width: 200px;
+        height: 140px;
     }
     
     .gauge-value {
