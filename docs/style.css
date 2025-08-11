@@ -48,6 +48,73 @@ header p {
     font-weight: 400;
 }
 
+/* Header Navigation */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+.logo-section {
+    flex: 1;
+}
+
+.header-nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #8b949e;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.15s ease-in-out;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.nav-link:hover {
+    color: #f0f6fc;
+    background: #21262d;
+}
+
+.nav-link.active {
+    color: #58a6ff;
+    background: #0d2636;
+}
+
+.nav-link i {
+    font-size: 1rem;
+}
+
+/* Responsive Header */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .header-nav {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    header {
+        padding: 2rem 0;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+}
+
 /* Cards */
 .card {
     background: #161b22;
@@ -962,5 +1029,181 @@ footer a:hover {
     
     .action-buttons {
         display: none !important;
+    }
+}
+
+/* Templates Page Styles */
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.template-card {
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 1.5rem;
+    transition: all 0.15s ease-in-out;
+}
+
+.template-card:hover {
+    border-color: #58a6ff;
+    box-shadow: 0 3px 12px rgba(88, 166, 255, 0.1);
+}
+
+.template-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.template-icon {
+    font-size: 2rem;
+    color: #58a6ff;
+}
+
+.template-info h3 {
+    margin: 0;
+    color: #f0f6fc;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.template-format {
+    font-size: 0.85rem;
+    color: #8b949e;
+    font-weight: 400;
+}
+
+.template-description {
+    color: #c9d1d9;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.template-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.templates-info {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #30363d;
+}
+
+.templates-info h3 {
+    color: #f0f6fc;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 1.25rem;
+}
+
+.info-card h4 {
+    color: #58a6ff;
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.info-card p {
+    color: #c9d1d9;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.templates-help {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #30363d;
+}
+
+.templates-help h3 {
+    color: #f0f6fc;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.help-links {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.help-links li {
+    margin-bottom: 0.5rem;
+}
+
+.help-links a {
+    color: #58a6ff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-links a:hover {
+    text-decoration: underline;
+}
+
+.help-links a::before {
+    content: "→";
+    color: #8b949e;
+}
+
+.help-note {
+    background: #0d2636;
+    border: 1px solid #1f6feb;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    color: #c9d1d9;
+}
+
+.help-note strong {
+    color: #58a6ff;
+}
+
+/* Responsive Design for Templates */
+@media (max-width: 768px) {
+    .templates-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .template-actions {
+        flex-direction: column;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .template-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .template-icon {
+        font-size: 1.5rem;
     }
 }
