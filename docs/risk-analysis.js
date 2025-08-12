@@ -168,24 +168,92 @@ class RiskAnalyzer {
             }
         });
         
-        // Search for pattern-based permissions (e.g., "read all users", "write directory")
+        // Search for pattern-based permissions with enhanced detection patterns
         const permissionPatterns = [
+            // User permissions - enhanced patterns
             { pattern: /read.*all.*user/gi, permission: 'User.Read.All' },
             { pattern: /write.*all.*user/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /manage.*user.*profile/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /access.*user.*information/gi, permission: 'User.Read.All' },
+            { pattern: /user.*read.*basic/gi, permission: 'User.ReadBasic.All' },
+            { pattern: /user.*management.*permission/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /modify.*user.*account/gi, permission: 'User.ReadWrite.All' },
+            { pattern: /user.*profile.*access/gi, permission: 'User.Read.All' },
+            { pattern: /employee.*information.*access/gi, permission: 'User.Read.All' },
+            { pattern: /staff.*directory.*access/gi, permission: 'User.Read.All' },
+            
+            // Directory permissions - enhanced patterns
             { pattern: /read.*director/gi, permission: 'Directory.Read.All' },
             { pattern: /write.*director/gi, permission: 'Directory.ReadWrite.All' },
+            { pattern: /access.*director.*information/gi, permission: 'Directory.Read.All' },
+            { pattern: /organization.*director/gi, permission: 'Directory.Read.All' },
+            { pattern: /company.*director.*access/gi, permission: 'Directory.Read.All' },
+            { pattern: /organizational.*structure/gi, permission: 'Directory.Read.All' },
+            { pattern: /active.*directory.*integration/gi, permission: 'Directory.Read.All' },
+            { pattern: /ad.*integration/gi, permission: 'Directory.Read.All' },
+            { pattern: /tenant.*information/gi, permission: 'Directory.Read.All' },
+            { pattern: /directory.*schema.*access/gi, permission: 'Directory.Read.All' },
+            
+            // Application permissions
             { pattern: /manage.*application/gi, permission: 'Application.ReadWrite.All' },
             { pattern: /read.*application/gi, permission: 'Application.Read.All' },
+            { pattern: /integrated.*application/gi, permission: 'Application.Read.All' },
+            
+            // Group permissions
             { pattern: /manage.*group/gi, permission: 'Group.ReadWrite.All' },
             { pattern: /read.*group/gi, permission: 'Group.Read.All' },
+            { pattern: /group.*membership/gi, permission: 'Group.Read.All' },
+            { pattern: /support.*group/gi, permission: 'Group.ReadWrite.All' },
+            
+            // Mail permissions
             { pattern: /send.*mail/gi, permission: 'Mail.Send' },
             { pattern: /read.*mail/gi, permission: 'Mail.Read' },
+            { pattern: /mail.*read.*write/gi, permission: 'Mail.ReadWrite' },
+            
+            // Role management permissions
             { pattern: /manage.*role/gi, permission: 'RoleManagement.ReadWrite.All' },
             { pattern: /read.*role/gi, permission: 'RoleManagement.Read.All' },
-            { pattern: /manage.*polic/gi, permission: 'Policy.ReadWrite.All' },
-            { pattern: /read.*polic/gi, permission: 'Policy.Read.All' },
+            { pattern: /role.*assignment/gi, permission: 'RoleManagement.ReadWrite.All' },
+            
+            // Files permissions
             { pattern: /read.*file/gi, permission: 'Files.Read.All' },
             { pattern: /write.*file/gi, permission: 'Files.ReadWrite.All' },
+            { pattern: /upload.*file/gi, permission: 'Files.ReadWrite.All' },
+            { pattern: /file.*report/gi, permission: 'Files.ReadWrite.All' },
+            { pattern: /document.*librar/gi, permission: 'Files.Read.All' },
+            
+            // Sites/SharePoint permissions
+            { pattern: /sites.*read.*write/gi, permission: 'Sites.ReadWrite.All' },
+            { pattern: /sites.*read/gi, permission: 'Sites.Read.All' },
+            { pattern: /sharepoint.*site/gi, permission: 'Sites.Read.All' },
+            { pattern: /access.*site/gi, permission: 'Sites.Read.All' },
+            
+            // Calendars permissions
+            { pattern: /calendar.*read.*write/gi, permission: 'Calendars.ReadWrite' },
+            { pattern: /calendar.*read/gi, permission: 'Calendars.Read' },
+            { pattern: /meeting.*data/gi, permission: 'Calendars.Read' },
+            
+            // Teams permissions  
+            { pattern: /team.*member/gi, permission: 'TeamMember.Read.All' },
+            { pattern: /teams.*app/gi, permission: 'TeamsApp.ReadWrite.All' },
+            { pattern: /chat.*read.*write/gi, permission: 'Chat.ReadWrite.All' },
+            { pattern: /chat.*read/gi, permission: 'Chat.Read.All' },
+            { pattern: /channel.*create/gi, permission: 'Channel.Create' },
+            
+            // Reports permissions
+            { pattern: /reports.*read/gi, permission: 'Reports.Read.All' },
+            { pattern: /usage.*report/gi, permission: 'Reports.Read.All' },
+            
+            // Basic profile permissions
+            { pattern: /profile.*read/gi, permission: 'Profile.Read' },
+            { pattern: /basic.*profile/gi, permission: 'Profile.Read' },
+            { pattern: /openid/gi, permission: 'OpenId' },
+            
+            // Policy permissions
+            { pattern: /manage.*polic/gi, permission: 'Policy.ReadWrite.All' },
+            { pattern: /read.*polic/gi, permission: 'Policy.Read.All' },
+            
+            // Audit permissions
             { pattern: /audit.*log/gi, permission: 'AuditLog.Read.All' }
         ];
         
@@ -983,6 +1051,25 @@ class RiskAnalyzer {
     }
     
     createRiskChart() {
+        // Use enhanced chart system with fallback support
+        if (typeof FallbackChart !== 'undefined') {
+            const fallbackChart = new FallbackChart();
+            const riskData = {
+                critical: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'critical').length,
+                high: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'high').length,
+                medium: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'medium').length,
+                low: this.analysisResults.detectedPermissions.filter(p => p.riskLevel === 'low').length
+            };
+            
+            // Try to create chart using the fallback system (which will use Chart.js if available)
+            fallbackChart.createRiskChart('risk-chart', riskData);
+        } else {
+            // Legacy implementation
+            this.legacyCreateRiskChart();
+        }
+    }
+    
+    legacyCreateRiskChart() {
         // Check if Chart.js is available and chart element exists
         if (typeof Chart === 'undefined') {
             console.warn('Chart.js not available, skipping chart creation');

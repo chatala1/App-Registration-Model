@@ -8,12 +8,15 @@ Visit the live application: [https://chatala1.github.io/App-Registration-Model/]
 
 ## Features
 
-- **File Upload**: Support for Markdown and JSON project plans
-- **Risk Analysis**: Intelligent parsing and analysis of Azure permissions
+- **File Upload**: Support for Markdown, JSON, and PDF project plans with enhanced extraction
+- **Enhanced PDF Processing**: Comprehensive fallback system for reliable PDF text extraction and permission detection
+- **Risk Analysis**: Intelligent parsing and analysis of Azure permissions with expanded pattern matching
 - **NIST CSF 2.0 Mapping**: Automatic mapping to NIST Cybersecurity Framework categories
 - **Risk Scoring**: Comprehensive risk scoring based on permission levels
 - **Recommendations**: Actionable security recommendations
 - **Report Generation**: Downloadable HTML and JSON reports
+- **Reliable Visualization**: SVG-based chart fallbacks ensuring charts work even when CDNs are blocked
+- **Graceful Degradation**: Full functionality maintained even in restricted network environments
 - **Responsive Design**: Works on desktop and mobile devices
 
 ## How It Works
@@ -26,14 +29,19 @@ Visit the live application: [https://chatala1.github.io/App-Registration-Model/]
 ## Architecture
 
 ```
-📁 /docs (GitHub Pages)
+/docs (GitHub Pages)
 ├── index.html          # Main application interface
-├── upload.js           # File upload handling
-├── risk-analysis.js    # Core analysis engine
+├── upload.js           # File upload handling with PDF support
+├── pdf-extractor.js    # Enhanced PDF processing with fallback system
+├── risk-analysis.js    # Core analysis engine with expanded patterns
+├── fallback-chart.js   # SVG-based chart fallbacks for reliable visualization
+├── navigation.js       # Application navigation
 ├── style.css           # Application styling
 ├── /data
 │   ├── nist-csf-2.0.json      # NIST framework mappings
 │   └── entra-permissions.json  # Azure permission definitions
+├── /vendor             # Local dependencies for reliability
+├── /samples            # Sample project plans
 └── /reports
     └── sample-report.html      # Sample analysis report
 ```
@@ -41,7 +49,9 @@ Visit the live application: [https://chatala1.github.io/App-Registration-Model/]
 ## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Charts**: Chart.js for risk visualization
+- **PDF Processing**: Enhanced extraction with multiple fallback strategies
+- **Charts**: Chart.js with SVG-based fallback system for reliable visualization
+- **External Dependencies**: Progressive enhancement with graceful degradation
 - **Hosting**: GitHub Pages
 - **CI/CD**: GitHub Actions for automated deployment
 
@@ -49,7 +59,7 @@ Visit the live application: [https://chatala1.github.io/App-Registration-Model/]
 
 The application analyzes **54 Azure Application Registration permissions** across critical, high, medium, and low risk categories, covering enterprise authentication, security & compliance, Teams collaboration, device management, and more.
 
-📋 **[View Complete Permissions List](PERMISSIONS.md)** - Detailed breakdown of all 54 supported permissions with risk scores and descriptions
+**[View Complete Permissions List](PERMISSIONS.md)** - Detailed breakdown of all 54 supported permissions with risk scores and descriptions
 
 ## NIST CSF 2.0 Categories
 
@@ -113,6 +123,34 @@ The application automatically deploys to GitHub Pages when changes are pushed to
 3. Deploys to GitHub Pages environment
 4. Available at: `https://[username].github.io/App-Registration-Model/`
 
+## Reliability & Performance Improvements
+
+The application has been enhanced with comprehensive fallback systems to ensure consistent functionality:
+
+### Enhanced PDF Processing
+- **PDFTextExtractor class** with multiple extraction strategies
+- **Pattern-based permission detection** for PDF content  
+- **Clear user guidance** when full extraction fails
+- **Emergency fallback mode** with actionable recommendations
+
+### Reliable Visualization System
+- **FallbackChart class** providing doughnut and bar charts
+- **Progressive enhancement** - uses Chart.js when available, SVG when blocked
+- **Consistent visualization** regardless of CDN availability
+- **Responsive design** matching original Chart.js styling
+
+### Enhanced Permission Detection
+- **Expanded pattern matching** to catch more Azure permission variations
+- **Improved directory permission detection** for organizational structure
+- **Better coverage** for real-world permission descriptions
+- **Robust content analysis** across different document formats
+
+### Graceful External Dependency Handling
+- **Dynamic script loading** with comprehensive error handling
+- **Fallback activation** when external resources fail
+- **Full functionality** maintained in restricted network environments
+- **Clear logging** of dependency status for debugging
+
 ## Risk Analysis Algorithm
 
 The risk scoring algorithm considers:
@@ -153,4 +191,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**Quick Start**: Try the live demo with the built-in sample project plan!
+**Quick Start**: Try the live demo with the built-in sample project plan! The application features enhanced reliability with comprehensive fallback systems ensuring full functionality even in restricted network environments.
