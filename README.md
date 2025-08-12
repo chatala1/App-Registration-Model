@@ -1,4 +1,4 @@
-# Risk Analysis Web App
+# RAE Risk Analysis Engine v1
 
 A GitHub Pages web application that analyzes Azure Application Registration permissions against the NIST Cybersecurity Framework 2.0 to identify and assess potential security risks.
 
