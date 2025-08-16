@@ -87,13 +87,11 @@ header p {
 
 .nav-link:hover {
     color: #f0f6fc;
-    background: #21262d;
     transform: translateY(-1px);
 }
 
 .nav-link.active {
     color: #58a6ff;
-    background: #0d2636;
 }
 
 .nav-link.active::after {
